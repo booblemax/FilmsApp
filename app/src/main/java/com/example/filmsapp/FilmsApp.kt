@@ -1,0 +1,25 @@
+package com.example.filmsapp
+
+import android.app.Application
+import com.example.filmsapp.data.di.dataModule
+import com.example.filmsapp.domain.di.domainModule
+import com.example.filmsapp.ui.di.vmModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+import timber.log.Timber
+
+class FilmsApp : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        Timber.plant(Timber.DebugTree())
+
+        startKoin {
+
+            androidContext(this@FilmsApp)
+
+            modules(dataModule + domainModule + vmModule)
+        }
+    }
+}

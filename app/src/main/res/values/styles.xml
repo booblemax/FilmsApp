@@ -1,0 +1,44 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="Text" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/text_size_14dp</item>
+    </style>
+
+    <style name="Text_10" parent="Text">
+        <item name="android:textSize">@dimen/text_size_10dp</item>
+    </style>
+
+    <style name="Text_12" parent="Text">
+        <item name="android:textSize">@dimen/text_size_12dp</item>
+    </style>
+
+    <style name="Text.Gray" parent="Text">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="Text_13" parent="Text">
+        <item name="android:textSize">@dimen/text_size_13dp</item>
+    </style>
+
+    <style name="Text_15" parent="Text">
+        <item name="android:textSize">@dimen/text_size_15dp</item>
+    </style>
+
+    <style name="Text_17" parent="Text">
+        <item name="android:textSize">@dimen/text_size_17dp</item>
+    </style>
+
+    <style name="Text_19" parent="Text">
+        <item name="android:textSize">@dimen/text_size_19dp</item>
+    </style>
+
+</resources>
