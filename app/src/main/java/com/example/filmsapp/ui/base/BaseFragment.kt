@@ -10,6 +10,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import com.example.filmsapp.BR
 
 abstract class BaseFragment<VM : BaseViewModel, B: ViewDataBinding> : Fragment() {
 
@@ -36,6 +37,7 @@ abstract class BaseFragment<VM : BaseViewModel, B: ViewDataBinding> : Fragment()
 
     private fun init(inflate: LayoutInflater, container: ViewGroup?) {
         binding = DataBindingUtil.inflate(inflate, layoutRes, container, false)
+        binding.setVariable(BR.viewModel, viewModel)
         binding.lifecycleOwner = this
 
         onBackPressedCallback = dispatcher.addCallback(this) {

@@ -1,6 +1,7 @@
 package com.example.filmsapp.util
 
 import android.content.res.Resources
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.annotation.StringRes
@@ -10,10 +11,15 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
+import com.bumptech.glide.GlideBuilder
 import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.Transformation
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.example.filmsapp.BuildConfig
 import com.example.filmsapp.R
 import com.example.filmsapp.domain.Resource
@@ -76,10 +82,13 @@ fun AppCompatTextView.setTextOrGone(text: String?) {
 @BindingAdapter("url")
 fun AppCompatImageView.src(url: String?) {
     val thumbnailBuilder = Glide.with(this).asBitmap().load(BuildConfig.REDUCED_IMAGE_URL + url)
-
     Glide.with(this)
         .asBitmap()
-        .apply(RequestOptions.bitmapTransform(RoundedCorners(16)))
+        .apply(
+            RequestOptions
+                .bitmapTransform(RoundedCorners(16))
+                .centerInside()
+        )
         .thumbnail(thumbnailBuilder)
         .error(R.drawable.ic_error)
         .load(BuildConfig.FULL_IMAGE_URL + url)
@@ -98,6 +107,10 @@ fun <T> View.visibility(status: Resource<T>?) {
 
 @BindingAdapter("progress")
 fun <T> bindStatus(layout: SwipeRefreshLayout, status: Resource<T>?) {
-    Timber.d("Status $status")
     layout.isRefreshing = status is Resource.LOADING
+}
+
+@BindingAdapter("progress")
+fun <T> bindStatus(layout: SwipeRefreshLayout, status: Boolean) {
+    layout.isRefreshing = status
 }
