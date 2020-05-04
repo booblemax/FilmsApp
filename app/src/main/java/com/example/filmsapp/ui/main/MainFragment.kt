@@ -42,6 +42,7 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
 
     private fun initRecyclerView(adapter: MainAdapter) {
         val layoutManager = GridLayoutManager(context, MIN_COLUMN_COUNT)
+        layoutManager.spanSizeLookup = MainSpanSizeLookup(adapter)
         binding.rvFilms.layoutManager = layoutManager
         binding.rvFilms.adapter = adapter
         binding.rvFilms.addItemDecoration(SimpleItemDecoration())
@@ -54,6 +55,7 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
             override fun isLoading(): Boolean = (adapter.isLoading)
 
         })
+        binding.rvFilms.itemAnimator = null
     }
 
     private fun initListener(adapter: MainAdapter) {

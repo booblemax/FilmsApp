@@ -51,7 +51,7 @@ class MainAdapter : RecyclerView.Adapter<BaseViewHolder>() {
         result.dispatchUpdatesTo(this)
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = items.size + isNeedLoadingItem()
 
     private fun isNeedLoadingItem() = if (isLoading) 1 else 0
 

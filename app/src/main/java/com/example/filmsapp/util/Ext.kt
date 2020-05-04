@@ -38,11 +38,19 @@ fun startCoroutinesTimer(delay: Long, action: () -> Unit) = GlobalScope.launch {
     action()
 }
 
-inline fun View.snack(@StringRes messageRes: Int, length: Int = Snackbar.LENGTH_LONG, f: Snackbar.() -> Unit = {}) {
+inline fun View.snack(
+    @StringRes messageRes: Int,
+    length: Int = Snackbar.LENGTH_LONG,
+    f: Snackbar.() -> Unit = {}
+) {
     snack(resources.getString(messageRes), length, f)
 }
 
-inline fun View.snack(message: String, length: Int = Snackbar.LENGTH_LONG, f: Snackbar.() -> Unit = {}) {
+inline fun View.snack(
+    message: String,
+    length: Int = Snackbar.LENGTH_LONG,
+    f: Snackbar.() -> Unit = {}
+) {
     val snack = Snackbar.make(this, message, length)
     snack.f()
     snack.show()
@@ -87,7 +95,6 @@ fun AppCompatImageView.src(url: String?) {
         .apply(
             RequestOptions
                 .bitmapTransform(RoundedCorners(16))
-                .centerInside()
         )
         .thumbnail(thumbnailBuilder)
         .error(R.drawable.ic_error)
