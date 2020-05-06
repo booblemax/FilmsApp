@@ -24,7 +24,12 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
 
     override fun init() {
         adapter = MainAdapter()
+        initRefreshLayout()
+        initRecyclerView(adapter)
+        initListener(adapter)
+    }
 
+    private fun initRefreshLayout() {
         binding.refreshLayout.setOnRefreshListener {
             viewModel.resetPageNumber()
             viewModel.loadPopularFilms()
@@ -35,9 +40,6 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
             ResourcesCompat.getColor(resources, R.color.colorPrimary, context?.theme),
             ResourcesCompat.getColor(resources, R.color.colorPrimaryDark, context?.theme)
         )
-
-        initRecyclerView(adapter)
-        initListener(adapter)
     }
 
     private fun initRecyclerView(adapter: MainAdapter) {
