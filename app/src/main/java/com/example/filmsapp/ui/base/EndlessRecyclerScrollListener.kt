@@ -38,7 +38,7 @@ abstract class EndlessRecyclerScrollListener(private var layoutManager: Recycler
         }
 
     companion object {
-        const val MIN_COUNT_VISIBLE_ITEMS = 1
+        const val MIN_COUNT_VISIBLE_ITEMS = 5
         const val PAGE_SIZE = 20
     }
 }

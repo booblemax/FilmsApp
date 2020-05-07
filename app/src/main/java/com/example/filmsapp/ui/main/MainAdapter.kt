@@ -2,6 +2,7 @@ package com.example.filmsapp.ui.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -11,10 +12,12 @@ import com.example.filmsapp.databinding.ItemFilmBinding
 import com.example.filmsapp.databinding.ItemLoadingBinding
 import com.example.filmsapp.ui.base.BaseViewHolder
 import com.example.filmsapp.ui.base.models.FilmModel
+import timber.log.Timber
 
 class MainAdapter : RecyclerView.Adapter<BaseViewHolder>() {
 
     private val items = mutableListOf<FilmModel>()
+    private var deepestIndex = -1
     var isLoading = false
 
     override fun getItemViewType(position: Int): Int =
@@ -38,6 +41,18 @@ class MainAdapter : RecyclerView.Adapter<BaseViewHolder>() {
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    override fun onViewAttachedToWindow(holder: BaseViewHolder) {
+        if (holder.adapterPosition > deepestIndex) {
+            val animation =
+                AnimationUtils.loadAnimation(
+                    holder.itemView.context,
+                    R.anim.item_animation_fall_down
+                )
+            holder.itemView.startAnimation(animation)
+            deepestIndex = holder.adapterPosition
+        }
     }
 
     fun submitList(list: MutableList<FilmModel>, isReload: Boolean = false) {

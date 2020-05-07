@@ -2,6 +2,7 @@ package com.example.filmsapp.ui.main
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
@@ -11,6 +12,7 @@ import com.example.filmsapp.databinding.MainFragmentBinding
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.ui.base.BaseFragment
 import com.example.filmsapp.ui.base.EndlessRecyclerScrollListener
+import com.example.filmsapp.ui.base.WrappedGridLayoutManager
 import com.example.filmsapp.util.snack
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -43,9 +45,10 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
     }
 
     private fun initRecyclerView(adapter: MainAdapter) {
-        val layoutManager = GridLayoutManager(context, MIN_COLUMN_COUNT)
+        val layoutManager = WrappedGridLayoutManager(context, MIN_COLUMN_COUNT)
         layoutManager.spanSizeLookup = MainSpanSizeLookup(adapter)
         binding.rvFilms.layoutManager = layoutManager
+        binding.rvFilms.setHasFixedSize(true)
         binding.rvFilms.adapter = adapter
         binding.rvFilms.addItemDecoration(SimpleItemDecoration())
         binding.rvFilms.addOnScrollListener(object : EndlessRecyclerScrollListener(layoutManager) {
@@ -57,7 +60,6 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
             override fun isLoading(): Boolean = (adapter.isLoading)
 
         })
-        binding.rvFilms.itemAnimator = null
     }
 
     private fun initListener(adapter: MainAdapter) {
@@ -68,7 +70,7 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
                     it.data?.let { list ->
                         adapter.submitList(
                             list.toMutableList(),
-                            viewModel.pageNumber == 1
+                            viewModel.isFirstPageLoading()
                         )
                     }
                     viewModel.incPageNumber()
@@ -78,7 +80,7 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
                     adapter.isLoading = false
                 }
                 is Resource.LOADING -> {
-                    if (viewModel.pageNumber > 0)
+                    if (!viewModel.isFirstPageLoading())
                         adapter.isLoading = true
                 }
             }

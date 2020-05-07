@@ -14,8 +14,7 @@ class MainViewModel(
     private val repository: FilmsRepository
 ) : BaseViewModel() {
 
-    var pageNumber = FIRST_PAGE_NUMBER
-        private set
+    private var pageNumber = FIRST_PAGE_NUMBER
 
     private val _popularFilms = MutableLiveData<Resource<List<FilmModel>>>()
     val popularFilms: LiveData<Resource<List<FilmModel>>> get() = _popularFilms
@@ -38,6 +37,8 @@ class MainViewModel(
     fun incPageNumber() {
         pageNumber++
     }
+
+    fun isFirstPageLoading() = pageNumber == FIRST_PAGE_NUMBER
 
     companion object {
         private const val FIRST_PAGE_NUMBER = 1
