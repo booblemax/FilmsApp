@@ -3,21 +3,20 @@ package com.example.filmsapp.ui.main
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmsapp.R
 import com.example.filmsapp.databinding.ItemFilmBinding
 import com.example.filmsapp.databinding.ItemLoadingBinding
 import com.example.filmsapp.ui.base.BaseViewHolder
 import com.example.filmsapp.ui.base.models.FilmModel
-import timber.log.Timber
 
-class MainAdapter : RecyclerView.Adapter<BaseViewHolder>() {
+class MainAdapter(
+    private val onItemClickListener: (FilmModel) -> Unit
+) : RecyclerView.Adapter<BaseViewHolder>() {
 
     private val items = mutableListOf<FilmModel>()
-    private var deepestIndex = -1
+    private var deepestIndex = DEFAULT_INDEX
     var isLoading = false
 
     override fun getItemViewType(position: Int): Int =
@@ -36,6 +35,10 @@ class MainAdapter : RecyclerView.Adapter<BaseViewHolder>() {
             else -> {
                 val binding = ItemLoadingBinding.inflate(LayoutInflater.from(parent.context))
                 LoadingViewHolder(binding)
+            }
+        }.also { holder ->
+            holder.itemView.setOnClickListener {
+                getItem(holder.adapterPosition)?.let { item -> onItemClickListener(item) }
             }
         }
 
@@ -70,8 +73,12 @@ class MainAdapter : RecyclerView.Adapter<BaseViewHolder>() {
 
     private fun isNeedLoadingItem() = if (isLoading) 1 else 0
 
-    private fun getItem(position: Int): Any? =
+    private fun getItem(position: Int): FilmModel? =
         if (position >= 0 && position < items.size) items[position] else null
+
+    companion object {
+        private const val DEFAULT_INDEX = -1
+    }
 
 }
 

@@ -15,6 +15,7 @@
     <dimen name="size_24">24dp</dimen>
     <dimen name="size_26">26dp</dimen>
     <dimen name="size_36">36dp</dimen>
+    <dimen name="size_40">40dp</dimen>
     <dimen name="size_52">52dp</dimen>
     <dimen name="size_72">72dp</dimen>
     <dimen name="size_86">86dp</dimen>
@@ -38,7 +39,9 @@
     <dimen name="text_size_23dp">23dp</dimen>
     <dimen name="text_size_24dp">24dp</dimen>
 
-    <dimen name="film_image_width">200dp</dimen>
-    <dimen name="film_image_height">250dp</dimen>
+    <dimen name="film_image_width_big">200dp</dimen>
+    <dimen name="film_image_height_big">250dp</dimen>
+    <dimen name="film_image_width_small">100dp</dimen>
+    <dimen name="film_image_height_small">150dp</dimen>
 
 </resources>

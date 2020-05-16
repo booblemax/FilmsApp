@@ -1,9 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.filmsapp.ui.details.DetailsViewModel" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <variable
+            name="posterUrl"
+            type="String" />
+
+        <variable
+            name="backdropUrl"
+            type="String" />
+
+        <variable
+            name="model"
+            type="com.example.filmsapp.ui.base.models.FilmModel" />
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:background="@color/black">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/details_backdrop"
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
+                android:scaleType="fitXY"
+                backdrop="@{backdropUrl}"
+                android:visibility="@{viewModel.film}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/details_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/size_12"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_arrow_back" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/details_poster"
+                android:layout_width="@dimen/film_image_width_small"
+                android:layout_height="@dimen/film_image_height_small"
+                android:scaleType="fitCenter"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="72dp"
+                url="@{posterUrl}"
+                android:visibility="@{viewModel.film}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/details_title"
+                style="@style/Text_24.White.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_16"
+                android:layout_marginStart="@dimen/size_16"
+                android:text="@{model.title}"
+                android:visibility="@{viewModel.film}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/details_poster"
+                tools:text="Title" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/details_genres"
+                style="@style/Text_13.White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_8"
+                android:layout_marginStart="@dimen/size_16"
+                genres="@{model.genres}"
+                android:visibility="@{viewModel.film}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/details_title"
+                tools:text="Genres" />
+
+            <View
+                android:id="@+id/details_first_devider"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:layout_marginStart="@dimen/size_4"
+                android:visibility="@{viewModel.film}"
+                app:layout_constraintTop_toTopOf="@+id/details_genres"
+                app:layout_constraintBottom_toBottomOf="@+id/details_genres"
+                app:layout_constraintStart_toEndOf="@id/details_genres"
+                />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/details_year"
+                style="@style/Text_13.White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_4"
+                year="@{model.releaseDate}"
+                android:visibility="@{viewModel.film}"
+                app:layout_constraintTop_toTopOf="@+id/details_genres"
+                app:layout_constraintBottom_toBottomOf="@+id/details_genres"
+                app:layout_constraintStart_toEndOf="@id/details_first_devider"
+                tools:text="2020" />
+
+            <View
+                android:id="@+id/details_second_devider"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:layout_marginStart="@dimen/size_4"
+                android:visibility="@{viewModel.film}"
+                app:layout_constraintTop_toTopOf="@+id/details_genres"
+                app:layout_constraintBottom_toBottomOf="@+id/details_genres"
+                app:layout_constraintStart_toEndOf="@id/details_year"
+                />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/details_length"
+                style="@style/Text_13.White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_4"
+                runtime="@{model.runtime}"
+                android:visibility="@{viewModel.film}"
+                app:layout_constraintTop_toTopOf="@+id/details_genres"
+                app:layout_constraintBottom_toBottomOf="@+id/details_genres"
+                app:layout_constraintStart_toEndOf="@id/details_second_devider"
+                tools:text="2h 20m" />
+
+            <androidx.appcompat.widget.AppCompatRatingBar
+                android:id="@+id/details_average"
+                style="?attr/ratingBarStyleSmall"
+                android:theme="@style/RatingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="10"
+                android:stepSize="0.1"
+                android:rating="@{model.voteAverage}"
+                android:layout_marginTop="@dimen/size_12"
+                android:layout_marginStart="@dimen/size_16"
+                android:visibility="@{viewModel.film}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/details_genres"
+                tools:rating="6.3"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/details_overview"
+                style="@style/Text_19.White"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_12"
+                android:layout_marginStart="@dimen/size_16"
+                android:layout_marginEnd="@dimen/size_16"
+                android:layout_marginBottom="@dimen/size_8"
+                android:text="@{model.overview}"
+                android:visibility="@{viewModel.film}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/details_average"
+                tools:text="asldjf;lahsdfklhjasdkljfhadkjshfkjasdhfkljahsdfkljahsdklfjhakajsdhflkjasdhfkajshdfkjahsd"/>
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.film}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/details_backdrop" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>

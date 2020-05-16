@@ -1,7 +1,6 @@
 package com.example.filmsapp.util
 
 import android.content.res.Resources
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.annotation.StringRes
@@ -11,22 +10,14 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
-import com.bumptech.glide.GlideBuilder
-import com.bumptech.glide.RequestBuilder
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.Transformation
-import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
 import com.example.filmsapp.BuildConfig
 import com.example.filmsapp.R
 import com.example.filmsapp.domain.Resource
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 val Int.dp: Int
     get() = (this / Resources.getSystem().displayMetrics.density).toInt()
@@ -80,9 +71,9 @@ fun Snackbar.action(action: String, color: Int? = null, listener: (View) -> Unit
 @BindingAdapter("textOrGone")
 fun AppCompatTextView.setTextOrGone(text: String?) {
     if (text.isNullOrEmpty()) {
-        visibility = View.GONE
+        gone()
     } else {
-        visibility = View.VISIBLE
+        visible()
         this.text = text
     }
 }
@@ -110,6 +101,11 @@ fun AppCompatRatingBar.rating(rating: Double) {
 @BindingAdapter("android:visibility")
 fun <T> View.visibility(status: Resource<T>?) {
     if (status is Resource.LOADING) gone() else visible()
+}
+
+@BindingAdapter("android:visibility")
+fun <T> setVisibilityForProgress(progressBar: ProgressBar, status: Resource<T>?) {
+    if (status is Resource.LOADING) progressBar.visible() else progressBar.gone()
 }
 
 @BindingAdapter("progress")

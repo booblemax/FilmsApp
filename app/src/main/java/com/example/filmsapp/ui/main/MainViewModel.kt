@@ -30,6 +30,12 @@ class MainViewModel(
         }
     }
 
+    fun loadFilm(id: String) {
+        baseContext.launch {
+            repository.getFilm(id)
+        }
+    }
+
     fun resetPageNumber() {
         pageNumber = FIRST_PAGE_NUMBER
     }

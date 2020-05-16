@@ -7,6 +7,18 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.filmsapp.ui.main.MainFragment"
-        android:label="MainFragment" />
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.example.filmsapp.ui.details.DetailsFragment"
+        android:label="DetailsFragment" >
+        <argument
+            android:name="filmModel"
+            app:argType="com.example.filmsapp.ui.base.models.FilmModel" />
+    </fragment>
 
 </navigation>

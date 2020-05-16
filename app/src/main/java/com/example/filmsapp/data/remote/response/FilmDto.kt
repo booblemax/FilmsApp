@@ -61,6 +61,8 @@ data class FilmDto(
             id,
             title,
             posterPath,
+            runtime,
+            releaseDate,
             backdropPath,
             overview,
             voteAverage,

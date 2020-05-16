@@ -9,6 +9,6 @@ val vmModule = module {
 
     viewModel { MainViewModel(get()) }
 
-    viewModel { DetailsViewModel() }
+    viewModel { DetailsViewModel(get()) }
 
 }

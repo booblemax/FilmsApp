@@ -35,6 +35,9 @@ abstract class BaseFragment<VM : BaseViewModel, B: ViewDataBinding> : Fragment()
         return binding.root
     }
 
+    /**
+     * calling in OnCreateView
+     */
     private fun init(inflate: LayoutInflater, container: ViewGroup?) {
         binding = DataBindingUtil.inflate(inflate, layoutRes, container, false)
         binding.setVariable(BR.viewModel, viewModel)

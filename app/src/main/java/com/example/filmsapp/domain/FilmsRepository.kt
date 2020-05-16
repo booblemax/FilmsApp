@@ -31,4 +31,15 @@ class FilmsRepository(
                 Resource.ERROR<List<FilmModel>>(RetrofitException(response.code(), response.message()))
             }
         }
+
+    suspend fun getFilm(id: String): Resource<FilmModel> =
+        withContext(Dispatchers.IO) {
+            val response = api.getFilm(id)
+            val body = response.body()
+            if (response.isSuccessful && body != null) {
+                Resource.SUCCESS(body.toModel())
+            } else {
+                Resource.ERROR<FilmModel>(RetrofitException(response.code(), response.message()))
+            }
+        }
 }
