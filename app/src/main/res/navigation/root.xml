@@ -17,8 +17,16 @@
         android:name="com.example.filmsapp.ui.details.DetailsFragment"
         android:label="DetailsFragment" >
         <argument
-            android:name="filmModel"
-            app:argType="com.example.filmsapp.ui.base.models.FilmModel" />
+            android:name="filmId"
+            app:argType="string" />
+        <argument
+            android:name="posterUrl"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="backdropUrl"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 
 </navigation>

@@ -23,10 +23,11 @@ class DetailsFragment : BaseFragment<DetailsViewModel, DetailsFragmentBinding>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         arguments?.let {
             val args = DetailsFragmentArgs.fromBundle(it)
-            val model = args.filmModel
-            binding.posterUrl = model.poster
-            binding.backdropUrl = model.backdropPath
-            viewModel.loadFilm(model.id.toString())
+            with(args) {
+                binding.posterUrl = posterUrl
+                binding.backdropUrl = backdropUrl
+                viewModel.loadFilm(filmId)
+            }
         }
     }
 

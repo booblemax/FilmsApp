@@ -1,5 +1,6 @@
 package com.example.filmsapp.data.remote
 
+import com.example.filmsapp.data.remote.response.BackdropsDto
 import com.example.filmsapp.data.remote.response.FilmDto
 import com.example.filmsapp.data.remote.response.FilmsDto
 import retrofit2.Response
@@ -16,6 +17,9 @@ interface FilmsApi {
     suspend fun getPopularList(@Query("page") page: Int): Response<FilmsDto>
 
     @GET("movie/{id}")
-    suspend fun getFilm(@Path("id") id: String): Response<FilmDto>
+    suspend fun getFilm(@Path("id") id: String): FilmDto
+
+    @GET("movie/{id}/images")
+    suspend fun getBackdrops(@Path("id") id: String): BackdropsDto
 
 }

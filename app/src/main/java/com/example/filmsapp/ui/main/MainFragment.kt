@@ -35,7 +35,7 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
     private fun initAdapter() {
         adapter = MainAdapter {
             findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToDetailsFragment(it)
+                MainFragmentDirections.actionMainFragmentToDetailsFragment(it.id, it.poster, it.backdropPath)
             )
         }
     }

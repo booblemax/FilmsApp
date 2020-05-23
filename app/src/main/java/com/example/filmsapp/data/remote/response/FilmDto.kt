@@ -56,9 +56,9 @@ data class FilmDto(
     val voteCount: Int
 ) {
 
-    fun toModel() =
+    fun toModel(backdrops: BackdropsDto? = null) =
         FilmModel(
-            id,
+            id.toString(),
             title,
             posterPath,
             runtime,

@@ -20,5 +20,4 @@ class DetailsViewModel(
             _film.value = repository.getFilm(id)
         }
     }
-
 }
