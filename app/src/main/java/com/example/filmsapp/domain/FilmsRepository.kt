@@ -4,8 +4,6 @@ import com.example.filmsapp.data.remote.FilmsApi
 import com.example.filmsapp.domain.exceptions.RetrofitException
 import com.example.filmsapp.ui.base.models.FilmModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 
 class FilmsRepository(
@@ -36,11 +34,9 @@ class FilmsRepository(
 
     suspend fun getFilm(id: String): Resource<FilmModel> =
         withContext(Dispatchers.IO) {
-            val filmDeferred = async { api.getFilm(id) }
-            val imagesDeferred = async { api.getBackdrops(id) }
-            val film = filmDeferred.await()
-            val images = imagesDeferred.await()
-            val filmModel = film.toModel(images)
-            Resource.SUCCESS(filmModel)
+            val images = api.getBackdrops(id)
+            val film = api.getFilm(id)
+            Resource.SUCCESS(film.toModel(images))
         }
+
 }

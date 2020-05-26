@@ -13,9 +13,9 @@ data class BackdropDto(
     @SerializedName("iso_639_1")
     val iso6391: Any?,
     @SerializedName("vote_average")
-    val voteAverage: Int,
+    val voteAverage: Double,
     @SerializedName("vote_count")
-    val voteCount: Int,
+    val voteCount: Double,
     @SerializedName("width")
     val width: Int
 )

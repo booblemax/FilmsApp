@@ -67,7 +67,8 @@ data class FilmDto(
             overview,
             voteAverage,
             voteCount,
-            genres
+            genres,
+            backdrops
         )
 
 }

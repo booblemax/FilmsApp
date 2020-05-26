@@ -158,6 +158,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/details_genres"
                 tools:rating="6.3"/>
 
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/details_backdrops"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_12"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/details_average"
+                />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/details_overview"
                 style="@style/Text_19.White"
@@ -171,7 +181,7 @@
                 android:visibility="@{viewModel.film}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/details_average"
+                app:layout_constraintTop_toBottomOf="@id/details_backdrops"
                 tools:text="asldjf;lahsdfklhjasdkljfhadkjshfkjasdhfkljahsdfkljahsdklfjhakajsdhflkjasdhfkajshdfkjahsd"/>
 
             <ProgressBar

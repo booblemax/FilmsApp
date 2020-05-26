@@ -8,7 +8,6 @@ import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.ui.base.BaseViewModel
 import com.example.filmsapp.ui.base.models.FilmModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class MainViewModel(
     private val repository: FilmsRepository
@@ -27,12 +26,6 @@ class MainViewModel(
         baseContext.launch {
             _popularFilms.value = Resource.LOADING()
             _popularFilms.value = repository.getPopularFilm(pageNumber)
-        }
-    }
-
-    fun loadFilm(id: String) {
-        baseContext.launch {
-            repository.getFilm(id)
         }
     }
 
