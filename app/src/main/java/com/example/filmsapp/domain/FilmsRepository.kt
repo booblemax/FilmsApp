@@ -1,9 +1,12 @@
 package com.example.filmsapp.domain
 
 import com.example.filmsapp.data.remote.FilmsApi
+import com.example.filmsapp.data.remote.response.BackdropsDto
 import com.example.filmsapp.domain.exceptions.RetrofitException
 import com.example.filmsapp.ui.base.models.FilmModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
 
 class FilmsRepository(
@@ -34,8 +37,13 @@ class FilmsRepository(
 
     suspend fun getFilm(id: String): Resource<FilmModel> =
         withContext(Dispatchers.IO) {
-            val images = api.getBackdrops(id)
             val film = api.getFilm(id)
+            var images: BackdropsDto? = null
+            supervisorScope {
+                launch(coroutineContext) {
+                    images = api.getBackdrops(id)
+                }
+            }
             Resource.SUCCESS(film.toModel(images))
         }
 
