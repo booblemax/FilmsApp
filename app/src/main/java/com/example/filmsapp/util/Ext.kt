@@ -9,9 +9,9 @@ import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
+import coil.Coil
+import coil.request.LoadRequest
+import coil.transform.RoundedCornersTransformation
 import com.example.filmsapp.BuildConfig
 import com.example.filmsapp.R
 import com.example.filmsapp.domain.Resource
@@ -80,17 +80,16 @@ fun AppCompatTextView.setTextOrGone(text: String?) {
 
 @BindingAdapter("url")
 fun AppCompatImageView.src(url: String?) {
-    val thumbnailBuilder = Glide.with(this).asBitmap().load(BuildConfig.REDUCED_IMAGE_URL + url)
-    Glide.with(this)
-        .asBitmap()
-        .apply(
-            RequestOptions
-                .bitmapTransform(RoundedCorners(16))
-        )
-        .thumbnail(thumbnailBuilder)
+    val imageLoader = Coil.imageLoader(context)
+    val request = LoadRequest.Builder(context)
+        .crossfade(true)
+        .transformations(RoundedCornersTransformation(16.0f))
         .error(R.drawable.ic_error)
-        .load(BuildConfig.FULL_IMAGE_URL + url)
-        .into(this)
+        .data(BuildConfig.REDUCED_IMAGE_URL + url)
+        .target(this)
+        .build()
+
+    imageLoader.execute(request)
 }
 
 @BindingAdapter("android:rating")

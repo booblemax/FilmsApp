@@ -4,7 +4,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
-import com.bumptech.glide.Glide
+import coil.api.load
 import com.example.filmsapp.BuildConfig
 import com.example.filmsapp.R
 import com.example.filmsapp.data.remote.response.Genre
@@ -43,13 +43,9 @@ fun setLength(textView: AppCompatTextView, runtime: Int?) {
 
 @BindingAdapter("backdrop")
 fun setBackdrop(imageView: AppCompatImageView, url: String?) {
-    val thumbnailBuilder = Glide.with(imageView).asBitmap().load(BuildConfig.REDUCED_IMAGE_URL + url)
-    Glide.with(imageView)
-        .asBitmap()
-        .thumbnail(thumbnailBuilder)
-        .error(R.drawable.ic_error)
-        .load(BuildConfig.FULL_IMAGE_URL + url)
-        .into(imageView)
+    imageView.load(BuildConfig.FULL_IMAGE_URL + url) {
+        error(R.drawable.ic_error)
+    }
 }
 
 @BindingAdapter("android:visibility")
