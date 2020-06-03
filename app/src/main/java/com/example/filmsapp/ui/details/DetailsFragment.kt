@@ -40,15 +40,14 @@ class DetailsFragment : BaseFragment<DetailsViewModel, DetailsFragmentBinding>()
     }
 
     private fun initViewPager() {
-        val marginPx = resources.getDimensionPixelOffset(R.dimen.size_20)
-        val offsetPx = resources.getDimensionPixelOffset(R.dimen.size_30)
+        val offsetPx = resources.getDimensionPixelOffset(R.dimen.size_24)
         with(binding.detailsBackdrops) {
             adapter = this@DetailsFragment.adapter
             clipToPadding = false
             clipChildren = false
             offscreenPageLimit = 3
             setPageTransformer(CompositePageTransformer().apply {
-                addTransformer(getOffsetTransformer(offsetPx, marginPx))
+                addTransformer(getOffsetTransformer(offsetPx))
                 addTransformer(this@DetailsFragment::getScaleTransformer)
             })
         }
@@ -62,11 +61,10 @@ class DetailsFragment : BaseFragment<DetailsViewModel, DetailsFragmentBinding>()
     }
 
     private fun getOffsetTransformer(
-        offsetPx: Int,
-        marginPx: Int
+        offsetPx: Int
     ) : ViewPager2.PageTransformer {
         return ViewPager2.PageTransformer { page, position ->
-            val offset = (-2 * offsetPx.toFloat() + marginPx) * position
+            val offset = -2.0f * offsetPx.toFloat() * position
             val viewPager = page.parent.parent as ViewPager2
             if (viewPager.orientation == ViewPager2.ORIENTATION_HORIZONTAL) {
                 if (ViewCompat.getLayoutDirection(viewPager) ==

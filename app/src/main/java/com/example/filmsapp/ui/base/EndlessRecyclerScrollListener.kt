@@ -3,6 +3,7 @@ package com.example.filmsapp.ui.base
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.filmsapp.util.ConstUtil
 
 abstract class EndlessRecyclerScrollListener(private var layoutManager: RecyclerView.LayoutManager) :
     RecyclerView.OnScrollListener() {
@@ -13,7 +14,7 @@ abstract class EndlessRecyclerScrollListener(private var layoutManager: Recycler
         val lastVisibleItemPosition: Int = getLastItemPosition()
         if (!isLoading() && !isLastPage()) {
             if (visibleItemCount + lastVisibleItemPosition >= totalItemCount &&
-                lastVisibleItemPosition >= 0 && totalItemCount >= PAGE_SIZE
+                lastVisibleItemPosition >= 0 && totalItemCount >= ConstUtil.PAGE_SIZE
             ) {
                 loadMoreItems()
             }
@@ -39,6 +40,5 @@ abstract class EndlessRecyclerScrollListener(private var layoutManager: Recycler
 
     companion object {
         const val MIN_COUNT_VISIBLE_ITEMS = 5
-        const val PAGE_SIZE = 20
     }
 }

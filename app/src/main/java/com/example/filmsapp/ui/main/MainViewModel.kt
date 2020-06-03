@@ -22,10 +22,17 @@ class MainViewModel(
         it is Resource.LOADING<*> && pageNumber == FIRST_PAGE_NUMBER
     }
 
-    fun loadPopularFilms() {
+    var lastKnownPosition = -1
+
+    init {
+        loadPopularFilms(true)
+    }
+
+    fun loadPopularFilms(forceUpdate: Boolean = false) {
         baseContext.launch {
+            incPageNumber()
             _popularFilms.value = Resource.LOADING()
-            _popularFilms.value = repository.getPopularFilm(pageNumber)
+            _popularFilms.value = repository.getPopularFilms(pageNumber, forceUpdate)
         }
     }
 
@@ -37,9 +44,13 @@ class MainViewModel(
         pageNumber++
     }
 
+    fun decPageNumber() {
+        pageNumber--
+    }
+
     fun isFirstPageLoading() = pageNumber == FIRST_PAGE_NUMBER
 
     companion object {
-        private const val FIRST_PAGE_NUMBER = 1
+        private const val FIRST_PAGE_NUMBER = 0
     }
 }

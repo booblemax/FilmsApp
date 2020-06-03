@@ -1,13 +1,8 @@
 package com.example.filmsapp.ui.main
 
-import android.os.Bundle
-import android.view.View
-import android.view.animation.AnimationUtils
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.filmsapp.R
 import com.example.filmsapp.databinding.MainFragmentBinding
 import com.example.filmsapp.domain.Resource
@@ -16,7 +11,6 @@ import com.example.filmsapp.ui.base.EndlessRecyclerScrollListener
 import com.example.filmsapp.ui.base.WrappedGridLayoutManager
 import com.example.filmsapp.util.snack
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
 
@@ -34,6 +28,9 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
 
     private fun initAdapter() {
         adapter = MainAdapter {
+            (binding.rvFilms.layoutManager as WrappedGridLayoutManager).let { layoutManager ->
+                viewModel.lastKnownPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
+            }
             findNavController().navigate(
                 MainFragmentDirections.actionMainFragmentToDetailsFragment(it.id, it.poster, it.backdropPath)
             )
@@ -55,15 +52,18 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
 
             override fun isLastPage(): Boolean = false
 
-            override fun isLoading(): Boolean = (adapter.isLoading)
+            override fun isLoading(): Boolean = adapter.isLoading
 
         })
+        if (viewModel.lastKnownPosition != -1) {
+            binding.rvFilms.scrollToPosition(viewModel.lastKnownPosition)
+        }
     }
 
     private fun initRefreshLayout() {
         binding.refreshLayout.setOnRefreshListener {
             viewModel.resetPageNumber()
-            viewModel.loadPopularFilms()
+            viewModel.loadPopularFilms(true)
         }
 
         binding.refreshLayout.setColorSchemeColors(
@@ -79,15 +79,12 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
                 is Resource.SUCCESS -> {
                     adapter.isLoading = false
                     it.data?.let { list ->
-                        adapter.submitList(
-                            list.toMutableList(),
-                            viewModel.isFirstPageLoading()
-                        )
+                        adapter.submitList(list.toMutableList())
                     }
-                    viewModel.incPageNumber()
                 }
                 is Resource.ERROR -> {
                     binding.rvFilms.snack(it.message?.localizedMessage ?: "")
+                    viewModel.decPageNumber()
                     adapter.isLoading = false
                 }
                 is Resource.LOADING -> {
@@ -96,10 +93,6 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
                 }
             }
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.loadPopularFilms()
     }
 
     companion object {

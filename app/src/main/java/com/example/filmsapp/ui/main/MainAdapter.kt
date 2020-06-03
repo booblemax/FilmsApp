@@ -61,7 +61,7 @@ class MainAdapter(
     fun submitList(list: MutableList<FilmModel>, isReload: Boolean = false) {
         val oldList = items.toMutableList()
 
-        if (isReload) items.clear()
+        items.clear()
         items.addAll(list)
 
         val callBack = FilmsDiffUtils(oldList, items)
