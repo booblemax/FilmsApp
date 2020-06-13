@@ -1,12 +1,8 @@
 package com.example.filmsapp.ui.details
 
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
-import coil.api.load
-import com.example.filmsapp.BuildConfig
-import com.example.filmsapp.R
 import com.example.filmsapp.data.remote.response.Genre
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.util.gone
@@ -38,13 +34,6 @@ fun setLength(textView: AppCompatTextView, runtime: Int?) {
         val h = it / 60
         val m = it - h * 60
         textView.text = "${h}h ${m}m"
-    }
-}
-
-@BindingAdapter("backdrop")
-fun setBackdrop(imageView: AppCompatImageView, url: String?) {
-    imageView.load(BuildConfig.FULL_IMAGE_URL + url) {
-        error(R.drawable.ic_error)
     }
 }
 

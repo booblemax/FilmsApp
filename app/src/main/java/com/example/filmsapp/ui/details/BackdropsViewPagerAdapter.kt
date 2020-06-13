@@ -8,7 +8,7 @@ import com.example.filmsapp.data.remote.response.BackdropDto
 import com.example.filmsapp.databinding.ItemBackdropBinding
 import com.example.filmsapp.ui.base.BaseViewHolder
 
-class BackdropsViewPagerAdapter : ListAdapter<BackdropDto, BackdropViewHolder>(
+class BackdropsViewPagerAdapter(private val onClickListener: (Int) -> Unit) : ListAdapter<BackdropDto, BackdropViewHolder>(
     object : DiffUtil.ItemCallback<BackdropDto>() {
         override fun areItemsTheSame(oldItem: BackdropDto, newItem: BackdropDto): Boolean =
             oldItem.filePath == newItem.filePath
@@ -25,7 +25,9 @@ class BackdropsViewPagerAdapter : ListAdapter<BackdropDto, BackdropViewHolder>(
                 parent,
                 false
             )
-        )
+        ).apply {
+            itemView.setOnClickListener { onClickListener(adapterPosition) }
+        }
     }
 
     override fun onBindViewHolder(holder: BackdropViewHolder, position: Int) {

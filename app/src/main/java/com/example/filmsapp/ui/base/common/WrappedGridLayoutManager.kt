@@ -1,10 +1,9 @@
-package com.example.filmsapp.ui.base
+package com.example.filmsapp.ui.base.common
 
 import android.content.Context
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import timber.log.Timber
-import java.lang.IndexOutOfBoundsException
 
 class WrappedGridLayoutManager(
     context: Context?,

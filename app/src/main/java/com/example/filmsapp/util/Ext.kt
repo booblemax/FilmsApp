@@ -10,6 +10,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import coil.Coil
+import coil.api.load
 import coil.request.LoadRequest
 import coil.transform.RoundedCornersTransformation
 import com.example.filmsapp.BuildConfig
@@ -90,6 +91,13 @@ fun AppCompatImageView.src(url: String?) {
         .build()
 
     imageLoader.execute(request)
+}
+
+@BindingAdapter("backdrop")
+fun setBackdrop(imageView: AppCompatImageView, url: String?) {
+    imageView.load(BuildConfig.FULL_IMAGE_URL + url) {
+        error(R.drawable.ic_error)
+    }
 }
 
 @BindingAdapter("android:rating")

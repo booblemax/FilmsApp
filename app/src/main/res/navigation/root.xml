@@ -27,6 +27,22 @@
             android:name="backdropUrl"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_detailsFragment_to_imagesCarouselFragment"
+            app:destination="@id/imagesCarouselFragment"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/imagesCarouselFragment"
+        android:name="com.example.filmsapp.ui.imagesCarousel.ImagesCarouselFragment"
+        android:label="ImagesCarouselFragment" >
+        <argument
+            android:name="urls"
+            app:argType="string[]" />
+        <argument
+            android:name="position"
+            app:argType="integer" />
     </fragment>
 
 </navigation>

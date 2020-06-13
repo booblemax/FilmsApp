@@ -19,7 +19,14 @@ class DetailsFragment : BaseFragment<DetailsViewModel, DetailsFragmentBinding>()
     override val viewModel: DetailsViewModel by viewModel()
     override val layoutRes: Int = R.layout.details_fragment
 
-    private val adapter = BackdropsViewPagerAdapter()
+    private val onItemClickListener = { position: Int ->
+        findNavController().navigate(
+            DetailsFragmentDirections.actionDetailsFragmentToImagesCarouselFragment(
+                adapter.currentList.map { it.filePath }.toTypedArray(), position)
+        )
+    }
+
+    private val adapter: BackdropsViewPagerAdapter = BackdropsViewPagerAdapter(onItemClickListener)
 
     override fun init() {
         binding.detailsBack.setOnClickListener { onBackPressed() }
@@ -62,7 +69,7 @@ class DetailsFragment : BaseFragment<DetailsViewModel, DetailsFragmentBinding>()
 
     private fun getOffsetTransformer(
         offsetPx: Int
-    ) : ViewPager2.PageTransformer {
+    ): ViewPager2.PageTransformer {
         return ViewPager2.PageTransformer { page, position ->
             val offset = -2.0f * offsetPx.toFloat() * position
             val viewPager = page.parent.parent as ViewPager2

@@ -1,4 +1,4 @@
-package com.example.filmsapp.ui.base
+package com.example.filmsapp.ui.base.common
 
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager

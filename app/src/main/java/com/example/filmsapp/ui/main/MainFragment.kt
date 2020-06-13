@@ -7,8 +7,8 @@ import com.example.filmsapp.R
 import com.example.filmsapp.databinding.MainFragmentBinding
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.ui.base.BaseFragment
-import com.example.filmsapp.ui.base.EndlessRecyclerScrollListener
-import com.example.filmsapp.ui.base.WrappedGridLayoutManager
+import com.example.filmsapp.ui.base.common.EndlessRecyclerScrollListener
+import com.example.filmsapp.ui.base.common.WrappedGridLayoutManager
 import com.example.filmsapp.util.snack
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -38,7 +38,11 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
     }
 
     private fun initRecyclerView(adapter: MainAdapter) {
-        val layoutManager = WrappedGridLayoutManager(context, MIN_COLUMN_COUNT)
+        val layoutManager =
+            WrappedGridLayoutManager(
+                context,
+                MIN_COLUMN_COUNT
+            )
         layoutManager.spanSizeLookup = MainSpanSizeLookup(adapter)
         binding.rvFilms.layoutManager = layoutManager
         binding.rvFilms.setHasFixedSize(true)
