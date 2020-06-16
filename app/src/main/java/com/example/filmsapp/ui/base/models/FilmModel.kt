@@ -8,7 +8,7 @@ data class FilmModel(
     val title: String = "",
     val poster: String? = "",
     val runtime: Int = 0,
-    val releaseDate: String = "",
+    val releaseDate: String? = "",
     val backdropPath: String? = null,
     val overview: String = "",
     val voteAverage: Double = 0.0,
