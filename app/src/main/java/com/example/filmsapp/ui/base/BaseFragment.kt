@@ -48,6 +48,9 @@ abstract class BaseFragment<VM : BaseViewModel, B: ViewDataBinding> : Fragment()
         }
     }
 
+    /**
+     * calling in OnCreateView
+     */
     open fun init() {}
 
     open fun onBackPressed() { }

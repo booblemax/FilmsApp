@@ -28,18 +28,24 @@ class DetailsFragment : BaseFragment<DetailsViewModel, DetailsFragmentBinding>()
 
     private val adapter: BackdropsViewPagerAdapter = BackdropsViewPagerAdapter(onItemClickListener)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            DetailsFragmentArgs.fromBundle(it).run {
+                viewModel.loadFilm(filmId)
+            }
+        }
+    }
+
     override fun init() {
         binding.detailsBack.setOnClickListener { onBackPressed() }
         initListener()
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         arguments?.let {
             val args = DetailsFragmentArgs.fromBundle(it)
             with(args) {
                 binding.posterUrl = posterUrl
                 binding.backdropUrl = backdropUrl
-                viewModel.loadFilm(filmId)
             }
         }
 
