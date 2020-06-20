@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FilmsApp</string>
+    <string name="transition_carousel_image">id_carousel_image</string>
 </resources>

@@ -7,11 +7,14 @@ import androidx.annotation.StringRes
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.doOnPreDraw
 import androidx.databinding.BindingAdapter
+import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import coil.Coil
 import coil.api.load
 import coil.request.LoadRequest
+import coil.request.Request
 import coil.transform.RoundedCornersTransformation
 import com.example.filmsapp.BuildConfig
 import com.example.filmsapp.R
@@ -69,6 +72,11 @@ fun Snackbar.action(action: String, color: Int? = null, listener: (View) -> Unit
     color?.let { setActionTextColor(color) }
 }
 
+fun Fragment.waitForTransition(targetView: View) {
+    postponeEnterTransition()
+    targetView.doOnPreDraw { startPostponedEnterTransition() }
+}
+
 @BindingAdapter("textOrGone")
 fun AppCompatTextView.setTextOrGone(text: String?) {
     if (text.isNullOrEmpty()) {
@@ -79,12 +87,13 @@ fun AppCompatTextView.setTextOrGone(text: String?) {
     }
 }
 
-@BindingAdapter("url")
-fun AppCompatImageView.src(url: String?) {
+@BindingAdapter("url", "requestListener", requireAll = false)
+fun AppCompatImageView.src(url: String?, requestListener: Request.Listener?) {
     val imageLoader = Coil.imageLoader(context)
     val request = LoadRequest.Builder(context)
         .crossfade(true)
         .transformations(RoundedCornersTransformation(16.0f))
+        .listener(requestListener)
         .error(R.drawable.ic_error)
         .data(BuildConfig.REDUCED_IMAGE_URL + url)
         .target(this)
@@ -93,9 +102,10 @@ fun AppCompatImageView.src(url: String?) {
     imageLoader.execute(request)
 }
 
-@BindingAdapter("backdrop")
-fun setBackdrop(imageView: AppCompatImageView, url: String?) {
+@BindingAdapter("backdrop", "requestListener", requireAll = false)
+fun setBackdrop(imageView: AppCompatImageView, url: String?, requestListener: Request.Listener? = null) {
     imageView.load(BuildConfig.FULL_IMAGE_URL + url) {
+        listener(requestListener)
         error(R.drawable.ic_error)
     }
 }
