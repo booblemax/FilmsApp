@@ -147,6 +147,7 @@ class DetailsFragment : BaseFragment<DetailsViewModel, DetailsFragmentBinding>()
     }
 
     override fun onBackPressed() {
+        sharedViewModel.clearBackdropCarouselPosition()
         findNavController().navigateUp()
     }
 }

@@ -4,5 +4,13 @@ import com.example.filmsapp.ui.base.BaseViewModel
 
 class SharedViewModel : BaseViewModel() {
 
-    var backdropCarouselPosition: Int = -1
+    var backdropCarouselPosition: Int = DEFAULT_POSITION
+
+    fun clearBackdropCarouselPosition() {
+        backdropCarouselPosition = DEFAULT_POSITION
+    }
+
+    companion object {
+        const val DEFAULT_POSITION = -1
+    }
 }
