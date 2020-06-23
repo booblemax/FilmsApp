@@ -3,8 +3,10 @@ package com.example.filmsapp.domain
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import com.example.filmsapp.domain.exceptions.RetrofitException
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
 abstract class NetworkBoundResource<ResultType, RequestType> {

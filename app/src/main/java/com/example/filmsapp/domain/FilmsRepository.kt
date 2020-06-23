@@ -63,5 +63,4 @@ class FilmsRepository(
             }
             Resource.SUCCESS(film.toModel(images))
         }
-
 }

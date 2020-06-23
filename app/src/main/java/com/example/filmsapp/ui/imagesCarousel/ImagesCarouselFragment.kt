@@ -15,9 +15,6 @@ import com.example.filmsapp.ui.base.BaseFragment
 import com.example.filmsapp.ui.main.SharedViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
-import kotlin.collections.asList
 import kotlin.collections.set
 
 class ImagesCarouselFragment :

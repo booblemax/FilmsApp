@@ -31,13 +31,11 @@ val dataModule = module {
 
     factory { AuthHeaderInterceptor() }
 
-
     // retrofit
 
     single { configRetrofit(get<OkHttpClient>(), get<Gson>()) }
 
     factory { createGithubService(get()) }
-
 }
 
 private fun configRetrofit(client: OkHttpClient, gson: Gson): Retrofit = Retrofit.Builder()

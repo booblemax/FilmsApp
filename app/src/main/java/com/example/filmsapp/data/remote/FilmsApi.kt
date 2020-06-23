@@ -21,5 +21,4 @@ interface FilmsApi {
 
     @GET("movie/{id}/images")
     suspend fun getBackdrops(@Path("id") id: String): BackdropsDto
-
 }

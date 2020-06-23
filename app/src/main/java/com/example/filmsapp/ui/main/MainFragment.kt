@@ -57,7 +57,6 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
             override fun isLastPage(): Boolean = false
 
             override fun isLoading(): Boolean = adapter.isLoading
-
         })
         if (viewModel.lastKnownPosition != -1) {
             binding.rvFilms.scrollToPosition(viewModel.lastKnownPosition)

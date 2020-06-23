@@ -13,5 +13,4 @@ class ZonedDateTimeDeserializer : JsonDeserializer<ZonedDateTime> {
         typeOfT: Type?,
         context: JsonDeserializationContext?
     ): ZonedDateTime = json?.let { ZonedDateTime.parse(it.asString) } ?: ZonedDateTime.now()
-
 }

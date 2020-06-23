@@ -10,7 +10,7 @@ class WrappedGridLayoutManager(
     spanCount: Int,
     orientation: Int = RecyclerView.VERTICAL,
     reverseLayout: Boolean = false
-    ) : GridLayoutManager(context, spanCount, orientation, reverseLayout) {
+) : GridLayoutManager(context, spanCount, orientation, reverseLayout) {
 
     override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
         try {

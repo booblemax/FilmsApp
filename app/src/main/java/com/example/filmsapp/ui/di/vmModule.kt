@@ -16,5 +16,4 @@ val vmModule = module {
     viewModel { DetailsViewModel(get()) }
 
     viewModel { ImagesCarouselViewModel() }
-
 }

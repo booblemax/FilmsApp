@@ -70,5 +70,4 @@ data class FilmDto(
             genres,
             backdrops
         )
-
 }

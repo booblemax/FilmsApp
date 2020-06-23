@@ -79,7 +79,6 @@ class MainAdapter(
     companion object {
         private const val DEFAULT_INDEX = -1
     }
-
 }
 
 class MainViewHolder(
@@ -115,5 +114,4 @@ private class FilmsDiffUtils(
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
         oldList[oldItemPosition] == newList[newItemPosition]
-
 }

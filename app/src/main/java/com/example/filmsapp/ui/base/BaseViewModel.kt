@@ -6,11 +6,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import timber.log.Timber
-import kotlin.coroutines.CoroutineContext
 
 abstract class BaseViewModel : ViewModel() {
 
-    protected val job : Job = Job()
+    protected val job: Job = Job()
 
     private val defaultExceptionHandler = CoroutineExceptionHandler { _, exception ->
         handleException(exception)

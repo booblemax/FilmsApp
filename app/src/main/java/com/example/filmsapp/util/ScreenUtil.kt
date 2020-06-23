@@ -17,5 +17,4 @@ object ScreenUtil {
         val spanCount = min(1, metrics.widthPixels / itemWidth)
         return spanCount
     }
-
 }

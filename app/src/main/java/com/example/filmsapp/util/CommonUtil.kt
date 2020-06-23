@@ -13,5 +13,4 @@ object CommonUtil {
         val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
         return (screenWidthDp / columnWidthDp + 0.5).toInt()
     }
-
 }
