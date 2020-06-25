@@ -11,7 +11,7 @@ class SimpleItemDecoration(
     private val bottom: Int
 ) : RecyclerView.ItemDecoration() {
 
-    constructor(all: Int): this(all, all, all, all)
+    constructor(all: Int) : this(all, all, all, all)
 
     override fun getItemOffsets(
         outRect: Rect,

@@ -35,12 +35,11 @@ class MainViewModel(
     }
 
     private suspend fun loadByListType(forceUpdate: Boolean = false): Resource<List<FilmModel>> =
-        when(listType) {
+        when (listType) {
             ListType.POPULAR -> repository.getPopularFilmsCached(pageNumber, forceUpdate)
             ListType.TOP_RATED -> repository.getTopRatedFilmsCached(pageNumber, forceUpdate)
             ListType.UPCOMING -> repository.getUpcomingFilmsCached(pageNumber, forceUpdate)
         }
-
 
     fun resetPageNumber() {
         pageNumber = FIRST_PAGE_NUMBER

@@ -9,7 +9,7 @@ class WrappedLinearLayoutManager(
     context: Context?,
     orientation: Int = RecyclerView.HORIZONTAL,
     reverseLayout: Boolean = false
-    ) : LinearLayoutManager(context, orientation, reverseLayout) {
+) : LinearLayoutManager(context, orientation, reverseLayout) {
 
     /**
      * When uses loading item in adapter for recyclerview layout manager has wrong
@@ -20,7 +20,7 @@ class WrappedLinearLayoutManager(
         try {
             super.onLayoutChildren(recycler, state)
         } catch (e: IndexOutOfBoundsException) {
-            Timber.e("IndexOutOfBoundException occur in RecyclerView: ${recycler.toString()}")
+            Timber.e("IndexOutOfBoundException occur in RecyclerView: $recycler")
         }
     }
 }

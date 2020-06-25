@@ -69,7 +69,6 @@ class FilmsRepository(
             }
         }
 
-
     suspend fun getTopRatedFilmsCached(
         page: Int = 1,
         forceUpdate: Boolean = false
@@ -112,7 +111,6 @@ class FilmsRepository(
             }
         }
 
-
     suspend fun getUpcomingFilmsCached(
         page: Int = 1,
         forceUpdate: Boolean = false
@@ -154,7 +152,6 @@ class FilmsRepository(
                 )
             }
         }
-
 
     suspend fun getFilm(id: String): Resource<FilmModel> =
         withContext(Dispatchers.IO) {

@@ -6,7 +6,7 @@ import timber.log.Timber
 
 abstract class BaseViewModel : ViewModel() {
 
-    protected val job: Job = Job()
+    private val job: Job = Job()
 
     private val defaultExceptionHandler = CoroutineExceptionHandler { _, exception ->
         handleException(exception)

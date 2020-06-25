@@ -21,7 +21,7 @@ class WrappedGridLayoutManager(
         try {
             super.onLayoutChildren(recycler, state)
         } catch (e: IndexOutOfBoundsException) {
-            Timber.e("IndexOutOfBoundsException occured in RecyclerView: ${recycler.toString()}")
+            Timber.e("IndexOutOfBoundsException occured in RecyclerView: $recycler")
         }
     }
 }
