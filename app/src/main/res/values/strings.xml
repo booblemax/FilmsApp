@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">FilmsApp</string>
     <string name="transition_carousel_image">id_carousel_image</string>
+
+    <string name="popular_title">Popular</string>
+    <string name="toprated_title">Top Rated</string>
+    <string name="upcoming_title">Upcoming</string>
+
+    <string name="title_popular">Popular</string>
+    <string name="title_toprated">Top Rated</string>
+    <string name="title_upcoming">Upcoming</string>
+
 </resources>

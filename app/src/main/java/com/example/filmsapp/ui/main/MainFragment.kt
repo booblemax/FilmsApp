@@ -1,5 +1,6 @@
 package com.example.filmsapp.ui.main
 
+import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -8,6 +9,7 @@ import com.example.filmsapp.databinding.MainFragmentBinding
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.ui.base.BaseFragment
 import com.example.filmsapp.ui.base.common.EndlessRecyclerScrollListener
+import com.example.filmsapp.ui.base.common.SimpleItemDecoration
 import com.example.filmsapp.ui.base.common.WrappedGridLayoutManager
 import com.example.filmsapp.util.snack
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -17,13 +19,29 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
     override val layoutRes: Int = R.layout.main_fragment
     override val viewModel: MainViewModel by viewModel()
 
+    private lateinit var args: MainFragmentArgs
+
     private lateinit var adapter: MainAdapter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        args = MainFragmentArgs.fromBundle(requireArguments())
+        viewModel.listType = args.listType
+        viewModel.loadPopularFilms(true)
+    }
+
     override fun init() {
+        initTitle()
         initAdapter()
         initRecyclerView(adapter)
         initRefreshLayout()
         initListener(adapter)
+    }
+
+    private fun initTitle() {
+        binding.toolbar.title = getString(args.listType.titleId)
+        binding.toolbar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_back, context?.theme)
+        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun initAdapter() {
@@ -47,7 +65,7 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
         binding.rvFilms.layoutManager = layoutManager
         binding.rvFilms.setHasFixedSize(true)
         binding.rvFilms.adapter = adapter
-        binding.rvFilms.addItemDecoration(SimpleItemDecoration())
+        binding.rvFilms.addItemDecoration(SimpleItemDecoration(MARGIN_OFFSET))
         binding.rvFilms.addOnScrollListener(object : EndlessRecyclerScrollListener(layoutManager) {
 
             override fun loadMoreItems() {
@@ -98,7 +116,12 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
         }
     }
 
+    override fun onBackPressed() {
+        findNavController().navigateUp()
+    }
+
     companion object {
         const val MIN_COLUMN_COUNT = 2
+        const val MARGIN_OFFSET = 24
     }
 }

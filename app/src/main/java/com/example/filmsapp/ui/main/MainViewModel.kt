@@ -7,6 +7,7 @@ import com.example.filmsapp.domain.FilmsRepository
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.ui.base.BaseViewModel
 import com.example.filmsapp.ui.base.models.FilmModel
+import com.example.filmsapp.ui.base.models.ListType
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -22,19 +23,24 @@ class MainViewModel(
         it is Resource.LOADING<*> && pageNumber == FIRST_PAGE_NUMBER
     }
 
+    lateinit var listType: ListType
     var lastKnownPosition = -1
-
-    init {
-        loadPopularFilms(true)
-    }
 
     fun loadPopularFilms(forceUpdate: Boolean = false) {
         baseContext.launch {
             incPageNumber()
             _popularFilms.value = Resource.LOADING()
-            _popularFilms.value = repository.getPopularFilms(pageNumber, forceUpdate)
+            _popularFilms.value = loadByListType(forceUpdate)
         }
     }
+
+    private suspend fun loadByListType(forceUpdate: Boolean = false): Resource<List<FilmModel>> =
+        when(listType) {
+            ListType.POPULAR -> repository.getPopularFilmsCached(pageNumber, forceUpdate)
+            ListType.TOP_RATED -> repository.getTopRatedFilmsCached(pageNumber, forceUpdate)
+            ListType.UPCOMING -> repository.getUpcomingFilmsCached(pageNumber, forceUpdate)
+        }
+
 
     fun resetPageNumber() {
         pageNumber = FIRST_PAGE_NUMBER

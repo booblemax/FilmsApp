@@ -16,6 +16,12 @@ interface FilmsApi {
     @GET("movie/popular")
     suspend fun getPopularList(@Query("page") page: Int): Response<FilmsDto>
 
+    @GET("movie/top_rated")
+    suspend fun getTopRatedList(@Query("page") page: Int): Response<FilmsDto>
+
+    @GET("movie/upcoming")
+    suspend fun getUpcomingList(@Query("page") page: Int): Response<FilmsDto>
+
     @GET("movie/{id}")
     suspend fun getFilm(@Path("id") id: String): FilmDto
 

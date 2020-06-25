@@ -88,7 +88,7 @@ fun AppCompatTextView.setTextOrGone(text: String?) {
 }
 
 @BindingAdapter("url", "requestListener", requireAll = false)
-fun AppCompatImageView.src(url: String?, requestListener: Request.Listener?) {
+fun AppCompatImageView.src(url: String?, requestListener: Request.Listener? = null) {
     val imageLoader = Coil.imageLoader(context)
     val request = LoadRequest.Builder(context)
         .crossfade(true)

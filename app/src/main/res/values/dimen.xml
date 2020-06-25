@@ -46,4 +46,7 @@
     <dimen name="film_image_width_small">100dp</dimen>
     <dimen name="film_image_height_small">150dp</dimen>
 
+    <dimen name="lists_film_image_width">150dp</dimen>
+    <dimen name="lists_film_image_height">225dp</dimen>
+
 </resources>

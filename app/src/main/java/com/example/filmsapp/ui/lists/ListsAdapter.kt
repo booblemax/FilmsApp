@@ -1,44 +1,50 @@
-package com.example.filmsapp.ui.main
+package com.example.filmsapp.ui.lists
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmsapp.R
-import com.example.filmsapp.databinding.ItemFilmBinding
-import com.example.filmsapp.databinding.ItemLoadingBinding
+import com.example.filmsapp.databinding.ItemFilmLoadingBinding
+import com.example.filmsapp.databinding.ItemListsFilmBinding
 import com.example.filmsapp.ui.base.BaseViewHolder
+import com.example.filmsapp.ui.base.common.FilmsDiffUtils
 import com.example.filmsapp.ui.base.models.FilmModel
 
-class MainAdapter(
+class ListsAdapter(
     private val onItemClickListener: (FilmModel) -> Unit
 ) : RecyclerView.Adapter<BaseViewHolder>() {
 
     private val items = mutableListOf<FilmModel>()
     private var deepestIndex = DEFAULT_INDEX
     var isLoading = false
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun getItemViewType(position: Int): Int =
-        if (isLoading && position == items.size) {
-            R.layout.item_loading
+        if (isLoading && (position == items.size || itemCount == 1)) {
+            R.layout.item_film_loading
         } else {
-            R.layout.item_film
+            R.layout.item_lists_film
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder =
         when (viewType) {
-            R.layout.item_film -> {
-                val binding = ItemFilmBinding.inflate(LayoutInflater.from(parent.context))
-                MainViewHolder(binding).also { holder ->
+            R.layout.item_lists_film -> {
+                val binding = ItemListsFilmBinding.inflate(LayoutInflater.from(parent.context))
+                FilmsViewHolder(binding).also { holder ->
                     holder.itemView.setOnClickListener {
                         getItem(holder.adapterPosition)?.let { item -> onItemClickListener(item) }
                     }
                 }
             }
             else -> {
-                val binding = ItemLoadingBinding.inflate(LayoutInflater.from(parent.context))
-                LoadingViewHolder(binding)
+                val binding = ItemFilmLoadingBinding.inflate(LayoutInflater.from(parent.context))
+                LoadingViewHolder(binding.root)
             }
         }
 
@@ -47,18 +53,18 @@ class MainAdapter(
     }
 
     override fun onViewAttachedToWindow(holder: BaseViewHolder) {
-        if (holder.adapterPosition > deepestIndex) {
+        if (holder.adapterPosition > deepestIndex && holder !is LoadingViewHolder) {
             val animation =
                 AnimationUtils.loadAnimation(
                     holder.itemView.context,
-                    R.anim.item_animation_fall_down
+                    R.anim.item_animation_fall_left
                 )
             holder.itemView.startAnimation(animation)
             deepestIndex = holder.adapterPosition
         }
     }
 
-    fun submitList(list: MutableList<FilmModel>) {
+    fun submitList(list: List<FilmModel>) {
         val oldList = items.toMutableList()
 
         items.clear()
@@ -81,37 +87,21 @@ class MainAdapter(
     }
 }
 
-class MainViewHolder(
-    private val binding: ItemFilmBinding
+class FilmsViewHolder(
+    private val binding: ItemListsFilmBinding
 ) : BaseViewHolder(binding.root) {
 
     override fun bind(model: Any?) {
         (model as? FilmModel)?.let {
-            binding.model = it
+            binding.path = it.poster
             binding.executePendingBindings()
         }
     }
 }
 
 class LoadingViewHolder(
-    binding: ItemLoadingBinding
-) : BaseViewHolder(binding.root) {
+    view: View
+) : BaseViewHolder(view) {
 
     override fun bind(model: Any?) {}
-}
-
-private class FilmsDiffUtils(
-    private val oldList: List<FilmModel>,
-    private val newList: List<FilmModel>
-) : DiffUtil.Callback() {
-
-    override fun getOldListSize(): Int = oldList.size
-
-    override fun getNewListSize(): Int = newList.size
-
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-        oldList[oldItemPosition].id == newList[newItemPosition].id
-
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-        oldList[oldItemPosition] == newList[newItemPosition]
 }

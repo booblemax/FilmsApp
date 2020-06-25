@@ -1,10 +1,7 @@
 package com.example.filmsapp.ui.base
 
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import timber.log.Timber
 
 abstract class BaseViewModel : ViewModel() {
@@ -19,5 +16,9 @@ abstract class BaseViewModel : ViewModel() {
 
     protected open fun handleException(exception: Throwable) {
         Timber.e(exception)
+    }
+
+    override fun onCleared() {
+        baseContext.cancel()
     }
 }

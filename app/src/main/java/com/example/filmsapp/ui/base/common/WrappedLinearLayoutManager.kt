@@ -1,16 +1,15 @@
 package com.example.filmsapp.ui.base.common
 
 import android.content.Context
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import timber.log.Timber
 
-class WrappedGridLayoutManager(
+class WrappedLinearLayoutManager(
     context: Context?,
-    spanCount: Int,
-    orientation: Int = RecyclerView.VERTICAL,
+    orientation: Int = RecyclerView.HORIZONTAL,
     reverseLayout: Boolean = false
-) : GridLayoutManager(context, spanCount, orientation, reverseLayout) {
+    ) : LinearLayoutManager(context, orientation, reverseLayout) {
 
     /**
      * When uses loading item in adapter for recyclerview layout manager has wrong
@@ -21,7 +20,7 @@ class WrappedGridLayoutManager(
         try {
             super.onLayoutChildren(recycler, state)
         } catch (e: IndexOutOfBoundsException) {
-            Timber.e("IndexOutOfBoundsException occured in RecyclerView: ${recycler.toString()}")
+            Timber.e("IndexOutOfBoundException occur in RecyclerView: ${recycler.toString()}")
         }
     }
 }

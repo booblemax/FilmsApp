@@ -2,16 +2,23 @@
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
+
+        <variable
+            name="path"
+            type="String" />
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <ProgressBar
-            android:theme="@style/ProgressBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_8"
-            android:layout_marginBottom="@dimen/size_8"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/item_lists_image"
+            android:layout_width="@dimen/lists_film_image_width"
+            android:layout_height="@dimen/lists_film_image_height"
+            url="@{path}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
