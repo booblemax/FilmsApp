@@ -10,6 +10,7 @@ import com.example.filmsapp.databinding.ItemFilmBinding
 import com.example.filmsapp.databinding.ItemLoadingBinding
 import com.example.filmsapp.ui.base.BaseViewHolder
 import com.example.filmsapp.ui.base.models.FilmModel
+import com.example.filmsapp.util.visible
 
 class MainAdapter(
     private val onItemClickListener: (FilmModel) -> Unit
@@ -88,6 +89,7 @@ class MainViewHolder(
     override fun bind(model: Any?) {
         (model as? FilmModel)?.let {
             binding.model = it
+            if (it.video) binding.filmPlay.visible()
             binding.executePendingBindings()
         }
     }

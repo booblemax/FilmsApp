@@ -60,7 +60,7 @@ class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {
     private fun initClickListeners() {
         binding.listsPopularBackground.setOnClickListener { filmsBackgroundItemClickListener(ListType.POPULAR) }
         binding.listsTopratedBackground.setOnClickListener { filmsBackgroundItemClickListener(ListType.TOP_RATED) }
-        binding.listsPopularBackground.setOnClickListener { filmsBackgroundItemClickListener(ListType.POPULAR) }
+        binding.listsUpcomingBackground.setOnClickListener { filmsBackgroundItemClickListener(ListType.POPULAR) }
     }
 
     private fun initListener() {

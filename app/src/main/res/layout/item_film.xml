@@ -10,12 +10,21 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?attr/selectableItemBackground">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivPoster"
+            android:id="@+id/film_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/size_4"
+            app:srcCompat="@drawable/ic_play"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/film_poster"
+            app:layout_constraintBottom_toBottomOf="@id/film_poster" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/film_poster"
             url="@{model.poster}"
             android:layout_width="@dimen/film_image_width_big"
             android:layout_height="@dimen/film_image_height_big"

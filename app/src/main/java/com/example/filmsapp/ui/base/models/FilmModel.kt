@@ -14,5 +14,6 @@ data class FilmModel(
     val voteAverage: Double = 0.0,
     val voteCount: Int = -1,
     val genres: List<Genre>? = null,
-    val backdrops: BackdropsDto? = null
+    val backdrops: BackdropsDto? = null,
+    val video: Boolean = false
 )
