@@ -40,8 +40,10 @@ android {
         }
     }
 
-    dataBinding {
-        isEnabled = true
+    buildFeatures {
+        dataBinding {
+            isEnabled = true
+        }
     }
 
     compileOptions {
