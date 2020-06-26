@@ -1,11 +1,11 @@
 plugins {
-    id ("com.android.application")
+    id("com.android.application")
     id("androidx.navigation.safeargs")
-    id("org.jlleitschuh.gradle.ktlint")
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
 }
+apply(from = "../ktlint.gradle.kts")
 
 android {
 
