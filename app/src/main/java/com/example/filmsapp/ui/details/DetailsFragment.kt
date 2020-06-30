@@ -105,7 +105,7 @@ class DetailsFragment :
             startActivityForResult(it.intent, REQUEST_AUTHORIZATION)
         }
         viewModel.displayGpsUnavailable.observe(viewLifecycleOwner, ::showGooglePlayServicesAvailabilityErrorDialog)
-        viewModel._showSnackbar.observe(viewLifecycleOwner) { view?.snack(it) }
+        viewModel.showSnackbar.observe(viewLifecycleOwner) { view?.snack(getString(R.string.error_occur, it)) }
     }
 
     private fun initImages() {

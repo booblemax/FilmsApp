@@ -76,7 +76,7 @@ class DetailsViewModel(
             is GooglePlayServicesAvailabilityIOException -> _displayGpsUnavailable.value =
                 exception.connectionStatusCode
             is UserRecoverableAuthIOException -> _requestAuthorizationPermission.value = exception
-            else -> _showSnackbar.value = "Error occur: ${exception.message}"
+            else -> _showSnackbar.value = exception.message
         }
     }
 
