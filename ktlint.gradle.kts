@@ -1,7 +1,7 @@
 val ktlint by configurations.creating
 
 dependencies {
-    ktlint("com.pinterest:ktlint:0.36.0")
+    ktlint("com.pinterest:ktlint:0.37.2")
 }
 
 val inputFiles = project.fileTree(mapOf("dir" to "src", "include" to "**/*.kt"))

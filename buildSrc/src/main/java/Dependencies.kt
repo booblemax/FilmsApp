@@ -11,6 +11,7 @@ object Apps {
 
 object Classpath {
     const val testInstrumentalRunner = "androidx.test.runner.AndroidJUnitRunner"
+    const val youtubePlayerApi = "libs/YouTubeAndroidPlayerApi.jar"
 }
 
 object Versions {
@@ -33,6 +34,10 @@ object Versions {
     const val room = "2.2.5"
     const val conscrypt = "2.4.0"
     const val threetenabp = "1.2.3"
+    const val googleApiClient = "1.22.0"
+    const val googleApiYoutube = "v3-rev183-1.22.0"
+    const val playServices = "18.0.0"
+    const val easyPermission = "3.0.0"
 
     /* test */
     const val junit = "4.13"
@@ -51,6 +56,12 @@ object Libs {
     const val swipe_refresh_layout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipeRefreshLayout}"
     const val recyclerview = "androidx.recyclerview:recyclerview:${Versions.material}"
     const val material = "com.google.android.material:material:${Versions.material}"
+
+    const val play_services = "com.google.android.gms:play-services-auth:${Versions.playServices}"
+    const val google_api_client = "com.google.api-client:google-api-client-android:${Versions.googleApiClient}"
+    const val google_api_youtube = "com.google.apis:google-api-services-youtube:${Versions.googleApiYoutube}"
+
+    const val excludePackage = "org.apache.httpcomponents"
 
     const val koin_core = "org.koin:koin-core:${Versions.koin}"
     const val koin_androidx_viewmodel = "org.koin:koin-androidx-viewmodel:${Versions.koin}"
@@ -71,6 +82,7 @@ object Libs {
     const val conscrypt = "org.conscrypt:conscrypt-android:${Versions.conscrypt}"
 
     const val threetenabp = "com.jakewharton.threetenabp:threetenabp:${Versions.threetenabp}"
+    const val easy_permission = "pub.devrel:easypermissions:${Versions.easyPermission}"
 
     const val coil = "io.coil-kt:coil:${Versions.coil}"
 

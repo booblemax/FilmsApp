@@ -29,12 +29,14 @@ android {
             buildConfigField("String", "BASE_URL", project.property("baseurl") as String)
             buildConfigField("String", "FULL_IMAGE_URL", project.property("fullImageUrl") as String)
             buildConfigField("String", "REDUCED_IMAGE_URL", project.property("reducedImageUrl") as String)
+            buildConfigField("String", "GOOGLE_API_KEY", project.property("googleApiKey") as String)
         }
         getByName("release") {
             buildConfigField("String", "TOKEN", project.property("token") as String)
             buildConfigField("String", "BASE_URL", project.property("baseurl") as String)
             buildConfigField("String", "FULL_IMAGE_URL", project.property("fullImageUrl") as String)
             buildConfigField("String", "REDUCED_IMAGE_URL", project.property("reducedImageUrl") as String)
+            buildConfigField("String", "GOOGLE_API_KEY", project.property("googleApiKey") as String)
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
@@ -70,6 +72,15 @@ dependencies {
     implementation(Libs.viewpager2)
     implementation(Libs.material)
 
+    implementation(Libs.google_api_client) {
+        exclude(group = Libs.excludePackage)
+    }
+    implementation(Libs.google_api_youtube) {
+        exclude(group = Libs.excludePackage)
+    }
+    files(Classpath.youtubePlayerApi)
+    implementation(Libs.play_services)
+
     implementation(Libs.koin_core)
     implementation(Libs.koin_androidx_scope)
     implementation(Libs.koin_androidx_viewmodel)
@@ -86,7 +97,7 @@ dependencies {
 
     implementation(Libs.conscrypt)
     implementation(Libs.threetenabp)
-
+    implementation(Libs.easy_permission)
     implementation(Libs.coil)
 
     implementation(Libs.timber)
