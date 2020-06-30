@@ -1,5 +1,6 @@
 package com.example.filmsapp.ui.details
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.filmsapp.BuildConfig
 import com.example.filmsapp.domain.FilmsRepository
@@ -25,10 +26,15 @@ class DetailsViewModel(
     private val _film = MutableLiveData<Resource<FilmModel>>()
     val film get() = _film
 
-    //todo refactor
-    val requestAuthorizationPermission = MutableLiveData<UserRecoverableAuthIOException>()
-    val displayGpsUnavailable = MutableLiveData<Int>()
-    val searchResult = MutableLiveData<String>()
+    private val _requestAuthorizationPermission = MutableLiveData<UserRecoverableAuthIOException>()
+    val requestAuthorizationPermission: LiveData<UserRecoverableAuthIOException> =
+        MutableLiveData<UserRecoverableAuthIOException>()
+
+    private val _displayGpsUnavailable = MutableLiveData<Int>()
+    val displayGpsUnavailable: LiveData<Int> = MutableLiveData<Int>()
+
+    private val _searchResult = MutableLiveData<String>()
+    val searchResult: LiveData<String> = MutableLiveData<String>()
 
     fun loadFilm(id: String) {
         baseContext.launch {
@@ -46,19 +52,19 @@ class DetailsViewModel(
                 .setYouTubeRequestInitializer(YouTubeRequestInitializer(BuildConfig.GOOGLE_API_KEY))
                 .build()
 
-            val query = "$filmName trailer"
+            val query = "$filmName $QUERY_SUFFIX"
             val result: SearchListResponse = withContext(Dispatchers.IO) {
-                service.search().list("snippet").apply {
+                service.search().list(SEARCH_PART).apply {
                     maxResults = 1
                     q = query
                 }.execute()
             }
 
             if (result.items.isEmpty()) {
-                searchResult.postValue("Empty list")
+                _searchResult.postValue("Empty list")
             } else {
                 result.items.forEach { item ->
-                    searchResult.postValue(item.snippet.title)
+                    _searchResult.postValue(item.snippet.title)
                 }
             }
         }
@@ -67,9 +73,15 @@ class DetailsViewModel(
     override fun handleException(exception: Throwable) {
         super.handleException(exception)
         when (exception) {
-            is GooglePlayServicesAvailabilityIOException -> displayGpsUnavailable.value = exception.connectionStatusCode
-            is UserRecoverableAuthIOException -> requestAuthorizationPermission.value = exception
-            else -> showSnackbar.value = "Error occur: ${exception.message}"
+            is GooglePlayServicesAvailabilityIOException -> _displayGpsUnavailable.value =
+                exception.connectionStatusCode
+            is UserRecoverableAuthIOException -> _requestAuthorizationPermission.value = exception
+            else -> _showSnackbar.value = "Error occur: ${exception.message}"
         }
+    }
+
+    companion object {
+        const val SEARCH_PART = "snippet"
+        const val QUERY_SUFFIX = "trailer"
     }
 }

@@ -76,25 +76,9 @@ class DetailsFragment :
     override fun init() {
         binding.detailsBack.setOnClickListener { onBackPressed() }
         initListener()
-
-        arguments?.let {
-            val args = DetailsFragmentArgs.fromBundle(it)
-            with(args) {
-                binding.posterUrl = posterUrl
-                binding.backdropUrl = backdropUrl
-            }
-        }
-
+        initImages()
         initViewPager()
-        credential = GoogleAccountCredential.usingOAuth2(
-            requireContext(), SCOPES
-        )
-            .setBackOff(ExponentialBackOff())
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        prepareTransition()
-        waitForTransition(binding.detailsBackdrops)
+        initCredentials()
     }
 
     private fun initListener() {
@@ -110,7 +94,7 @@ class DetailsFragment :
             }
         }
         viewModel.searchResult.observe(viewLifecycleOwner) {
-            if (!it.isNullOrEmpty()) {
+            if (it.isNotEmpty()) {
                 binding.detailsPlay.visible()
                 binding.detailsPlay.snack("Title $it")
             } else {
@@ -121,7 +105,29 @@ class DetailsFragment :
             startActivityForResult(it.intent, REQUEST_AUTHORIZATION)
         }
         viewModel.displayGpsUnavailable.observe(viewLifecycleOwner, ::showGooglePlayServicesAvailabilityErrorDialog)
-        viewModel.showSnackbar.observe(viewLifecycleOwner) { view?.snack(it) }
+        viewModel._showSnackbar.observe(viewLifecycleOwner) { view?.snack(it) }
+    }
+
+    private fun initImages() {
+        arguments?.let {
+            val args = DetailsFragmentArgs.fromBundle(it)
+            with(args) {
+                binding.posterUrl = posterUrl
+                binding.backdropUrl = backdropUrl
+            }
+        }
+    }
+
+    private fun initCredentials() {
+        credential = GoogleAccountCredential.usingOAuth2(
+            requireContext(), SCOPES
+        )
+            .setBackOff(ExponentialBackOff())
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        prepareTransition()
+        waitForTransition(binding.detailsBackdrops)
     }
 
     private fun initViewPager() {
@@ -193,15 +199,6 @@ class DetailsFragment :
     }
 
     private fun getResultsFromApi() {
-//        if (!isGooglePlayServicesAvailable()) {
-//            acquireGooglePlayServices()
-//        } else if (credential.selectedAccountName == null) {
-//            chooseAccount()
-//        } else if (!NetworkStateHolder.isConnected) {
-//            view?.snack("No network connection available :(")
-//        } else {
-//            viewModel.requestFilmTrailer(binding.detailsTitle.text.toString(), credential)
-//        }
         when {
             !isGooglePlayServicesAvailable() -> acquireGooglePlayServices()
             credential.selectedAccountName == null -> chooseAccount()

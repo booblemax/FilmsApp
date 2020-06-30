@@ -1,5 +1,6 @@
 package com.example.filmsapp.ui.base
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
@@ -7,7 +8,8 @@ import timber.log.Timber
 
 abstract class BaseViewModel : ViewModel() {
 
-    val showSnackbar = MutableLiveData<String>()
+    protected val _showSnackbar = MutableLiveData<String>()
+    val showSnackbar: LiveData<String> = _showSnackbar
 
     private val job: Job = Job()
     private val defaultExceptionHandler = CoroutineExceptionHandler { _, exception ->
