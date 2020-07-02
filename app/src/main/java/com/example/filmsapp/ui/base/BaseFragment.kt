@@ -10,6 +10,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.filmsapp.BR
 
 abstract class BaseFragment<VM : BaseViewModel, B : ViewDataBinding> : Fragment() {
@@ -53,5 +54,5 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewDataBinding> : Fragment(
      */
     open fun init() {}
 
-    open fun onBackPressed() { }
+    open fun onBackPressed() { findNavController().navigateUp() }
 }

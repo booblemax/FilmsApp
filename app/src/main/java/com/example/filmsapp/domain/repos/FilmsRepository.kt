@@ -1,7 +1,8 @@
-package com.example.filmsapp.domain
+package com.example.filmsapp.domain.repos
 
 import com.example.filmsapp.data.remote.FilmsApi
-import com.example.filmsapp.data.remote.response.BackdropsDto
+import com.example.filmsapp.data.remote.response.films.BackdropsDto
+import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.domain.exceptions.RetrofitException
 import com.example.filmsapp.ui.base.models.FilmModel
 import com.example.filmsapp.util.ConstUtil
@@ -23,7 +24,9 @@ class FilmsRepository(
             if (response.isSuccessful && body != null) {
                 Resource.SUCCESS(body.toModel())
             } else {
-                Resource.ERROR<FilmModel>(RetrofitException(response.code(), response.message()))
+                Resource.ERROR<FilmModel>(
+                    RetrofitException(response.code(), response.message())
+                )
             }
         }
 

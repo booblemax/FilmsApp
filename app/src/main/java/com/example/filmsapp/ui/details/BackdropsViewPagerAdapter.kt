@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.filmsapp.data.remote.response.BackdropDto
+import com.example.filmsapp.data.remote.response.films.BackdropDto
 import com.example.filmsapp.databinding.ItemBackdropBinding
 import com.example.filmsapp.ui.base.BaseViewHolder
 

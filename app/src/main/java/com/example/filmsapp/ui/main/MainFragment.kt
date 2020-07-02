@@ -116,10 +116,6 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
         }
     }
 
-    override fun onBackPressed() {
-        findNavController().navigateUp()
-    }
-
     companion object {
         const val MIN_COLUMN_COUNT = 2
         const val MARGIN_OFFSET = 24

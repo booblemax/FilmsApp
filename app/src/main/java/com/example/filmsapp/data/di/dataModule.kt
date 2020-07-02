@@ -6,10 +6,13 @@ import com.example.filmsapp.domain.interceptor.AuthHeaderInterceptor
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.core.qualifier.StringQualifier
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
+
+val youtubeQualifier = StringQualifier("youtube")
 
 val dataModule = module {
 
@@ -33,13 +36,13 @@ val dataModule = module {
 
     // retrofit
 
-    single { configRetrofit(get<OkHttpClient>(), get<Gson>()) }
+    single { configRetrofit(get<OkHttpClient>(), get<Gson>(), BuildConfig.BASE_URL) }
 
-    factory { createGithubService(get()) }
+    factory { createService(get(), FilmsApi::class.java) }
 }
 
-private fun configRetrofit(client: OkHttpClient, gson: Gson): Retrofit = Retrofit.Builder()
-    .baseUrl(BuildConfig.BASE_URL)
+private fun configRetrofit(client: OkHttpClient, gson: Gson, baseUrl: String): Retrofit = Retrofit.Builder()
+    .baseUrl(baseUrl)
     .client(client)
     .addConverterFactory(GsonConverterFactory.create(gson))
     .build()
@@ -50,5 +53,4 @@ private fun configClient(httpInterceptor: HttpLoggingInterceptor, authHeaderInte
         .addInterceptor(authHeaderInterceptor)
         .build()
 
-private fun createGithubService(retrofit: Retrofit) =
-    retrofit.create(FilmsApi::class.java)
+private fun <T> createService(retrofit: Retrofit, clazz: Class<T>) = retrofit.create(clazz)

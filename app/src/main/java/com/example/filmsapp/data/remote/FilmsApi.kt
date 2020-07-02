@@ -1,8 +1,8 @@
 package com.example.filmsapp.data.remote
 
-import com.example.filmsapp.data.remote.response.BackdropsDto
-import com.example.filmsapp.data.remote.response.FilmDto
-import com.example.filmsapp.data.remote.response.FilmsDto
+import com.example.filmsapp.data.remote.response.films.BackdropsDto
+import com.example.filmsapp.data.remote.response.films.FilmDto
+import com.example.filmsapp.data.remote.response.films.FilmsDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

@@ -78,7 +78,7 @@ dependencies {
     implementation(Libs.google_api_youtube) {
         exclude(group = Libs.excludePackage)
     }
-    files(Classpath.youtubePlayerApi)
+    implementation(Libs.youtube_player)
     implementation(Libs.play_services)
 
     implementation(Libs.koin_core)

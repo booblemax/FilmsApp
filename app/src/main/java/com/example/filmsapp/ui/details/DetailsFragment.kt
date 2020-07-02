@@ -75,13 +75,13 @@ class DetailsFragment :
 
     override fun init() {
         binding.detailsBack.setOnClickListener { onBackPressed() }
-        initListener()
+        initObservers()
         initImages()
         initViewPager()
         initCredentials()
     }
 
-    private fun initListener() {
+    private fun initObservers() {
         viewModel.film.observe(viewLifecycleOwner) { resource ->
             if (resource is Resource.SUCCESS) {
                 binding.model = resource.data
@@ -93,19 +93,28 @@ class DetailsFragment :
                 getResultsFromApi()
             }
         }
-        viewModel.searchResult.observe(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
-                binding.detailsPlay.visible()
-                binding.detailsPlay.snack("Title $it")
-            } else {
-                binding.detailsPlay.snack("Error while load film trailer")
+        viewModel.youtubeMovieSearchResult.observe(viewLifecycleOwner) { model ->
+            binding.detailsPlay.setOnClickListener {
+                findNavController().navigate(
+                    DetailsFragmentDirections.actionDetailsFragmentToPlayerFragment(model.videoId)
+                )
             }
+            binding.detailsPlay.visible()
         }
         viewModel.requestAuthorizationPermission.observe(viewLifecycleOwner) {
             startActivityForResult(it.intent, REQUEST_AUTHORIZATION)
         }
-        viewModel.displayGpsUnavailable.observe(viewLifecycleOwner, ::showGooglePlayServicesAvailabilityErrorDialog)
-        viewModel.showSnackbar.observe(viewLifecycleOwner) { view?.snack(getString(R.string.error_occur, it)) }
+        viewModel.displayGpsUnavailable.observe(
+            viewLifecycleOwner, ::showGooglePlayServicesAvailabilityErrorDialog
+        )
+        viewModel.showSnackbar.observe(viewLifecycleOwner) {
+            view?.snack(
+                getString(
+                    R.string.error_occur,
+                    it
+                )
+            )
+        }
     }
 
     private fun initImages() {
@@ -121,14 +130,15 @@ class DetailsFragment :
     private fun initCredentials() {
         credential = GoogleAccountCredential.usingOAuth2(
             requireContext(), SCOPES
-        )
-            .setBackOff(ExponentialBackOff())
+        ).setBackOff(ExponentialBackOff())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         prepareTransition()
         waitForTransition(binding.detailsBackdrops)
     }
+
+    //region view_pager
 
     private fun initViewPager() {
         val offsetPx = resources.getDimensionPixelOffset(R.dimen.size_24)
@@ -193,10 +203,14 @@ class DetailsFragment :
         })
     }
 
+    //endregion
+
     override fun onBackPressed() {
         sharedViewModel.clearBackdropCarouselPosition()
-        findNavController().navigateUp()
+        super.onBackPressed()
     }
+
+    //region google_api
 
     private fun getResultsFromApi() {
         when {
@@ -233,8 +247,11 @@ class DetailsFragment :
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private fun chooseAccount() {
         if (EasyPermissions.hasPermissions(
-                requireContext(), Manifest.permission.GET_ACCOUNTS)) {
-            val accountName = activity?.getPreferences(Context.MODE_PRIVATE)?.getString(PREF_ACCOUNT_NAME, null)
+                requireContext(), Manifest.permission.GET_ACCOUNTS
+            )
+        ) {
+            val accountName =
+                activity?.getPreferences(Context.MODE_PRIVATE)?.getString(PREF_ACCOUNT_NAME, null)
             if (accountName != null) {
                 credential.selectedAccountName = accountName
                 getResultsFromApi()
@@ -302,6 +319,8 @@ class DetailsFragment :
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
         // do nothing
     }
+
+    //endregion
 
     companion object {
         const val REQUEST_ACCOUNT_PICKER = 1000

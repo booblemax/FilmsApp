@@ -5,7 +5,6 @@ import android.transition.TransitionInflater
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.SharedElementCallback
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -53,7 +52,7 @@ class ImagesCarouselFragment :
 
     override fun onBackPressed() {
         storeImagePosition()
-        findNavController().navigateUp()
+        super.onBackPressed()
     }
 
     private fun storeImagePosition() {

@@ -1,7 +1,7 @@
 package com.example.filmsapp.ui.base.models
 
-import com.example.filmsapp.data.remote.response.BackdropsDto
-import com.example.filmsapp.data.remote.response.Genre
+import com.example.filmsapp.data.remote.response.films.BackdropsDto
+import com.example.filmsapp.data.remote.response.films.Genre
 
 data class FilmModel(
     val id: String = "",

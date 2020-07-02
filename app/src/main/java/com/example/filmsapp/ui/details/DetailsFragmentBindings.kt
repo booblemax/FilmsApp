@@ -3,7 +3,7 @@ package com.example.filmsapp.ui.details
 import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
-import com.example.filmsapp.data.remote.response.Genre
+import com.example.filmsapp.data.remote.response.films.Genre
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.util.gone
 import com.example.filmsapp.util.visible

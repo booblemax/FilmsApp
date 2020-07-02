@@ -2,71 +2,46 @@ package com.example.filmsapp.ui.details
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.filmsapp.BuildConfig
-import com.example.filmsapp.domain.FilmsRepository
 import com.example.filmsapp.domain.Resource
+import com.example.filmsapp.domain.repos.FilmsRepository
+import com.example.filmsapp.domain.repos.YoutubeRepository
 import com.example.filmsapp.ui.base.BaseViewModel
 import com.example.filmsapp.ui.base.models.FilmModel
-import com.google.api.client.extensions.android.http.AndroidHttp
+import com.example.filmsapp.ui.base.models.YoutubeFilmModel
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
-import com.google.api.client.json.jackson2.JacksonFactory
-import com.google.api.services.youtube.YouTube
-import com.google.api.services.youtube.YouTubeRequestInitializer
-import com.google.api.services.youtube.model.SearchListResponse
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class DetailsViewModel(
-    private val repository: FilmsRepository
+    private val filmsRepository: FilmsRepository,
+    private val youtubeRepository: YoutubeRepository
 ) : BaseViewModel() {
 
     private val _film = MutableLiveData<Resource<FilmModel>>()
     val film get() = _film
 
     private val _requestAuthorizationPermission = MutableLiveData<UserRecoverableAuthIOException>()
-    val requestAuthorizationPermission: LiveData<UserRecoverableAuthIOException> =
+    val requestAuthorizationPermission: LiveData<UserRecoverableAuthIOException> get() =
         MutableLiveData<UserRecoverableAuthIOException>()
 
     private val _displayGpsUnavailable = MutableLiveData<Int>()
-    val displayGpsUnavailable: LiveData<Int> = MutableLiveData<Int>()
+    val displayGpsUnavailable: LiveData<Int> get() = _displayGpsUnavailable
 
-    private val _searchResult = MutableLiveData<String>()
-    val searchResult: LiveData<String> = MutableLiveData<String>()
+    private val _youtubeMovieSearchResult = MutableLiveData<YoutubeFilmModel>()
+    val youtubeMovieSearchResult: LiveData<YoutubeFilmModel> get() = _youtubeMovieSearchResult
 
     fun loadFilm(id: String) {
         baseContext.launch {
             _film.value = Resource.LOADING()
-            _film.value = repository.getFilm(id)
+            _film.value = filmsRepository.getFilm(id)
         }
     }
 
     fun requestFilmTrailer(filmName: String, credential: GoogleAccountCredential) {
         baseContext.launch {
-            val transport = AndroidHttp.newCompatibleTransport()
-            val factory = JacksonFactory.getDefaultInstance()
-            val service = YouTube.Builder(transport, factory, credential)
-                .setApplicationName("FilmsApp")
-                .setYouTubeRequestInitializer(YouTubeRequestInitializer(BuildConfig.GOOGLE_API_KEY))
-                .build()
-
-            val query = "$filmName $QUERY_SUFFIX"
-            val result: SearchListResponse = withContext(Dispatchers.IO) {
-                service.search().list(SEARCH_PART).apply {
-                    maxResults = 1
-                    q = query
-                }.execute()
-            }
-
-            if (result.items.isEmpty()) {
-                _searchResult.postValue("Empty list")
-            } else {
-                result.items.forEach { item ->
-                    _searchResult.postValue(item.snippet.title)
-                }
-            }
+            val model = youtubeRepository.getTrailerForFilm(filmName, credential)
+            _youtubeMovieSearchResult.value = model
         }
     }
 
@@ -78,10 +53,5 @@ class DetailsViewModel(
             is UserRecoverableAuthIOException -> _requestAuthorizationPermission.value = exception
             else -> _showSnackbar.value = exception.message
         }
-    }
-
-    companion object {
-        const val SEARCH_PART = "snippet"
-        const val QUERY_SUFFIX = "trailer"
     }
 }

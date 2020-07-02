@@ -1,4 +1,4 @@
-package com.example.filmsapp.data.remote.response
+package com.example.filmsapp.data.remote.response.films
 
 import com.example.filmsapp.ui.base.models.FilmModel
 import com.google.gson.annotations.SerializedName

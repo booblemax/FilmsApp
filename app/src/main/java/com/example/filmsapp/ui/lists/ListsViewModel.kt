@@ -2,8 +2,8 @@ package com.example.filmsapp.ui.lists
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.filmsapp.domain.FilmsRepository
 import com.example.filmsapp.domain.Resource
+import com.example.filmsapp.domain.repos.FilmsRepository
 import com.example.filmsapp.ui.base.BaseViewModel
 import com.example.filmsapp.ui.base.models.FilmModel
 import kotlinx.coroutines.async

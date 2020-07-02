@@ -11,7 +11,6 @@ object Apps {
 
 object Classpath {
     const val testInstrumentalRunner = "androidx.test.runner.AndroidJUnitRunner"
-    const val youtubePlayerApi = "libs/YouTubeAndroidPlayerApi.jar"
 }
 
 object Versions {
@@ -38,6 +37,7 @@ object Versions {
     const val googleApiYoutube = "v3-rev183-1.22.0"
     const val playServices = "18.0.0"
     const val easyPermission = "3.0.0"
+    const val youtubePlayer = "0.23"
 
     /* test */
     const val junit = "4.13"
@@ -88,6 +88,8 @@ object Libs {
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
     const val logging_interceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.loggingInterceptor}"
+
+    const val youtube_player = "com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:${Versions.youtubePlayer}"
 }
 
 object TestLibs {

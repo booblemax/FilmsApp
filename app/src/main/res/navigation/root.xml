@@ -35,6 +35,9 @@
             app:destination="@id/imagesCarouselFragment"
             app:launchSingleTop="true"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_detailsFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
     </fragment>
     <fragment
         android:id="@+id/imagesCarouselFragment"
@@ -57,6 +60,14 @@
         <action
             android:id="@+id/action_listsFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playerFragment"
+        android:name="com.example.filmsapp.ui.player.PlayerFragment"
+        android:label="PlayerFragment" >
+        <argument
+            android:name="videoId"
+            app:argType="string" />
     </fragment>
 
 </navigation>
