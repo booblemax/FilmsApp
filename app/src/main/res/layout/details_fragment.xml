@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_play"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/bg_circle_button"
                 android:layout_margin="@dimen/size_12"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -57,13 +57,15 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/details_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/size_12"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_width="@dimen/size_24"
+                android:layout_height="@dimen/size_24"
+                android:layout_marginTop="@dimen/size_12"
+                android:layout_marginStart="@dimen/size_12"
+                android:background="@drawable/bg_circle_button"
+                android:padding="@dimen/size_4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_arrow_back" />
+                app:srcCompat="@drawable/ic_arrow_back_black" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/details_poster"

@@ -24,9 +24,7 @@ import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.ui.base.BaseFragment
 import com.example.filmsapp.ui.base.common.networkinfo.NetworkStateHolder
 import com.example.filmsapp.ui.main.SharedViewModel
-import com.example.filmsapp.util.snack
-import com.example.filmsapp.util.visible
-import com.example.filmsapp.util.waitForTransition
+import com.example.filmsapp.util.*
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
@@ -71,6 +69,7 @@ class DetailsFragment :
                 viewModel.loadFilm(filmId)
             }
         }
+        requireActivity().makeStatusBarTransparent()
     }
 
     override fun init() {
@@ -79,6 +78,7 @@ class DetailsFragment :
         initImages()
         initViewPager()
         initCredentials()
+        registerInsetsListener()
     }
 
     private fun initObservers() {
@@ -131,6 +131,14 @@ class DetailsFragment :
         credential = GoogleAccountCredential.usingOAuth2(
             requireContext(), SCOPES
         ).setBackOff(ExponentialBackOff())
+    }
+
+
+    private fun registerInsetsListener() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            binding.detailsBack.setMarginTop(insets.systemWindowInsetTop)
+            insets.consumeSystemWindowInsets()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -207,6 +215,7 @@ class DetailsFragment :
 
     override fun onBackPressed() {
         sharedViewModel.clearBackdropCarouselPosition()
+        requireActivity().makeStatusBarVisible()
         super.onBackPressed()
     }
 

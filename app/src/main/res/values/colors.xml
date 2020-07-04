@@ -7,6 +7,7 @@
     <color name="black">#000</color>
     <color name="black_60">#66000000</color>
     <color name="white">#fff</color>
+    <color name="white_95">#F2FFFFFF</color>
     <color name="orange">#e53935</color>
     <color name="gray">#C8C8C8</color>
     <color name="yellow">#ffd700</color>
