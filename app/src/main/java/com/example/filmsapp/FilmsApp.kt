@@ -24,6 +24,7 @@ class FilmsApp : Application() {
             androidContext(this@FilmsApp)
 
             modules(dataModule + domainModule + vmModule)
+
         }
     }
 }

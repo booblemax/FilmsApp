@@ -12,12 +12,17 @@ class SettingsFragment : BaseFragment<SettingsViewModel, SettingsFragmentBinding
     override val layoutRes: Int = R.layout.settings_fragment
 
     override fun init() {
-        binding.materialToolbar.setNavigationOnClickListener { onBackPressed() }
-        binding.settingsSwitch.setOnCheckedChangeListener { _, isChecked ->
-            AppCompatDelegate.setDefaultNightMode(
-                if (isChecked) AppCompatDelegate.MODE_NIGHT_YES
-                else AppCompatDelegate.MODE_NIGHT_NO
-            )
+        with(binding) {
+            materialToolbar.setNavigationOnClickListener { onBackPressed() }
+            settingsSwitch.setOnCheckedChangeListener { _, isChecked ->
+                val theme =
+                    if (isChecked) AppCompatDelegate.MODE_NIGHT_YES
+                    else AppCompatDelegate.MODE_NIGHT_NO
+                viewModel.saveChosenTheme(theme)
+                AppCompatDelegate.setDefaultNightMode(theme)
+            }
+            settingsSwitch.isChecked =
+                viewModel.getCurrentTheme() == AppCompatDelegate.MODE_NIGHT_YES
         }
     }
 }

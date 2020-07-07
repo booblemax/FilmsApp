@@ -24,5 +24,5 @@ val vmModule = module {
 
     viewModel { PlayerViewModel() }
 
-    viewModel { SettingsViewModel() }
+    viewModel { SettingsViewModel(get()) }
 }

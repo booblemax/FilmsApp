@@ -1,6 +1,7 @@
 package com.example.filmsapp.data.di
 
 import com.example.filmsapp.BuildConfig
+import com.example.filmsapp.data.prefs.SPreferences
 import com.example.filmsapp.data.remote.FilmsApi
 import com.example.filmsapp.domain.interceptor.AuthHeaderInterceptor
 import com.google.gson.Gson
@@ -33,6 +34,8 @@ val dataModule = module {
     }
 
     factory { AuthHeaderInterceptor() }
+
+    factory { SPreferences(get()) }
 
     // retrofit
 
