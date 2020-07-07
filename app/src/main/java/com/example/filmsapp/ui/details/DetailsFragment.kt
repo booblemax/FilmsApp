@@ -213,10 +213,10 @@ class DetailsFragment :
 
     //endregion
 
-    override fun onBackPressed() {
+    override fun onBackPressed(popTo: Int?) {
         sharedViewModel.clearBackdropCarouselPosition()
         requireActivity().makeStatusBarVisible()
-        super.onBackPressed()
+        super.onBackPressed(popTo)
     }
 
     //region google_api

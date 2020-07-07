@@ -63,6 +63,9 @@ class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {
         binding.listsPopularBackground.setOnClickListener { filmsBackgroundItemClickListener(ListType.POPULAR) }
         binding.listsTopratedBackground.setOnClickListener { filmsBackgroundItemClickListener(ListType.TOP_RATED) }
         binding.listsUpcomingBackground.setOnClickListener { filmsBackgroundItemClickListener(ListType.POPULAR) }
+        binding.listsSettings.setOnClickListener {
+            findNavController().navigate(ListsFragmentDirections.actionListsFragmentToSettingsFragment2())
+        }
     }
 
     private fun initListener() {

@@ -60,6 +60,9 @@
         <action
             android:id="@+id/action_listsFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/action_listsFragment_to_settingsFragment2"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/playerFragment"
@@ -69,5 +72,9 @@
             android:name="videoId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.filmsapp.ui.settings.SettingsFragment"
+        android:label="SettingsFragment" />
 
 </navigation>

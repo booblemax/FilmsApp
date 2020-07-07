@@ -50,9 +50,9 @@ class ImagesCarouselFragment :
         }
     }
 
-    override fun onBackPressed() {
+    override fun onBackPressed(popTo: Int?) {
         storeImagePosition()
-        super.onBackPressed()
+        super.onBackPressed(popTo)
     }
 
     private fun storeImagePosition() {

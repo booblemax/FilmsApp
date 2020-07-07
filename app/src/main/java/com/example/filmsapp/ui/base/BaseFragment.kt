@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
+import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -54,5 +55,8 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewDataBinding> : Fragment(
      */
     open fun init() {}
 
-    open fun onBackPressed() { findNavController().navigateUp() }
+    open fun onBackPressed(@IdRes popTo: Int? = null) {
+        popTo?.let { findNavController().popBackStack(it, false) } ?:
+            findNavController().popBackStack()
+    }
 }

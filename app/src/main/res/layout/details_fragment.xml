@@ -25,8 +25,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:background="@color/backgroundColor">
+        android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -45,20 +44,19 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/details_play"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/size_48"
+                android:layout_height="@dimen/size_48"
                 app:srcCompat="@drawable/ic_play"
                 android:background="@drawable/bg_circle_button"
                 android:layout_margin="@dimen/size_12"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="@+id/details_backdrop"
-                />
+                app:layout_constraintBottom_toBottomOf="@+id/details_backdrop" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/details_back"
-                android:layout_width="@dimen/size_24"
-                android:layout_height="@dimen/size_24"
+                android:layout_width="@dimen/size_32"
+                android:layout_height="@dimen/size_32"
                 android:layout_marginTop="@dimen/size_12"
                 android:layout_marginStart="@dimen/size_12"
                 android:background="@drawable/bg_circle_button"
@@ -77,12 +75,11 @@
                 url="@{posterUrl}"
                 android:visibility="@{viewModel.film}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/details_title"
-                style="@style/Text_24.White.Bold"
+                style="@style/Text_24.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_16"
@@ -95,7 +92,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/details_genres"
-                style="@style/Text_13.White"
+                style="@style/Text_13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_8"
@@ -115,12 +112,11 @@
                 android:visibility="@{viewModel.film}"
                 app:layout_constraintTop_toTopOf="@+id/details_genres"
                 app:layout_constraintBottom_toBottomOf="@+id/details_genres"
-                app:layout_constraintStart_toEndOf="@id/details_genres"
-                />
+                app:layout_constraintStart_toEndOf="@id/details_genres" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/details_year"
-                style="@style/Text_13.White"
+                style="@style/Text_13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_4"
@@ -140,12 +136,11 @@
                 android:visibility="@{viewModel.film}"
                 app:layout_constraintTop_toTopOf="@+id/details_genres"
                 app:layout_constraintBottom_toBottomOf="@+id/details_genres"
-                app:layout_constraintStart_toEndOf="@id/details_year"
-                />
+                app:layout_constraintStart_toEndOf="@id/details_year" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/details_length"
-                style="@style/Text_13.White"
+                style="@style/Text_13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_4"
@@ -179,12 +174,11 @@
                 android:layout_marginTop="@dimen/size_12"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/details_average"
-                />
+                app:layout_constraintTop_toBottomOf="@id/details_average" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/details_overview"
-                style="@style/Text_19.White"
+                style="@style/Text_19"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_12"
