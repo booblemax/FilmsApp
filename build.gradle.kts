@@ -24,11 +24,3 @@ allprojects {
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
-
-tasks.register("installGitHook", Copy::class) {
-    from(File(rootProject.rootDir, "pre-commit"))
-    into(File(rootProject.rootDir, ".git/hooks"))
-    fileMode = 777
-}
-
-tasks.getByPath(":app:preBuild").dependsOn(getTasksByName("installGitHook", false))

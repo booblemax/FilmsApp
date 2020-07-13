@@ -5,7 +5,6 @@ plugins {
     kotlin("android.extensions")
     kotlin("kapt")
 }
-apply(from = "../ktlint.gradle.kts")
 
 android {
 
