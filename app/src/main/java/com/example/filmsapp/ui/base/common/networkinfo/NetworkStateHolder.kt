@@ -2,9 +2,13 @@ package com.example.filmsapp.ui.base.common.networkinfo
 
 import android.app.Application
 import android.content.Context
-import android.net.*
+import android.net.ConnectivityManager
+import android.net.LinkProperties
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 
-object NetworkStateHolder: NetworkState {
+object NetworkStateHolder : NetworkState {
 
     private lateinit var holder: NetworkStateImpl
 

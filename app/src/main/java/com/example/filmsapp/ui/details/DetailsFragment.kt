@@ -24,7 +24,12 @@ import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.ui.base.BaseFragment
 import com.example.filmsapp.ui.base.common.networkinfo.NetworkStateHolder
 import com.example.filmsapp.ui.main.SharedViewModel
-import com.example.filmsapp.util.*
+import com.example.filmsapp.util.makeStatusBarTransparent
+import com.example.filmsapp.util.makeStatusBarVisible
+import com.example.filmsapp.util.setMarginTop
+import com.example.filmsapp.util.snack
+import com.example.filmsapp.util.visible
+import com.example.filmsapp.util.waitForTransition
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
@@ -132,7 +137,6 @@ class DetailsFragment :
             requireContext(), SCOPES
         ).setBackOff(ExponentialBackOff())
     }
-
 
     private fun registerInsetsListener() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->

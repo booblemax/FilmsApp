@@ -1,16 +1,19 @@
+plugins {
+    id("org.jlleitschuh.gradle.ktlint") version "6.1.0"
+}
+
 buildscript {
 
     repositories {
         google()
         jcenter()
-        maven {
-            url = uri("https://plugins.gradle.org/m2/")
-        }
+        maven("https://plugins.gradle.org/m2/")
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.0.0")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.navigation}")
+        classpath(Classpath.gradle)
+        classpath(Classpath.kotlinGradlePlugin)
+        classpath(Classpath.navigationSafeArgs)
+        classpath(Classpath.ktlinGradlePlugin)
     }
 }
 

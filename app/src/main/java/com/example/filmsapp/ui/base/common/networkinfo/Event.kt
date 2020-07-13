@@ -7,8 +7,8 @@ sealed class Event {
 
     val networkState: NetworkState = NetworkStateHolder
 
-    object ConnectivityLost: Event()
-    object ConnectivityAvailable: Event()
-    data class NetworkCapabilitiesChanged(val old: NetworkCapabilities?): Event()
-    data class LinkPropertyChanged(val old: LinkProperties?): Event()
+    object ConnectivityLost : Event()
+    object ConnectivityAvailable : Event()
+    data class NetworkCapabilitiesChanged(val old: NetworkCapabilities?) : Event()
+    data class LinkPropertyChanged(val old: LinkProperties?) : Event()
 }

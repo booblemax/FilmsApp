@@ -11,10 +11,14 @@ object Apps {
 
 object Classpath {
     const val testInstrumentalRunner = "androidx.test.runner.AndroidJUnitRunner"
+    const val gradle = "com.android.tools.build:gradle:${Versions.gradle}"
+    const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
+    const val navigationSafeArgs = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.navigation}"
+    const val ktlinGradlePlugin = "org.jlleitschuh.gradle:ktlint-gradle:${Versions.ktlintGradlePlugin}"
 }
 
 object Versions {
-    const val gradle = "3.5.0"
+    const val gradle = "4.0.0"
     const val kotlin = "1.3.72"
     const val lifecycler = "2.2.0"
     const val appcompat = "1.1.0"
@@ -38,6 +42,7 @@ object Versions {
     const val playServices = "18.0.0"
     const val easyPermission = "3.0.0"
     const val youtubePlayer = "0.23"
+    const val ktlintGradlePlugin = "9.2.1"
 
     /* test */
     const val junit = "4.13"

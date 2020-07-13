@@ -100,7 +100,7 @@ dependencies {
     implementation(Libs.coil)
 
     implementation(Libs.timber)
-    
+
     implementation(Libs.logging_interceptor)
 
     testImplementation(TestLibs.junit)
