@@ -56,7 +56,11 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewDataBinding> : Fragment(
     open fun init() {}
 
     open fun onBackPressed(@IdRes popTo: Int? = null) {
-        popTo?.let { findNavController().popBackStack(it, false) }
-            ?: findNavController().popBackStack()
+        if (!(popTo?.let { findNavController().popBackStack(it, false) }
+            ?: findNavController().popBackStack())) {
+            requireActivity().finish()
+        } else {
+            findNavController().navigateUp()
+        }
     }
 }
