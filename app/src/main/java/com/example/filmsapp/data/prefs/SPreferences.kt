@@ -17,6 +17,12 @@ class SPreferences(private val context: Context) {
         }
     }
 
+    fun clearPrefs() {
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit {
+            clear()
+        }
+    }
+
     companion object {
         private const val PREF_NAME = "films_prefs"
         private const val THEME_NAME = "theme"

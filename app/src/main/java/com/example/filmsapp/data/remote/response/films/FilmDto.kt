@@ -5,55 +5,55 @@ import com.google.gson.annotations.SerializedName
 
 data class FilmDto(
     @SerializedName("adult")
-    val adult: Boolean,
+    val adult: Boolean = false,
     @SerializedName("backdrop_path")
-    val backdropPath: String?,
+    val backdropPath: String? = null,
     @SerializedName("belongs_to_collection")
-    val belongsToCollection: Any?,
+    val belongsToCollection: Any? = null,
     @SerializedName("budget")
-    val budget: Int,
+    val budget: Int = 0,
     @SerializedName("genres")
-    val genres: List<Genre>,
+    val genres: List<Genre> = listOf(),
     @SerializedName("homepage")
-    val homepage: String,
+    val homepage: String = "",
     @SerializedName("id")
-    val id: Int,
+    val id: Int = -1,
     @SerializedName("imdb_id")
-    val imdbId: String,
+    val imdbId: String = "",
     @SerializedName("original_language")
-    val originalLanguage: String,
+    val originalLanguage: String = "",
     @SerializedName("original_title")
-    val originalTitle: String,
+    val originalTitle: String = "",
     @SerializedName("overview")
-    val overview: String,
+    val overview: String = "",
     @SerializedName("popularity")
-    val popularity: Double,
+    val popularity: Double = -1.0,
     @SerializedName("poster_path")
-    val posterPath: String?,
+    val posterPath: String? = null,
     @SerializedName("production_companies")
-    val productionCompanies: List<Any>,
+    val productionCompanies: List<Any> = listOf(),
     @SerializedName("production_countries")
-    val productionCountries: List<Any>,
+    val productionCountries: List<Any> = listOf(),
     @SerializedName("release_date")
-    val releaseDate: String,
+    val releaseDate: String = "",
     @SerializedName("revenue")
-    val revenue: Int,
+    val revenue: Int = -1,
     @SerializedName("runtime")
-    val runtime: Int,
+    val runtime: Int = -1,
     @SerializedName("spoken_languages")
-    val spokenLanguages: List<Any>,
+    val spokenLanguages: List<Any> = listOf(),
     @SerializedName("status")
-    val status: String,
+    val status: String = "",
     @SerializedName("tagline")
-    val tagline: String,
+    val tagline: String = "",
     @SerializedName("title")
-    val title: String,
+    val title: String = "",
     @SerializedName("video")
-    val video: Boolean,
+    val video: Boolean = false,
     @SerializedName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Double = -1.0,
     @SerializedName("vote_count")
-    val voteCount: Int
+    val voteCount: Int = 0
 ) {
 
     fun toModel(backdrops: BackdropsDto? = null) =

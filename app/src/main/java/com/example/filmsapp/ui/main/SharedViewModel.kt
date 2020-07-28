@@ -1,8 +1,9 @@
 package com.example.filmsapp.ui.main
 
+import com.example.filmsapp.domain.DispatcherProvider
 import com.example.filmsapp.ui.base.BaseViewModel
 
-class SharedViewModel : BaseViewModel() {
+class SharedViewModel(dispatcherProvider: DispatcherProvider) : BaseViewModel(dispatcherProvider) {
 
     var backdropCarouselPosition: Int = DEFAULT_POSITION
 

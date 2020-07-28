@@ -2,6 +2,7 @@ package com.example.filmsapp.ui.details
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.filmsapp.domain.DispatcherProvider
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.domain.repos.FilmsRepository
 import com.example.filmsapp.domain.repos.YoutubeRepository
@@ -14,9 +15,10 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecovera
 import kotlinx.coroutines.launch
 
 class DetailsViewModel(
+    dispatcherProvider: DispatcherProvider,
     private val filmsRepository: FilmsRepository,
     private val youtubeRepository: YoutubeRepository
-) : BaseViewModel() {
+) : BaseViewModel(dispatcherProvider) {
 
     private val _film = MutableLiveData<Resource<FilmModel>>()
     val film get() = _film

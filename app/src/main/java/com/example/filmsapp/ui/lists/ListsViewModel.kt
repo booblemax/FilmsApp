@@ -2,6 +2,7 @@ package com.example.filmsapp.ui.lists
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.filmsapp.domain.DispatcherProvider
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.domain.repos.FilmsRepository
 import com.example.filmsapp.ui.base.BaseViewModel
@@ -10,7 +11,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
-class ListsViewModel(private val repository: FilmsRepository) : BaseViewModel() {
+class ListsViewModel(
+    dispatcherProvider: DispatcherProvider,
+    private val repository: FilmsRepository) : BaseViewModel(dispatcherProvider) {
 
     private val _latestFilm = MutableLiveData<Resource<FilmModel>>()
     val latestFilm: LiveData<Resource<FilmModel>> get() = _latestFilm

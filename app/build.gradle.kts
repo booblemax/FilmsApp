@@ -43,6 +43,13 @@ android {
 
     buildFeatures {
         dataBinding = true
+        dataBinding {
+            isEnabledForTests = true
+        }
+    }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
     }
 
     compileOptions {
@@ -58,6 +65,7 @@ android {
 dependencies {
     implementation(Libs.kotlin)
     implementation(Libs.appcompat)
+    implementation(Libs.coroutines)
     implementation(Libs.core_ktx)
     implementation(Libs.fragment_ktx)
     implementation(Libs.constraint_layout)
@@ -101,7 +109,21 @@ dependencies {
 
     implementation(Libs.logging_interceptor)
 
+    //local tests
     testImplementation(TestLibs.junit)
+    testImplementation(TestLibs.mockito_unit)
+    androidTestImplementation(TestLibs.hamcrest)
+
+    //instrumented tests
+    androidTestImplementation(TestLibs.mockito_android)
     androidTestImplementation(TestLibs.junit_ext)
     androidTestImplementation(TestLibs.espresso)
+
+    //jvm testing
+    testImplementation(TestLibs.junit_ext_ktx)
+    testImplementation(TestLibs.androidx_test_core_ktx)
+    testImplementation(TestLibs.robolectric)
+    testImplementation(TestLibs.androidx_arch_core_testing)
+    testImplementation(TestLibs.coroutines_test)
+
 }

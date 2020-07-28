@@ -4,24 +4,25 @@ import android.util.SparseArray
 import androidx.core.util.contains
 import com.example.filmsapp.data.remote.FilmsApi
 import com.example.filmsapp.data.remote.response.films.BackdropsDto
+import com.example.filmsapp.domain.DispatcherProvider
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.domain.exceptions.RetrofitException
 import com.example.filmsapp.domain.repos.FilmsRepository
 import com.example.filmsapp.ui.base.models.FilmModel
-import com.example.filmsapp.util.ConstUtil
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
 
 class FilmsRepositoryImpl(
-    private val api: FilmsApi
+    private val api: FilmsApi,
+    private val dispatcher: DispatcherProvider,
+    private val pageSize: Int
 ) : FilmsRepository {
 
     private val cache = SparseArray<MutableList<FilmModel>>()
 
     override suspend fun getLatestFilm(): Resource<FilmModel> =
-        withContext(Dispatchers.IO) {
+        withContext(dispatcher.io()) {
             val response = api.getLatestFilm()
             val body = response.body()
             if (response.isSuccessful && body != null) {
@@ -36,27 +37,22 @@ class FilmsRepositoryImpl(
     override suspend fun getPopularFilms(
         page: Int, forceUpdate: Boolean
     ): Resource<List<FilmModel>> =
-        withContext(Dispatchers.IO) {
-            getFilmsCached(page, forceUpdate, FilmType.POPULAR)
-        }
+        withContext(dispatcher.io()) { getFilmsCached(page, forceUpdate, FilmType.POPULAR) }
 
     override suspend fun getTopRatedFilms(
         page: Int,
         forceUpdate: Boolean
     ): Resource<List<FilmModel>> =
-        withContext(Dispatchers.IO) {
-            getFilmsCached(page, forceUpdate, FilmType.TOP_RATED)
-        }
+        withContext(dispatcher.io()) { getFilmsCached(page, forceUpdate, FilmType.TOP_RATED) }
+
     override suspend fun getUpcomingFilms(
         page: Int,
         forceUpdate: Boolean
     ): Resource<List<FilmModel>> =
-        withContext(Dispatchers.IO) {
-            getFilmsCached(page, forceUpdate, FilmType.UPCOMING)
-        }
+        withContext(dispatcher.io()) { getFilmsCached(page, forceUpdate, FilmType.UPCOMING) }
 
     override suspend fun getFilm(id: String): Resource<FilmModel> =
-        withContext(Dispatchers.IO) {
+        withContext(dispatcher.io()) {
             val film = api.getFilm(id)
             var images: BackdropsDto? = null
             supervisorScope {
@@ -67,13 +63,17 @@ class FilmsRepositoryImpl(
             Resource.SUCCESS(film.toModel(images))
         }
 
-    private suspend fun getFilmsCached(page: Int, forceUpdate: Boolean, type: FilmType): Resource<List<FilmModel>> {
+    private suspend fun getFilmsCached(
+        page: Int,
+        forceUpdate: Boolean,
+        type: FilmType
+    ): Resource<List<FilmModel>> {
         val filmsCache = getCacheForFilmType(type)
 
         if (forceUpdate) {
             filmsCache.clear()
         }
-        if (forceUpdate || filmsCache.size < page * ConstUtil.PAGE_SIZE) {
+        if (forceUpdate || filmsCache.size < page * pageSize) {
             val response = performRequest(page, type)
 
             val body = response.body()
@@ -100,13 +100,13 @@ class FilmsRepositoryImpl(
     }
 
     private suspend fun performRequest(page: Int, type: FilmType) =
-        when(type) {
+        when (type) {
             FilmType.POPULAR -> api.getPopularList(page)
             FilmType.TOP_RATED -> api.getTopRatedList(page)
             FilmType.UPCOMING -> api.getUpcomingList(page)
         }
 
-    enum class FilmType() {
+    enum class FilmType {
         POPULAR,
         TOP_RATED,
         UPCOMING

@@ -43,16 +43,24 @@ object Versions {
     const val easyPermission = "3.0.0"
     const val youtubePlayer = "0.23"
     const val ktlintGradlePlugin = "9.2.1"
+    const val coroutines = "1.3.6"
 
     /* test */
     const val junit = "4.13"
+    const val hamcrest = "1.3"
     const val junit_ext = "1.1.1"
     const val espresso_core = "3.2.0"
+    const val androidx_test_core = "1.2.0"
+    const val androidx_test_ext_kotlin_runner = "1.1.1"
+    const val arch_testing = "2.0.0"
+    const val mockito = "2.23.0"
+    const val robolectric = "4.3.1"
 }
 
 object Libs {
     const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
     const val appcompat = "androidx.appcompat:appcompat:${Versions.appcompat}"
+    const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
     const val core_ktx = "androidx.core:core-ktx:${Versions.ktx}"
     const val fragment_ktx = "androidx.fragment:fragment-ktx:${Versions.fragment_ktx}"
     const val constraint_layout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
@@ -101,4 +109,12 @@ object TestLibs {
     const val junit = "junit:junit:${Versions.junit}"
     const val junit_ext = "androidx.test.ext:junit:${Versions.junit_ext}"
     const val espresso = "androidx.test.espresso:espresso-core:${Versions.espresso_core}"
+    const val hamcrest = "org.hamcrest:hamcrest-all:${Versions.hamcrest}"
+    const val junit_ext_ktx = "androidx.test.ext:junit-ktx:${Versions.androidx_test_ext_kotlin_runner}"
+    const val androidx_test_core_ktx = "androidx.test:core-ktx:${Versions.androidx_test_core}"
+    const val androidx_arch_core_testing = "androidx.arch.core:core-testing:${Versions.arch_testing}"
+    const val robolectric = "org.robolectric:robolectric:${Versions.robolectric}"
+    const val coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
+    const val mockito_unit = "org.mockito:mockito-core:${Versions.mockito}"
+    const val mockito_android = "org.mockito:mockito-android:${Versions.mockito}"
 }

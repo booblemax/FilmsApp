@@ -12,17 +12,17 @@ import org.koin.dsl.module
 
 val vmModule = module {
 
-    viewModel { SharedViewModel() }
+    viewModel { SharedViewModel(get()) }
 
-    viewModel { ListsViewModel(get()) }
+    viewModel { ListsViewModel(get(), get()) }
 
-    viewModel { MainViewModel(get()) }
+    viewModel { MainViewModel(get(), get()) }
 
-    viewModel { DetailsViewModel(get(), get()) }
+    viewModel { DetailsViewModel(get(), get(), get()) }
 
-    viewModel { ImagesCarouselViewModel() }
+    viewModel { ImagesCarouselViewModel(get()) }
 
-    viewModel { PlayerViewModel() }
+    viewModel { PlayerViewModel(get()) }
 
-    viewModel { SettingsViewModel(get()) }
+    viewModel { SettingsViewModel(get(), get()) }
 }
