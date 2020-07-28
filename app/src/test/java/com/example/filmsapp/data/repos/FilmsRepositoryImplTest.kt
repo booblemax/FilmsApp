@@ -63,11 +63,11 @@ class FilmsRepositoryImplTest {
     @Before
     fun setUp() {
         needFailure = false
-        repositoryImpl = FilmsRepositoryImpl(fakeFilmsApi, coroutinesTestRule.testDispatcherProvider, pageSize)
+        repositoryImpl =
+            FilmsRepositoryImpl(fakeFilmsApi, coroutinesTestRule.testDispatcherProvider, pageSize)
 
-        // Mockito.`when`(mockedApi.getTopRatedList(any())).thenReturn(Response.success(FilmsDto(1, toprated.subList(0, 2), 10, 10)))
-        // Mockito.`when`(mockedApi.getUpcomingList(any())).thenReturn(Response.success(FilmsDto(1, upcoming.subList(0, 2), 10, 10)))
-        mockedRepositoryImpl = FilmsRepositoryImpl(mockedApi, coroutinesTestRule.testDispatcherProvider, pageSize)
+        mockedRepositoryImpl =
+            FilmsRepositoryImpl(mockedApi, coroutinesTestRule.testDispatcherProvider, pageSize)
     }
 
     @Test
@@ -83,7 +83,8 @@ class FilmsRepositoryImplTest {
     fun `getPopularFilm return first page of film models`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             val popularFilmsRes = repositoryImpl.getPopularFilms()
-            val origin: Resource<List<FilmModel>> = Resource.SUCCESS(populars.map { it.toModel() }.take(pageSize))
+            val origin: Resource<List<FilmModel>> =
+                Resource.SUCCESS(populars.map { it.toModel() }.take(pageSize))
 
             assertThat(popularFilmsRes, IsEqual(origin))
         }
@@ -101,7 +102,8 @@ class FilmsRepositoryImplTest {
     @Test
     fun `getPopularFilm first call from api second from cache`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
-            Mockito.`when`(mockedApi.getPopularList(1)).thenReturn(Response.success(FilmsDto(1, populars.subList(0, 2), 10, 10)))
+            Mockito.`when`(mockedApi.getPopularList(1))
+                .thenReturn(Response.success(FilmsDto(1, populars.subList(0, 2), 10, 10)))
 
             mockedRepositoryImpl.getPopularFilms()
             mockedRepositoryImpl.getPopularFilms()
@@ -112,7 +114,8 @@ class FilmsRepositoryImplTest {
     @Test
     fun `getPopularFilm first and second call performs by api`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
-            Mockito.`when`(mockedApi.getPopularList(1)).thenReturn(Response.success(FilmsDto(1, populars.subList(0, 2), 10, 10)))
+            Mockito.`when`(mockedApi.getPopularList(1))
+                .thenReturn(Response.success(FilmsDto(1, populars.subList(0, 2), 10, 10)))
 
             mockedRepositoryImpl.getPopularFilms()
             mockedRepositoryImpl.getPopularFilms(forceUpdate = true)
@@ -129,6 +132,124 @@ class FilmsRepositoryImplTest {
 
             assertThat(
                 popularFilmsRes,
+                IsInstanceOf(Resource.ERROR::class.java)
+            )
+        }
+
+    //Top Rated
+
+    @Test
+    fun `getTopRatedFilms return first page of film models`() =
+        coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
+            val topratedFilmsRes = repositoryImpl.getTopRatedFilms()
+            val origin: Resource<List<FilmModel>> =
+                Resource.SUCCESS(toprated.map { it.toModel() }.take(pageSize))
+
+            assertThat(topratedFilmsRes, IsEqual(origin))
+        }
+
+    @Test
+    fun `getTopRatedFilms return second page of film models`() =
+        coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
+            val topratedFilmsRes = repositoryImpl.getTopRatedFilms(page = 2)
+            val originSecondPage: Resource<List<FilmModel>> =
+                Resource.SUCCESS(toprated.map { it.toModel() }.subList(2, 4))
+
+            assertThat(topratedFilmsRes, IsEqual(originSecondPage))
+        }
+
+    @Test
+    fun `getTopRatedFilms first call from api second from cache`() =
+        coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
+            Mockito.`when`(mockedApi.getTopRatedList(1))
+                .thenReturn(Response.success(FilmsDto(1, toprated.subList(0, 2), 10, 10)))
+
+            mockedRepositoryImpl.getTopRatedFilms()
+            mockedRepositoryImpl.getTopRatedFilms()
+
+            Mockito.verify(mockedApi, Mockito.times(1)).getTopRatedList(1)
+        }
+
+    @Test
+    fun `getTopRatedFilms first and second call performs by api`() =
+        coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
+            Mockito.`when`(mockedApi.getTopRatedList(1))
+                .thenReturn(Response.success(FilmsDto(1, populars.subList(0, 2), 10, 10)))
+
+            mockedRepositoryImpl.getTopRatedFilms()
+            mockedRepositoryImpl.getTopRatedFilms(forceUpdate = true)
+
+            Mockito.verify(mockedApi, Mockito.times(2)).getTopRatedList(1)
+        }
+
+    @Test
+    fun `getTopRatedFilms return error`() =
+        coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
+            needFailure = true
+
+            val topratedFilmsRes = repositoryImpl.getTopRatedFilms()
+
+            assertThat(
+                topratedFilmsRes,
+                IsInstanceOf(Resource.ERROR::class.java)
+            )
+        }
+
+    //Upcoming
+
+    @Test
+    fun `getUpcomingFilms return first page of film models`() =
+        coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
+            val upcomingFilmsRes = repositoryImpl.getUpcomingFilms()
+            val origin: Resource<List<FilmModel>> =
+                Resource.SUCCESS(upcoming.map { it.toModel() }.take(pageSize))
+
+            assertThat(upcomingFilmsRes, IsEqual(origin))
+        }
+
+    @Test
+    fun `getUpcomingFilms return second page of film models`() =
+        coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
+            val upcomingFilmsRes = repositoryImpl.getUpcomingFilms(page = 2)
+            val originSecondPage: Resource<List<FilmModel>> =
+                Resource.SUCCESS(upcoming.map { it.toModel() }.subList(2, 4))
+
+            assertThat(upcomingFilmsRes, IsEqual(originSecondPage))
+        }
+
+    @Test
+    fun `getUpcomingFilms first call from api second from cache`() =
+        coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
+            Mockito.`when`(mockedApi.getUpcomingList(1))
+                .thenReturn(Response.success(FilmsDto(1, upcoming.subList(0, 2), 10, 10)))
+
+            mockedRepositoryImpl.getUpcomingFilms()
+            mockedRepositoryImpl.getUpcomingFilms()
+
+            Mockito.verify(mockedApi, Mockito.times(1)).getUpcomingList(1)
+        }
+
+    @Test
+    fun `getUpcomingFilms first and second call performs by api`() =
+        coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
+            Mockito.`when`(mockedApi.getUpcomingList(1))
+                .thenReturn(Response.success(FilmsDto(1, upcoming.subList(0, 2), 10, 10)))
+
+            mockedRepositoryImpl.getUpcomingFilms()
+            mockedRepositoryImpl.getUpcomingFilms(forceUpdate = true)
+
+            Mockito.verify(mockedApi, Mockito.times(2)).getUpcomingList(1)
+        }
+
+    @Test
+    fun `getUpcomingFilms return error`() =
+        coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
+            needFailure = true
+
+            val upcomingFilmsRes = repositoryImpl.getUpcomingFilms()
+
+            assertThat(
+                upcomingFilmsRes,
                 IsInstanceOf(Resource.ERROR::class.java)
             )
         }

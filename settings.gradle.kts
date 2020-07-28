@@ -1,2 +1,2 @@
-rootProject.name="FilmsApp"
+rootProject.name = "FilmsApp"
 include(":app")
