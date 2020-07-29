@@ -4,8 +4,11 @@ import android.os.Build
 import com.example.filmsapp.CoroutinesTestRule
 import com.example.filmsapp.FilmsTestApp
 import com.example.filmsapp.data.datasource.FakeFilmsApi
+import com.example.filmsapp.data.datasource.latest
+import com.example.filmsapp.data.datasource.populars
+import com.example.filmsapp.data.datasource.toprated
+import com.example.filmsapp.data.datasource.upcoming
 import com.example.filmsapp.data.remote.FilmsApi
-import com.example.filmsapp.data.remote.response.films.FilmDto
 import com.example.filmsapp.data.remote.response.films.FilmsDto
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.ui.base.models.FilmModel
@@ -22,28 +25,6 @@ import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import retrofit2.Response
-
-val latest = FilmDto()
-val populars = listOf(
-    FilmDto(id = 591, title = "g4T095W", backdropPath = "JYDPCx5"),
-    FilmDto(id = 212, title = "Q9jK0Cr8", backdropPath = "mw3Qf3l6"),
-    FilmDto(id = 978, title = "o10h", backdropPath = "9y8ReDT"),
-    FilmDto(id = 811, title = "s6nn", backdropPath = "NY8nDGyP")
-)
-val toprated = listOf(
-    FilmDto(id = 325, title = "1ov", backdropPath = "4zCSA"),
-    FilmDto(id = 959, title = "rM6bG", backdropPath = "sMN"),
-    FilmDto(id = 830, title = "eycobJY", backdropPath = "T8luQ"),
-    FilmDto(id = 221, title = "VoXP2", backdropPath = "5lCNCQ"),
-    FilmDto(id = 303, title = "4CYBATJ", backdropPath = "0l9e25")
-)
-val upcoming = listOf(
-    FilmDto(id = 61, title = "FB3Q4X", backdropPath = "Rbw"),
-    FilmDto(id = 402, title = "Z9qmruv", backdropPath = "yt3L1"),
-    FilmDto(id = 798, title = "6hED2", backdropPath = "t6NVfMSR"),
-    FilmDto(id = 632, title = "2rT9", backdropPath = "hM7dO3i"),
-    FilmDto(id = 360, title = "rqt7O", backdropPath = "cdtM")
-)
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)

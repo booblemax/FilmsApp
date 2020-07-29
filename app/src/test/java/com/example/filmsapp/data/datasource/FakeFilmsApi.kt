@@ -43,13 +43,16 @@ class FakeFilmsApi(
         return Response.success(dto)
     }
 
-    override suspend fun getFilm(id: String): FilmDto =
+    override suspend fun getFilm(id: String): Response<FilmDto> =
         if (needFailureResult?.invoke() == true) throw RetrofitException(404, "wrong id")
-        else populars.find { it.id.toString() == id } ?: throw RetrofitException(404, "wrong id")
+        else Response.success(
+            populars.find { it.id.toString() == id } ?: throw RetrofitException(404, "wrong id")
+        )
 
     override suspend fun getBackdrops(id: String): BackdropsDto {
         if (needFailureResult?.invoke() == true) throw RetrofitException(404, "wrong id")
-        val dto = populars.find { it.id.toString() == id } ?: throw RetrofitException(404, "wrong id")
+        val dto =
+            populars.find { it.id.toString() == id } ?: throw RetrofitException(404, "wrong id")
         return BackdropsDto(
             listOf(BackdropDto(0.0, dto.backdropPath ?: "", 1, 1, 0.0, 0.0, 0)),
             dto.id

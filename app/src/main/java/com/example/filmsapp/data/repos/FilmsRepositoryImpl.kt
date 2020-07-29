@@ -53,14 +53,19 @@ class FilmsRepositoryImpl(
 
     override suspend fun getFilm(id: String): Resource<FilmModel> =
         withContext(dispatcher.io()) {
-            val film = api.getFilm(id)
-            var images: BackdropsDto? = null
-            supervisorScope {
-                launch(coroutineContext) {
-                    images = api.getBackdrops(id)
+            val filmResponse = api.getFilm(id)
+            if (filmResponse.isSuccessful && filmResponse.body() != null) {
+                val filmDto = filmResponse.body()
+                var images: BackdropsDto? = null
+                supervisorScope {
+                    launch(coroutineContext) {
+                        images = api.getBackdrops(id)
+                    }
                 }
+                Resource.SUCCESS(filmDto?.toModel(images))
+            } else {
+                Resource.ERROR<FilmModel>(RetrofitException(filmResponse.code(), filmResponse.message()))
             }
-            Resource.SUCCESS(film.toModel(images))
         }
 
     private suspend fun getFilmsCached(

@@ -23,7 +23,7 @@ interface FilmsApi {
     suspend fun getUpcomingList(@Query("page") page: Int): Response<FilmsDto>
 
     @GET("movie/{id}")
-    suspend fun getFilm(@Path("id") id: String): FilmDto
+    suspend fun getFilm(@Path("id") id: String): Response<FilmDto>
 
     @GET("movie/{id}/images")
     suspend fun getBackdrops(@Path("id") id: String): BackdropsDto
