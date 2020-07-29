@@ -24,8 +24,7 @@ class DetailsViewModel(
     val film get() = _film
 
     private val _requestAuthorizationPermission = MutableLiveData<UserRecoverableAuthIOException>()
-    val requestAuthorizationPermission: LiveData<UserRecoverableAuthIOException> get() =
-        MutableLiveData<UserRecoverableAuthIOException>()
+    val requestAuthorizationPermission: LiveData<UserRecoverableAuthIOException> get() = _requestAuthorizationPermission
 
     private val _displayGpsUnavailable = MutableLiveData<Int>()
     val displayGpsUnavailable: LiveData<Int> get() = _displayGpsUnavailable

@@ -1,6 +1,7 @@
 package com.example.filmsapp.data.datasource
 
 import com.example.filmsapp.data.remote.response.films.FilmDto
+import com.example.filmsapp.ui.base.models.YoutubeFilmModel
 
 val latest = FilmDto()
 val populars = listOf(
@@ -23,3 +24,5 @@ val upcoming = listOf(
     FilmDto(id = 632, title = "2rT9", backdropPath = "hM7dO3i"),
     FilmDto(id = 360, title = "rqt7O", backdropPath = "cdtM")
 )
+
+val youtubeDataModel = YoutubeFilmModel("Film", "1", "1")
