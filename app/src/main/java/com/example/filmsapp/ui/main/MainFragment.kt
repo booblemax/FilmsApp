@@ -27,7 +27,7 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
         super.onCreate(savedInstanceState)
         args = MainFragmentArgs.fromBundle(requireArguments())
         viewModel.listType = args.listType
-        viewModel.loadPopularFilms(true)
+        viewModel.loadFilms(true)
     }
 
     override fun init() {
@@ -69,7 +69,7 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
         binding.rvFilms.addOnScrollListener(object : EndlessRecyclerScrollListener(layoutManager) {
 
             override fun loadMoreItems() {
-                viewModel.loadPopularFilms()
+                viewModel.loadFilms()
             }
 
             override fun isLastPage(): Boolean = false
@@ -84,7 +84,7 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
     private fun initRefreshLayout() {
         binding.refreshLayout.setOnRefreshListener {
             viewModel.resetPageNumber()
-            viewModel.loadPopularFilms(true)
+            viewModel.loadFilms(true)
         }
 
         binding.refreshLayout.setColorSchemeColors(
@@ -95,7 +95,7 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
     }
 
     private fun initListener(adapter: MainAdapter) {
-        viewModel.popularFilms.observe(viewLifecycleOwner) {
+        viewModel.films.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.SUCCESS -> {
                     adapter.isLoading = false

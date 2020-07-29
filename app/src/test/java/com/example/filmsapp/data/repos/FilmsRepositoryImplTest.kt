@@ -52,7 +52,7 @@ class FilmsRepositoryImplTest {
     }
 
     @Test
-    fun `getLatestFilm return film`() =
+    fun `when getLatestFilm should return film`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             val latestFilmResource = repositoryImpl.getLatestFilm()
             val origin: Resource<FilmModel> = Resource.SUCCESS(latest.toModel())
@@ -61,7 +61,7 @@ class FilmsRepositoryImplTest {
         }
 
     @Test
-    fun `getPopularFilm return first page of film models`() =
+    fun `when getPopularFilm should return first page of film models`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             val popularFilmsRes = repositoryImpl.getPopularFilms()
             val origin: Resource<List<FilmModel>> =
@@ -71,7 +71,7 @@ class FilmsRepositoryImplTest {
         }
 
     @Test
-    fun `getPopularFilm return second page of film models`() =
+    fun `when getPopularFilm should return second page of film models`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             val popularFilmsRes = repositoryImpl.getPopularFilms(page = 2)
             val originSecondPage: Resource<List<FilmModel>> =
@@ -81,7 +81,7 @@ class FilmsRepositoryImplTest {
         }
 
     @Test
-    fun `getPopularFilm first call from api second from cache`() =
+    fun `when getPopularFilm should first call from api second from cache`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             Mockito.`when`(mockedApi.getPopularList(1))
                 .thenReturn(Response.success(FilmsDto(1, populars.subList(0, 2), 10, 10)))
@@ -93,7 +93,7 @@ class FilmsRepositoryImplTest {
         }
 
     @Test
-    fun `getPopularFilm first and second call performs by api`() =
+    fun `when getPopularFilm should first and second call performs by api`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             Mockito.`when`(mockedApi.getPopularList(1))
                 .thenReturn(Response.success(FilmsDto(1, populars.subList(0, 2), 10, 10)))
@@ -105,7 +105,7 @@ class FilmsRepositoryImplTest {
         }
 
     @Test
-    fun `getPopularFilm return error`() =
+    fun `when getPopularFilm should return error`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             needFailure = true
 
@@ -120,7 +120,7 @@ class FilmsRepositoryImplTest {
     //Top Rated
 
     @Test
-    fun `getTopRatedFilms return first page of film models`() =
+    fun `when getTopRatedFilms should return first page of film models`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             val topratedFilmsRes = repositoryImpl.getTopRatedFilms()
             val origin: Resource<List<FilmModel>> =
@@ -130,7 +130,7 @@ class FilmsRepositoryImplTest {
         }
 
     @Test
-    fun `getTopRatedFilms return second page of film models`() =
+    fun `when getTopRatedFilms should return second page of film models`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             val topratedFilmsRes = repositoryImpl.getTopRatedFilms(page = 2)
             val originSecondPage: Resource<List<FilmModel>> =
@@ -140,7 +140,7 @@ class FilmsRepositoryImplTest {
         }
 
     @Test
-    fun `getTopRatedFilms first call from api second from cache`() =
+    fun `when getTopRatedFilms should first call from api second from cache`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             Mockito.`when`(mockedApi.getTopRatedList(1))
                 .thenReturn(Response.success(FilmsDto(1, toprated.subList(0, 2), 10, 10)))
@@ -152,7 +152,7 @@ class FilmsRepositoryImplTest {
         }
 
     @Test
-    fun `getTopRatedFilms first and second call performs by api`() =
+    fun `when getTopRatedFilms should first and second call performs by api`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             Mockito.`when`(mockedApi.getTopRatedList(1))
                 .thenReturn(Response.success(FilmsDto(1, populars.subList(0, 2), 10, 10)))
@@ -164,7 +164,7 @@ class FilmsRepositoryImplTest {
         }
 
     @Test
-    fun `getTopRatedFilms return error`() =
+    fun `when getTopRatedFilms should return error`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             needFailure = true
 
@@ -179,7 +179,7 @@ class FilmsRepositoryImplTest {
     //Upcoming
 
     @Test
-    fun `getUpcomingFilms return first page of film models`() =
+    fun `when getUpcomingFilms should return first page of film models`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             val upcomingFilmsRes = repositoryImpl.getUpcomingFilms()
             val origin: Resource<List<FilmModel>> =
@@ -189,7 +189,7 @@ class FilmsRepositoryImplTest {
         }
 
     @Test
-    fun `getUpcomingFilms return second page of film models`() =
+    fun `when getUpcomingFilms should return second page of film models`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             val upcomingFilmsRes = repositoryImpl.getUpcomingFilms(page = 2)
             val originSecondPage: Resource<List<FilmModel>> =
@@ -199,7 +199,7 @@ class FilmsRepositoryImplTest {
         }
 
     @Test
-    fun `getUpcomingFilms first call from api second from cache`() =
+    fun `when getUpcomingFilms should first call from api second from cache`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             Mockito.`when`(mockedApi.getUpcomingList(1))
                 .thenReturn(Response.success(FilmsDto(1, upcoming.subList(0, 2), 10, 10)))
@@ -211,7 +211,7 @@ class FilmsRepositoryImplTest {
         }
 
     @Test
-    fun `getUpcomingFilms first and second call performs by api`() =
+    fun `when getUpcomingFilms should first and second call performs by api`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             Mockito.`when`(mockedApi.getUpcomingList(1))
                 .thenReturn(Response.success(FilmsDto(1, upcoming.subList(0, 2), 10, 10)))
@@ -223,7 +223,7 @@ class FilmsRepositoryImplTest {
         }
 
     @Test
-    fun `getUpcomingFilms return error`() =
+    fun `when getUpcomingFilms should return error`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             needFailure = true
 

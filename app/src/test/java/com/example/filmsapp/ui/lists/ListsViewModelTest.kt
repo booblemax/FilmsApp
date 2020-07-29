@@ -44,7 +44,7 @@ class ListsViewModelTest {
     }
 
     @Test
-    fun `init all data loaded`() {
+    fun `when loadFilms should return all data`() {
         val originLatest: Resource<FilmModel> = Resource.SUCCESS(latest.toModel())
         val pagePopular: Resource<List<FilmModel>> = Resource.SUCCESS(populars.subList(0, pageSize).map { it.toModel() })
         val pageToprated: Resource<List<FilmModel>> = Resource.SUCCESS(toprated.subList(0, pageSize).map { it.toModel() })
@@ -63,7 +63,7 @@ class ListsViewModelTest {
     }
 
     @Test
-    fun `init all data error`() {
+    fun `when loadFilms should return error`() {
         needFailure = true
 
         val viewModel = ListsViewModel(coroutinesDispatcher.testDispatcherProvider, repository)

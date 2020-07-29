@@ -18,21 +18,21 @@ class MainViewModel(
 
     private var pageNumber = FIRST_PAGE_NUMBER
 
-    private val _popularFilms = MutableLiveData<Resource<List<FilmModel>>>()
-    val popularFilms: LiveData<Resource<List<FilmModel>>> get() = _popularFilms
+    private val _films = MutableLiveData<Resource<List<FilmModel>>>()
+    val films: LiveData<Resource<List<FilmModel>>> get() = _films
 
-    val isFirstLoading = Transformations.map(popularFilms) {
+    val isFirstLoading = Transformations.map(films) {
         it is Resource.LOADING<*> && pageNumber == FIRST_PAGE_NUMBER
     }
 
     lateinit var listType: ListType
     var lastKnownPosition = -1
 
-    fun loadPopularFilms(forceUpdate: Boolean = false) {
+    fun loadFilms(forceUpdate: Boolean = false) {
         baseContext.launch {
             incPageNumber()
-            _popularFilms.value = Resource.LOADING()
-            _popularFilms.value = loadByListType(forceUpdate)
+            _films.value = Resource.LOADING()
+            _films.value = loadByListType(forceUpdate)
         }
     }
 

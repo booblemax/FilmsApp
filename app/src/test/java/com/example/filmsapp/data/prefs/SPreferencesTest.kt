@@ -15,7 +15,7 @@ class SPreferencesTest {
     private val prefs: SPreferences =SPreferences(ApplicationProvider.getApplicationContext())
 
     @Test
-    fun `save theme night return night`() {
+    fun `given mode night when save theme should return night`() {
         val savingTheme = AppCompatDelegate.MODE_NIGHT_YES
 
         prefs.saveTheme(savingTheme)
@@ -24,14 +24,14 @@ class SPreferencesTest {
     }
 
     @Test
-    fun `get theme return default light`() {
+    fun `when get theme should return default light theme`() {
         val theme = prefs.getCurrentTheme()
 
         assertThat(theme, `is`(AppCompatDelegate.MODE_NIGHT_NO))
     }
 
     @Test
-    fun `save theme and clear return default light`() {
+    fun `when save theme and clear should return default light theme`() {
         val savingTheme = AppCompatDelegate.MODE_NIGHT_YES
 
         prefs.saveTheme(savingTheme)
