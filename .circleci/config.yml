@@ -22,6 +22,9 @@ version: 2.1
             name: Detekt Lint
             commnd: ./gradlew detekt
         - run:
+            name: Ktlint
+            commnd: ./gradlew ktlintCheck
+        - run:
             name: Run Tests
             command: ./gradlew test
         - store_artifacts:
