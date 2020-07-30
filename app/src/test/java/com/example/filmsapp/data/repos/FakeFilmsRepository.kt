@@ -64,4 +64,4 @@ class FakeFilmsRepository(
             Resource.SUCCESS(mapper(response.body()))
         } else Resource.ERROR(RetrofitException(response.code(), response.message()))
     }
- }
+}

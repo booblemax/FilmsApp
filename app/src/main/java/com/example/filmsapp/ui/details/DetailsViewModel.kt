@@ -49,10 +49,11 @@ class DetailsViewModel(
     override fun handleException(exception: Throwable) {
         super.handleException(exception)
         when (exception) {
-            is GooglePlayServicesAvailabilityIOException -> _displayGpsUnavailable.value =
-                exception.connectionStatusCode
+            is GooglePlayServicesAvailabilityIOException ->
+                _displayGpsUnavailable.value =
+                    exception.connectionStatusCode
             is UserRecoverableAuthIOException -> _requestAuthorizationPermission.value = exception
-            else -> _showSnackbar.value = exception.message
+            else -> postMessage(exception.message)
         }
     }
 }

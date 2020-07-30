@@ -99,7 +99,9 @@ class LoadingViewHolder(
     binding: ItemLoadingBinding
 ) : BaseViewHolder(binding.root) {
 
-    override fun bind(model: Any?) {}
+    override fun bind(model: Any?) {
+        // nothing to bind
+    }
 }
 
 private class FilmsDiffUtils(

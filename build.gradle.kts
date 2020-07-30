@@ -1,6 +1,6 @@
 plugins {
-    id("org.jlleitschuh.gradle.ktlint") version "6.1.0"
-    id("io.gitlab.arturbosch.detekt") version "1.10.0"
+    id("org.jlleitschuh.gradle.ktlint") version Versions.ktLint
+    id("io.gitlab.arturbosch.detekt") version Versions.detekt
 }
 
 buildscript {
@@ -23,9 +23,39 @@ buildscript {
 }
 
 allprojects {
+    apply {
+        plugin("io.gitlab.arturbosch.detekt")
+        plugin("org.jlleitschuh.gradle.ktlint")
+    }
+
     repositories {
         google()
         jcenter()
+    }
+
+    ktlint {
+        version.set("0.35.0")
+        debug.set(false)
+        verbose.set(true)
+        android.set(false)
+        outputToConsole.set(true)
+        ignoreFailures.set(false)
+        enableExperimentalRules.set(false)
+        disabledRules.set(listOf("import-ordering"))
+        filter {
+            exclude("**/generated/**")
+            include("**/kotlin/**")
+        }
+    }
+
+    detekt {
+        config = rootProject.files("config/detekt/detekt.yml")
+        reports {
+            html {
+                enabled = true
+                destination = file("build/reports/detekt.html")
+            }
+        }
     }
 }
 

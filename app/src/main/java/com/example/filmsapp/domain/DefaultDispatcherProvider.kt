@@ -12,5 +12,4 @@ class DefaultDispatcherProvider : DispatcherProvider {
     override fun io(): CoroutineDispatcher = Dispatchers.IO
 
     override fun unconfined(): CoroutineDispatcher = Dispatchers.Unconfined
-
 }

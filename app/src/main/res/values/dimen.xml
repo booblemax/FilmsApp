@@ -50,4 +50,7 @@
     <dimen name="lists_film_image_width">150dp</dimen>
     <dimen name="lists_film_image_height">225dp</dimen>
 
+    <integer name="image_corner_radius">16</integer>
+    <integer name="minutes_in_hour">60</integer>
+
 </resources>

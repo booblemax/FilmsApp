@@ -109,21 +109,20 @@ dependencies {
 
     implementation(Libs.logging_interceptor)
 
-    //local tests
+    // local tests
     testImplementation(TestLibs.junit)
     testImplementation(TestLibs.mockito_unit)
     androidTestImplementation(TestLibs.hamcrest)
 
-    //instrumented tests
+    // instrumented tests
     androidTestImplementation(TestLibs.mockito_android)
     androidTestImplementation(TestLibs.junit_ext)
     androidTestImplementation(TestLibs.espresso)
 
-    //jvm testing
+    // jvm testing
     testImplementation(TestLibs.junit_ext_ktx)
     testImplementation(TestLibs.androidx_test_core_ktx)
     testImplementation(TestLibs.robolectric)
     testImplementation(TestLibs.androidx_arch_core_testing)
     testImplementation(TestLibs.coroutines_test)
-
 }

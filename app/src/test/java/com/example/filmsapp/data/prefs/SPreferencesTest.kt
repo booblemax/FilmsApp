@@ -12,7 +12,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class SPreferencesTest {
 
-    private val prefs: SPreferences =SPreferences(ApplicationProvider.getApplicationContext())
+    private val prefs: SPreferences = SPreferences(ApplicationProvider.getApplicationContext())
 
     @Test
     fun `given mode night when save theme should return night`() {

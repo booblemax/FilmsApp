@@ -29,9 +29,10 @@ fun AppCompatTextView.setTextOrGone(text: String?) {
 @BindingAdapter("url", "requestListener", requireAll = false)
 fun AppCompatImageView.src(url: String?, requestListener: Request.Listener? = null) {
     val imageLoader = Coil.imageLoader(context)
+    val radius = context.resources.getInteger(R.integer.image_corner_radius)
     val request = LoadRequest.Builder(context)
         .crossfade(true)
-        .transformations(RoundedCornersTransformation(16.0f))
+        .transformations(RoundedCornersTransformation(radius.toFloat()))
         .listener(requestListener)
         .error(R.drawable.ic_error)
         .data(BuildConfig.REDUCED_IMAGE_URL + url)

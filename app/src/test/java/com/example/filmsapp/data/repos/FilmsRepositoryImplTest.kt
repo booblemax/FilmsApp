@@ -117,7 +117,7 @@ class FilmsRepositoryImplTest {
             )
         }
 
-    //Top Rated
+    // Top Rated
 
     @Test
     fun `when getTopRatedFilms should return first page of film models`() =
@@ -176,7 +176,7 @@ class FilmsRepositoryImplTest {
             )
         }
 
-    //Upcoming
+    // Upcoming
 
     @Test
     fun `when getUpcomingFilms should return first page of film models`() =

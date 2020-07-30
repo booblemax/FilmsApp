@@ -29,7 +29,8 @@ abstract class NetworkBoundResource<ResultType, RequestType> {
                             RetrofitException(
                                 response.code(),
                                 response.message()
-                            ), it
+                            ),
+                            it
                         )
                     )
                 }

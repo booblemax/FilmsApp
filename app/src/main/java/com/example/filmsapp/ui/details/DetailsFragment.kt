@@ -2,6 +2,7 @@ package com.example.filmsapp.ui.details
 
 import android.Manifest
 import android.accounts.AccountManager
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
@@ -17,12 +18,13 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.ViewPager2
 import com.example.filmsapp.R
 import com.example.filmsapp.databinding.DetailsFragmentBinding
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.ui.base.BaseFragment
 import com.example.filmsapp.ui.base.common.networkinfo.NetworkStateHolder
+import com.example.filmsapp.ui.details.transformers.OffsetTransformer
+import com.example.filmsapp.ui.details.transformers.ScaleTransformer
 import com.example.filmsapp.ui.main.SharedViewModel
 import com.example.filmsapp.util.makeStatusBarTransparent
 import com.example.filmsapp.util.makeStatusBarVisible
@@ -30,17 +32,12 @@ import com.example.filmsapp.util.setMarginTop
 import com.example.filmsapp.util.snack
 import com.example.filmsapp.util.visible
 import com.example.filmsapp.util.waitForTransition
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.util.ExponentialBackOff
 import com.google.api.services.youtube.YouTubeScopes
 import kotlinx.android.synthetic.main.item_backdrop.view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import kotlin.math.abs
 
 class DetailsFragment :
     BaseFragment<DetailsViewModel, DetailsFragmentBinding>(),
@@ -50,7 +47,7 @@ class DetailsFragment :
     override val viewModel: DetailsViewModel by viewModel()
     override val layoutRes: Int = R.layout.details_fragment
 
-    private lateinit var credential: GoogleAccountCredential
+    private val googleAccountManager = GoogleAccountManager(requireContext())
     private val onItemClickListener = { itemView: View, position: Int ->
         sharedViewModel.backdropCarouselPosition = position
 
@@ -61,7 +58,8 @@ class DetailsFragment :
         findNavController().navigate(
             DetailsFragmentDirections.actionDetailsFragmentToImagesCarouselFragment(
                 adapter.currentList.map { it.filePath }.toTypedArray(), position
-            ), extras
+            ),
+            extras
         )
     }
 
@@ -82,7 +80,6 @@ class DetailsFragment :
         initObservers()
         initImages()
         initViewPager()
-        initCredentials()
         registerInsetsListener()
     }
 
@@ -110,7 +107,7 @@ class DetailsFragment :
             startActivityForResult(it.intent, REQUEST_AUTHORIZATION)
         }
         viewModel.displayGpsUnavailable.observe(
-            viewLifecycleOwner, ::showGooglePlayServicesAvailabilityErrorDialog
+            viewLifecycleOwner, googleAccountManager::showGooglePlayServicesAvailabilityErrorDialog
         )
         viewModel.showSnackbar.observe(viewLifecycleOwner) {
             view?.snack(
@@ -132,12 +129,6 @@ class DetailsFragment :
         }
     }
 
-    private fun initCredentials() {
-        credential = GoogleAccountCredential.usingOAuth2(
-            requireContext(), SCOPES
-        ).setBackOff(ExponentialBackOff())
-    }
-
     private fun registerInsetsListener() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             binding.detailsBack.setMarginTop(insets.systemWindowInsetTop)
@@ -150,52 +141,25 @@ class DetailsFragment :
         waitForTransition(binding.detailsBackdrops)
     }
 
-    //region view_pager
-
+    @SuppressLint("WrongConstant")
     private fun initViewPager() {
         val offsetPx = resources.getDimensionPixelOffset(R.dimen.size_24)
         with(binding.detailsBackdrops) {
             adapter = this@DetailsFragment.adapter
             clipToPadding = false
             clipChildren = false
-            offscreenPageLimit = 3
-            setPageTransformer(CompositePageTransformer().apply {
-                addTransformer(getOffsetTransformer(offsetPx))
-                addTransformer(this@DetailsFragment::getScaleTransformer)
-            })
-        }
-    }
-
-    private fun getScaleTransformer(page: View, position: Float) {
-        page.apply {
-            translationY = abs(position) * 20f
-            scaleX = 1.1f
-        }
-    }
-
-    private fun getOffsetTransformer(
-        offsetPx: Int
-    ): ViewPager2.PageTransformer {
-        return ViewPager2.PageTransformer { page, position ->
-            val offset = -2.0f * offsetPx.toFloat() * position
-            val viewPager = page.parent.parent as ViewPager2
-            if (viewPager.orientation == ViewPager2.ORIENTATION_HORIZONTAL) {
-                if (ViewCompat.getLayoutDirection(viewPager) ==
-                    ViewCompat.LAYOUT_DIRECTION_RTL
-                ) {
-                    page.translationX = -offset
-                } else {
-                    page.translationX = offset
+            offscreenPageLimit = VISIBLE_PAGE_LIMIT
+            setPageTransformer(
+                CompositePageTransformer().apply {
+                    addTransformer(OffsetTransformer(offsetPx.toFloat()))
+                    addTransformer(ScaleTransformer())
                 }
-            } else {
-                page.translationY = offset
-            }
+            )
         }
     }
 
     private fun prepareTransition() {
         setExitSharedElementCallback(object : SharedElementCallback() {
-
             override fun onMapSharedElements(
                 names: MutableList<String>?,
                 sharedElements: MutableMap<String, View>?
@@ -215,8 +179,6 @@ class DetailsFragment :
         })
     }
 
-    //endregion
-
     override fun onBackPressed(popTo: Int?) {
         sharedViewModel.clearBackdropCarouselPosition()
         requireActivity().makeStatusBarVisible()
@@ -227,53 +189,23 @@ class DetailsFragment :
 
     private fun getResultsFromApi() {
         when {
-            !isGooglePlayServicesAvailable() -> acquireGooglePlayServices()
-            credential.selectedAccountName == null -> chooseAccount()
+            !googleAccountManager.isGooglePlayServicesAvailable() ->
+                googleAccountManager.acquireGooglePlayServices()
+            !googleAccountManager.hasAccountName() -> chooseAccount()
             !NetworkStateHolder.isConnected -> view?.snack("No network connection available :(")
-            else -> binding.model?.let { viewModel.requestFilmTrailer(it.title, credential) }
+            else -> binding.model?.let {
+                viewModel.requestFilmTrailer(it.title, googleAccountManager.getCredential())
+            }
         }
-    }
-
-    private fun isGooglePlayServicesAvailable(): Boolean {
-        val apiAvailability = GoogleApiAvailability.getInstance()
-        val connectionStatusCode = apiAvailability.isGooglePlayServicesAvailable(requireContext())
-        return connectionStatusCode == ConnectionResult.SUCCESS
-    }
-
-    private fun acquireGooglePlayServices() {
-        val apiAvailability = GoogleApiAvailability.getInstance()
-        val connectionStatusCode = apiAvailability.isGooglePlayServicesAvailable(requireContext())
-        if (apiAvailability.isUserResolvableError(connectionStatusCode)) {
-            showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode)
-        }
-    }
-
-    private fun showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode: Int) {
-        val apiAvailability = GoogleApiAvailability.getInstance()
-        apiAvailability.getErrorDialog(
-            requireActivity(),
-            connectionStatusCode,
-            REQUEST_GOOGLE_PLAY_SERVICES
-        ).show()
     }
 
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private fun chooseAccount() {
         if (EasyPermissions.hasPermissions(
-                requireContext(), Manifest.permission.GET_ACCOUNTS
-            )
+            requireContext(), Manifest.permission.GET_ACCOUNTS
+        )
         ) {
-            val accountName =
-                activity?.getPreferences(Context.MODE_PRIVATE)?.getString(PREF_ACCOUNT_NAME, null)
-            if (accountName != null) {
-                credential.selectedAccountName = accountName
-                getResultsFromApi()
-            } else {
-                startActivityForResult(
-                    credential.newChooseAccountIntent(),
-                    REQUEST_ACCOUNT_PICKER
-                )
-            }
+            googleAccountManager.requestOrSetupAccountName(this::getResultsFromApi)
         } else {
             EasyPermissions.requestPermissions(
                 this,
@@ -301,7 +233,7 @@ class DetailsFragment :
                         activity?.getPreferences(Context.MODE_PRIVATE)?.edit {
                             putString(PREF_ACCOUNT_NAME, accountName)
                         }
-                        credential.selectedAccountName = accountName
+                        googleAccountManager.setAccountName(accountName)
                         getResultsFromApi()
                     }
                 }
@@ -341,6 +273,7 @@ class DetailsFragment :
         const val REQUEST_GOOGLE_PLAY_SERVICES = 1002
         const val REQUEST_PERMISSION_GET_ACCOUNTS = 1003
         const val PREF_ACCOUNT_NAME = "accountName"
+        const val VISIBLE_PAGE_LIMIT = 3
 
         val SCOPES = listOf(YouTubeScopes.YOUTUBE_READONLY)
     }
