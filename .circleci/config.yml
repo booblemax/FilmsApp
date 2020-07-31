@@ -20,10 +20,10 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
           name: Detekt Lint
-          commnd: ./gradlew detekt
+          command: ./gradlew detekt
       - run:
           name: Ktlint
-          commnd: ./gradlew ktlintCheck
+          command: ./gradlew ktlintCheck
       - run:
           name: Run Tests
           command: ./gradlew test
