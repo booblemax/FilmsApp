@@ -16,5 +16,4 @@ val domainModule = module {
     factory<YoutubeRepository> { YoutubeRepositoryImpl() }
 
     factory<DispatcherProvider> { DefaultDispatcherProvider() }
-
 }

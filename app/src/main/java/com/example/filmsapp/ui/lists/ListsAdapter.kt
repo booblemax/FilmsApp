@@ -103,5 +103,7 @@ class LoadingViewHolder(
     view: View
 ) : BaseViewHolder(view) {
 
-    override fun bind(model: Any?) {}
+    override fun bind(model: Any?) {
+        // nothing to bind
+    }
 }

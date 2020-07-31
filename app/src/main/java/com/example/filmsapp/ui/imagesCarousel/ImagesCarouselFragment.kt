@@ -63,7 +63,6 @@ class ImagesCarouselFragment :
 
     private fun prepareTransition() {
         setEnterSharedElementCallback(object : SharedElementCallback() {
-
             override fun onMapSharedElements(
                 names: MutableList<String>?,
                 sharedElements: MutableMap<String, View>?

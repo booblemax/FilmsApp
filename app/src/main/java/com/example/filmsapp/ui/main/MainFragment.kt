@@ -40,7 +40,8 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
 
     private fun initTitle() {
         binding.toolbar.title = getString(args.listType.titleId)
-        binding.toolbar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_back, context?.theme)
+        binding.toolbar.navigationIcon =
+            ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_back, context?.theme)
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
@@ -67,7 +68,6 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
         binding.rvFilms.adapter = adapter
         binding.rvFilms.addItemDecoration(SimpleItemDecoration(MARGIN_OFFSET))
         binding.rvFilms.addOnScrollListener(object : EndlessRecyclerScrollListener(layoutManager) {
-
             override fun loadMoreItems() {
                 viewModel.loadFilms()
             }
@@ -109,8 +109,9 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
                     adapter.isLoading = false
                 }
                 is Resource.LOADING -> {
-                    if (!viewModel.isFirstPageLoading())
+                    if (!viewModel.isFirstPageLoading()) {
                         adapter.isLoading = true
+                    }
                 }
             }
         }

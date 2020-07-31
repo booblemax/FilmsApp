@@ -8,5 +8,4 @@ interface DispatcherProvider {
     fun default(): CoroutineDispatcher
     fun io(): CoroutineDispatcher
     fun unconfined(): CoroutineDispatcher
-
 }

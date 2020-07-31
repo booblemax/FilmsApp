@@ -36,18 +36,36 @@ class MainViewModelTest {
     fun setUp() {
         repository = Mockito.mock(FilmsRepository::class.java)
         coroutinesDispatcher.testCoroutineDispatcher.runBlockingTest {
-            Mockito.`when`(repository.getPopularFilms(1)).thenReturn(Resource.SUCCESS(
-                populars.take(2).map { it.toModel() }))
-            Mockito.`when`(repository.getPopularFilms(2)).thenReturn(Resource.SUCCESS(
-                populars.subList(2, 4).map { it.toModel() }))
-            Mockito.`when`(repository.getTopRatedFilms(1)).thenReturn(Resource.SUCCESS(
-                toprated.take(2).map { it.toModel() }))
-            Mockito.`when`(repository.getTopRatedFilms(2)).thenReturn(Resource.SUCCESS(
-                toprated.subList(2, 4).map { it.toModel() }))
-            Mockito.`when`(repository.getUpcomingFilms(1)).thenReturn(Resource.SUCCESS(
-                upcoming.take(2).map { it.toModel() }))
-            Mockito.`when`(repository.getUpcomingFilms(2)).thenReturn(Resource.SUCCESS(
-                upcoming.subList(2, 4).map { it.toModel() }))
+            Mockito.`when`(repository.getPopularFilms(1)).thenReturn(
+                Resource.SUCCESS(
+                    populars.take(2).map { it.toModel() }
+                )
+            )
+            Mockito.`when`(repository.getPopularFilms(2)).thenReturn(
+                Resource.SUCCESS(
+                    populars.subList(2, 4).map { it.toModel() }
+                )
+            )
+            Mockito.`when`(repository.getTopRatedFilms(1)).thenReturn(
+                Resource.SUCCESS(
+                    toprated.take(2).map { it.toModel() }
+                )
+            )
+            Mockito.`when`(repository.getTopRatedFilms(2)).thenReturn(
+                Resource.SUCCESS(
+                    toprated.subList(2, 4).map { it.toModel() }
+                )
+            )
+            Mockito.`when`(repository.getUpcomingFilms(1)).thenReturn(
+                Resource.SUCCESS(
+                    upcoming.take(2).map { it.toModel() }
+                )
+            )
+            Mockito.`when`(repository.getUpcomingFilms(2)).thenReturn(
+                Resource.SUCCESS(
+                    upcoming.subList(2, 4).map { it.toModel() }
+                )
+            )
         }
 
         viewModel = MainViewModel(coroutinesDispatcher.testDispatcherProvider, repository)
@@ -93,7 +111,6 @@ class MainViewModelTest {
         assertThat(value, IsEqual(origin))
     }
 
-
     @Test
     fun `given type toprated and page 2 when twice loadFilms should call getTopRatedFilms with page 2`() {
         viewModel.listType = ListType.TOP_RATED
@@ -119,7 +136,6 @@ class MainViewModelTest {
         }
         assertThat(value, IsEqual(origin))
     }
-
 
     @Test
     fun `given type upcoming and page 2 when twice loadFilms should call getUpcomingFilms with page 2`() {

@@ -35,7 +35,8 @@ class FilmsRepositoryImpl(
         }
 
     override suspend fun getPopularFilms(
-        page: Int, forceUpdate: Boolean
+        page: Int,
+        forceUpdate: Boolean
     ): Resource<List<FilmModel>> =
         withContext(dispatcher.io()) { getFilmsCached(page, forceUpdate, FilmType.POPULAR) }
 

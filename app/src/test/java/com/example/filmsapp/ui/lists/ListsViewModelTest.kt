@@ -13,9 +13,9 @@ import com.example.filmsapp.domain.repos.FilmsRepository
 import com.example.filmsapp.getOrAwaitValue
 import com.example.filmsapp.ui.base.models.FilmModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual
 import org.hamcrest.core.IsInstanceOf
-import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

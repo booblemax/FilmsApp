@@ -6,5 +6,4 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 interface YoutubeRepository {
 
     suspend fun getTrailerForFilm(filmName: String, credential: GoogleAccountCredential): YoutubeFilmModel?
-
 }

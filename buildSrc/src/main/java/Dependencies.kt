@@ -18,6 +18,10 @@ object Classpath {
 }
 
 object Versions {
+    const val ktLint = "6.1.0"
+    const val ktlintGradlePlugin = "9.2.1"
+    const val detekt = "1.10.0"
+
     const val gradle = "4.0.0"
     const val kotlin = "1.3.72"
     const val lifecycler = "2.2.0"
@@ -42,7 +46,6 @@ object Versions {
     const val playServices = "18.0.0"
     const val easyPermission = "3.0.0"
     const val youtubePlayer = "0.23"
-    const val ktlintGradlePlugin = "9.2.1"
     const val coroutines = "1.3.6"
 
     /* test */
@@ -55,6 +58,7 @@ object Versions {
     const val arch_testing = "2.0.0"
     const val mockito = "2.23.0"
     const val robolectric = "4.3.1"
+    const val guava = "29.0-jre"
 }
 
 object Libs {
@@ -102,7 +106,8 @@ object Libs {
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
     const val logging_interceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.loggingInterceptor}"
 
-    const val youtube_player = "com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:${Versions.youtubePlayer}"
+    const val youtube_player =
+        "com.pierfrancescosoffritti.androidyoutubeplayer:chromecast-sender:${Versions.youtubePlayer}"
 }
 
 object TestLibs {
@@ -117,4 +122,5 @@ object TestLibs {
     const val coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
     const val mockito_unit = "org.mockito:mockito-core:${Versions.mockito}"
     const val mockito_android = "org.mockito:mockito-android:${Versions.mockito}"
+    const val guava = "com.google.guava:guava"
 }

@@ -13,7 +13,8 @@ import kotlinx.coroutines.launch
 
 class ListsViewModel(
     dispatcherProvider: DispatcherProvider,
-    private val repository: FilmsRepository) : BaseViewModel(dispatcherProvider) {
+    private val repository: FilmsRepository
+) : BaseViewModel(dispatcherProvider) {
 
     private val _latestFilm = MutableLiveData<Resource<FilmModel>>()
     val latestFilm: LiveData<Resource<FilmModel>> get() = _latestFilm

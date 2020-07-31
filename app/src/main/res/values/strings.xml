@@ -13,5 +13,7 @@
 
     <string name="error_occur">Error occur: %s</string>
 
+    <string name="time">%sh %sm</string>
+
     <string name="switch_theme">Light Theme</string>
 </resources>

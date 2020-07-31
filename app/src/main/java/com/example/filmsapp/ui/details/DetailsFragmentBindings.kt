@@ -3,6 +3,7 @@ package com.example.filmsapp.ui.details
 import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
+import com.example.filmsapp.R
 import com.example.filmsapp.data.remote.response.films.Genre
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.util.gone
@@ -21,7 +22,7 @@ fun setGenres(textView: AppCompatTextView, genres: List<Genre>?) {
 @BindingAdapter("year")
 fun setYear(textView: AppCompatTextView, releaseDate: String?) {
     releaseDate?.let {
-        var dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val date = LocalDate.parse(it, dateFormatter)
         val zoneDate = date.atStartOfDay(ZoneId.systemDefault())
         textView.text = zoneDate.year.toString()
@@ -31,9 +32,10 @@ fun setYear(textView: AppCompatTextView, releaseDate: String?) {
 @BindingAdapter("runtime")
 fun setLength(textView: AppCompatTextView, runtime: Int?) {
     runtime?.let {
-        val h = it / 60
-        val m = it - h * 60
-        textView.text = "${h}h ${m}m"
+        val minuteInHour = textView.context.resources.getInteger(R.integer.minutes_in_hour)
+        val h = it / minuteInHour
+        val m = it - h * minuteInHour
+        textView.text = textView.context.getString(R.string.time, h.toString(), m.toString())
     }
 }
 

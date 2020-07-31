@@ -44,13 +44,17 @@ val dataModule = module {
     factory { createService(get(), FilmsApi::class.java) }
 }
 
-private fun configRetrofit(client: OkHttpClient, gson: Gson, baseUrl: String): Retrofit = Retrofit.Builder()
-    .baseUrl(baseUrl)
-    .client(client)
-    .addConverterFactory(GsonConverterFactory.create(gson))
-    .build()
+private fun configRetrofit(client: OkHttpClient, gson: Gson, baseUrl: String): Retrofit =
+    Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .client(client)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
 
-private fun configClient(httpInterceptor: HttpLoggingInterceptor, authHeaderInterceptor: AuthHeaderInterceptor): OkHttpClient =
+private fun configClient(
+    httpInterceptor: HttpLoggingInterceptor,
+    authHeaderInterceptor: AuthHeaderInterceptor
+): OkHttpClient =
     OkHttpClient.Builder()
         .addInterceptor(httpInterceptor)
         .addInterceptor(authHeaderInterceptor)
