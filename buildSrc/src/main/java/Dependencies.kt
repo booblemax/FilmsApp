@@ -58,6 +58,7 @@ object Versions {
     const val arch_testing = "2.0.0"
     const val mockito = "2.23.0"
     const val robolectric = "4.3.1"
+    const val guava = "29.0-jre"
 }
 
 object Libs {
@@ -121,4 +122,5 @@ object TestLibs {
     const val coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
     const val mockito_unit = "org.mockito:mockito-core:${Versions.mockito}"
     const val mockito_android = "org.mockito:mockito-android:${Versions.mockito}"
+    const val guava = "com.google.guava:guava"
 }

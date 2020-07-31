@@ -125,4 +125,11 @@ dependencies {
     testImplementation(TestLibs.robolectric)
     testImplementation(TestLibs.androidx_arch_core_testing)
     testImplementation(TestLibs.coroutines_test)
+
+    implementation(TestLibs.guava) {
+        version {
+            strictly(Versions.guava)
+            prefer(Versions.guava)
+        }
+    }
 }

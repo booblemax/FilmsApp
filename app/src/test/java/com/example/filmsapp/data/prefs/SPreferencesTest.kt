@@ -3,12 +3,15 @@ package com.example.filmsapp.data.prefs
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.filmsapp.FilmsTestApp
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.After
-import org.junit.Assert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
+@Config(application = FilmsTestApp::class, sdk = [28])
 @RunWith(AndroidJUnit4::class)
 class SPreferencesTest {
 
