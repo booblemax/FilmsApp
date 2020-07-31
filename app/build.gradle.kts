@@ -20,6 +20,12 @@ android {
 
         testInstrumentationRunner = Classpath.testInstrumentalRunner
         vectorDrawables.useSupportLibrary = true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                argument("room.incremental", "true")
+            }
+        }
     }
 
     buildTypes {
