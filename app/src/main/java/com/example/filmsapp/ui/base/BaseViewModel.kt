@@ -12,7 +12,7 @@ import timber.log.Timber
 
 abstract class BaseViewModel(protected val dispatcherProvider: DispatcherProvider) : ViewModel() {
 
-    protected val _showSnackbar = MutableLiveData<String>()
+    private val _showSnackbar = MutableLiveData<String>()
     val showSnackbar: LiveData<String> = _showSnackbar
 
     private val job: Job = Job()
@@ -27,5 +27,9 @@ abstract class BaseViewModel(protected val dispatcherProvider: DispatcherProvide
 
     override fun onCleared() {
         baseContext.cancel()
+    }
+
+    protected fun postMessage(message: String?) {
+        if (message != null)_showSnackbar.value = message
     }
 }

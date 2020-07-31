@@ -78,6 +78,7 @@ class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {
                     }
                 }
                 is Resource.ERROR -> binding.listsLatestFilm.gone()
+                is Resource.LOADING -> { /*do nothing*/ }
             }
         }
         viewModel.popularFilms.observe(viewLifecycleOwner) {

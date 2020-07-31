@@ -17,13 +17,4 @@ object ScreenUtil {
         val spanCount = min(1, metrics.widthPixels / itemWidth)
         return spanCount
     }
-
-    fun calculateNoOfColumns(
-        context: Context,
-        columnWidthDp: Float
-    ): Int {
-        val displayMetrics: DisplayMetrics = context.resources.displayMetrics
-        val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
-        return (screenWidthDp / columnWidthDp + 0.5).toInt()
-    }
 }

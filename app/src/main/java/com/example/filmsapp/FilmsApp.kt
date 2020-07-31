@@ -20,7 +20,6 @@ class FilmsApp : Application() {
         registerConnectivityMonitor()
 
         startKoin {
-
             androidContext(this@FilmsApp)
 
             modules(dataModule + domainModule + vmModule)
