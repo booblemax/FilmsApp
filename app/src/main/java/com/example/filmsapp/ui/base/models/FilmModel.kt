@@ -1,5 +1,6 @@
 package com.example.filmsapp.ui.base.models
 
+import com.example.filmsapp.data.db.FilmDataModel
 import com.example.filmsapp.data.remote.response.films.BackdropsDto
 import com.example.filmsapp.data.remote.response.films.Genre
 
@@ -15,5 +16,23 @@ data class FilmModel(
     val voteCount: Int = -1,
     val genres: List<Genre>? = null,
     val backdrops: BackdropsDto? = null,
-    val video: Boolean = false
-)
+    val video: Boolean = false,
+    val hasBookmark: Boolean = false
+) {
+
+    fun toDataModel() =
+        FilmDataModel(
+            id,
+            title,
+            poster,
+            runtime,
+            releaseDate,
+            backdropPath,
+            overview,
+            voteAverage,
+            voteCount,
+            genres,
+            backdrops,
+            video
+        )
+}

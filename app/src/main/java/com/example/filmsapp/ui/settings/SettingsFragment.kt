@@ -1,9 +1,11 @@
 package com.example.filmsapp.ui.settings
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.filmsapp.R
 import com.example.filmsapp.databinding.SettingsFragmentBinding
 import com.example.filmsapp.ui.base.BaseFragment
+import kotlinx.android.synthetic.main.settings_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : BaseFragment<SettingsViewModel, SettingsFragmentBinding>() {
@@ -13,7 +15,8 @@ class SettingsFragment : BaseFragment<SettingsViewModel, SettingsFragmentBinding
 
     override fun init() {
         with(binding) {
-            materialToolbar.setNavigationOnClickListener { onBackPressed() }
+            (activity as AppCompatActivity).setSupportActionBar(settings_toolbar)
+            settings_toolbar.setNavigationOnClickListener { onBackPressed() }
             settingsSwitch.setOnCheckedChangeListener { _, isChecked ->
                 val theme =
                     if (isChecked) AppCompatDelegate.MODE_NIGHT_YES

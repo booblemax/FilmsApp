@@ -41,6 +41,7 @@ class MainViewModel(
             ListType.POPULAR -> repository.getPopularFilms(pageNumber, forceUpdate)
             ListType.TOP_RATED -> repository.getTopRatedFilms(pageNumber, forceUpdate)
             ListType.UPCOMING -> repository.getUpcomingFilms(pageNumber, forceUpdate)
+            ListType.FAVOURITES -> repository.getFavouritesFilms(pageNumber)
         }
 
     fun resetPageNumber() {
@@ -56,6 +57,8 @@ class MainViewModel(
     }
 
     fun isFirstPageLoading() = pageNumber == FIRST_PAGE_NUMBER
+
+    fun isFavoriteList() = listType == ListType.FAVOURITES
 
     companion object {
         private const val FIRST_PAGE_NUMBER = 0

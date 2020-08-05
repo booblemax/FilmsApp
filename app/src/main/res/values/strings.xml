@@ -6,14 +6,18 @@
     <string name="toprated_title">Top Rated</string>
     <string name="upcoming_title">Upcoming</string>
 
+    <string name="title_lists">Films</string>
     <string name="title_popular">Popular</string>
     <string name="title_toprated">Top Rated</string>
     <string name="title_upcoming">Upcoming</string>
+    <string name="title_favourites">Favourites</string>
     <string name="title_settings">Settings</string>
 
     <string name="error_occur">Error occur: %s</string>
 
     <string name="time">%sh %sm</string>
-
     <string name="switch_theme">Light Theme</string>
+
+    <string name="menu_favorites">Favorites</string>
+
 </resources>

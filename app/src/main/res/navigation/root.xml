@@ -38,6 +38,9 @@
         <action
             android:id="@+id/action_detailsFragment_to_playerFragment"
             app:destination="@id/playerFragment" />
+        <argument
+            android:name="isFavorites"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/imagesCarouselFragment"

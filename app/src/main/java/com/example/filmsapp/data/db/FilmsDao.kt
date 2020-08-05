@@ -20,8 +20,11 @@ interface FilmsDao {
     fun delete(vararg films: FilmDataModel)
 
     @Query("SELECT * FROM films WHERE id = :id")
-    fun getFilm(id: String): FilmDataModel
+    fun getFilm(id: String): FilmDataModel?
 
     @Query("SELECT * FROM films")
     fun getFilms(): List<FilmDataModel>
+
+    @Query("SELECT COUNT(*) FROM films WHERE id = :id")
+    fun contains(id: String): Int
 }

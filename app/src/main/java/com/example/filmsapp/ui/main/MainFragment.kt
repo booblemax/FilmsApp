@@ -1,6 +1,7 @@
 package com.example.filmsapp.ui.main
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -39,6 +40,7 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
     }
 
     private fun initTitle() {
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
         binding.toolbar.title = getString(args.listType.titleId)
         binding.toolbar.navigationIcon =
             ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_back, context?.theme)
@@ -51,7 +53,12 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
                 viewModel.lastKnownPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
             }
             findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToDetailsFragment(it.id, it.poster, it.backdropPath)
+                MainFragmentDirections.actionMainFragmentToDetailsFragment(
+                    it.id,
+                    it.poster,
+                    it.backdropPath,
+                    viewModel.isFavoriteList()
+                )
             )
         }
     }

@@ -7,6 +7,7 @@ import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.domain.repos.FilmsRepository
 import com.example.filmsapp.domain.repos.YoutubeRepository
 import com.example.filmsapp.ui.base.BaseViewModel
+import com.example.filmsapp.ui.base.Event
 import com.example.filmsapp.ui.base.models.FilmModel
 import com.example.filmsapp.ui.base.models.YoutubeFilmModel
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
@@ -23,6 +24,9 @@ class DetailsViewModel(
     private val _film = MutableLiveData<Resource<FilmModel>>()
     val film get() = _film
 
+    private val _isFavorite = MutableLiveData<Event<Boolean>>()
+    val isFavorites get() = _isFavorite
+
     private val _requestAuthorizationPermission = MutableLiveData<UserRecoverableAuthIOException>()
     val requestAuthorizationPermission: LiveData<UserRecoverableAuthIOException> get() = _requestAuthorizationPermission
 
@@ -32,10 +36,19 @@ class DetailsViewModel(
     private val _youtubeMovieSearchResult = MutableLiveData<YoutubeFilmModel>()
     val youtubeMovieSearchResult: LiveData<YoutubeFilmModel> get() = _youtubeMovieSearchResult
 
-    fun loadFilm(id: String) {
+    fun loadFilm(id: String, isFavorites: Boolean) {
         baseContext.launch {
             _film.value = Resource.LOADING()
-            _film.value = filmsRepository.getFilm(id)
+            checkFilmStoredInDb(isFavorites, id)
+            _film.value = filmsRepository.getFilm(id, !isFavorites)
+        }
+    }
+
+    private suspend fun checkFilmStoredInDb(isFavorites: Boolean, id: String) {
+        if (!isFavorites) {
+            _isFavorite.value = Event(filmsRepository.isFilmStoredInDb(id))
+        } else {
+            _isFavorite.value = Event(true)
         }
     }
 
@@ -44,6 +57,33 @@ class DetailsViewModel(
             val model = youtubeRepository.getTrailerForFilm(filmName, credential)
             _youtubeMovieSearchResult.value = model
         }
+    }
+
+    fun favoriteClicked() {
+        isFavorites.value?.let {
+            if (it.peekContent()) {
+                removeFilmFromStore()
+            } else {
+                storeFilm()
+            }
+            isFavorites.value = Event(!it.peekContent())
+        }
+    }
+
+    private fun storeFilm() {
+        (film.value as? Resource.SUCCESS)?.data?.let {
+            baseContext.launch {
+                filmsRepository.saveFilm(it)
+            }
+        } ?: postMessage("Something went wrong!")
+    }
+
+    private fun removeFilmFromStore() {
+        (film.value as? Resource.SUCCESS)?.data?.let {
+            baseContext.launch {
+                filmsRepository.deleteFilm(it)
+            }
+        } ?: postMessage("Something went wrong!")
     }
 
     override fun handleException(exception: Throwable) {

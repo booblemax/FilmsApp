@@ -66,6 +66,18 @@
                 app:srcCompat="@drawable/ic_arrow_back_black" />
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/details_bookmark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_8"
+                android:layout_marginEnd="@dimen/size_8"
+                android:padding="@dimen/size_8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_bookmark"
+                />
+
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/details_poster"
                 android:layout_width="@dimen/film_image_width_small"
                 android:layout_height="@dimen/film_image_height_small"
