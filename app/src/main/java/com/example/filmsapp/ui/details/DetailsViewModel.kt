@@ -2,6 +2,7 @@ package com.example.filmsapp.ui.details
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.filmsapp.R
 import com.example.filmsapp.domain.DispatcherProvider
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.domain.repos.FilmsRepository
@@ -14,6 +15,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class DetailsViewModel(
     dispatcherProvider: DispatcherProvider,
@@ -74,16 +76,18 @@ class DetailsViewModel(
         (film.value as? Resource.SUCCESS)?.data?.let {
             baseContext.launch {
                 filmsRepository.saveFilm(it)
+                postMessage(R.string.film_saved)
             }
-        } ?: postMessage("Something went wrong!")
+        } ?: postMessage(R.string.error)
     }
 
     private fun removeFilmFromStore() {
         (film.value as? Resource.SUCCESS)?.data?.let {
             baseContext.launch {
                 filmsRepository.deleteFilm(it)
+                postMessage(R.string.film_removed)
             }
-        } ?: postMessage("Something went wrong!")
+        } ?: postMessage(R.string.error)
     }
 
     override fun handleException(exception: Throwable) {
@@ -93,7 +97,10 @@ class DetailsViewModel(
                 _displayGpsUnavailable.value =
                     exception.connectionStatusCode
             is UserRecoverableAuthIOException -> _requestAuthorizationPermission.value = exception
-            else -> postMessage(exception.message)
+            else -> {
+                Timber.e(exception)
+                postMessage(R.string.error)
+            }
         }
     }
 }

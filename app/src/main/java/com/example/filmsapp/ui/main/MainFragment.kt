@@ -40,11 +40,11 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
     }
 
     private fun initTitle() {
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-        binding.toolbar.title = getString(args.listType.titleId)
-        binding.toolbar.navigationIcon =
+        (activity as AppCompatActivity).setSupportActionBar(binding.mainToolbar)
+        binding.mainToolbar.title = getString(args.listType.titleId)
+        binding.mainToolbar.navigationIcon =
             ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_back, context?.theme)
-        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
+        binding.mainToolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun initAdapter() {
@@ -106,13 +106,13 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
             when (it) {
                 is Resource.SUCCESS -> {
                     adapter.isLoading = false
-                    it.data?.let { list ->
-                        adapter.submitList(list.toMutableList())
-                    }
+                    viewModel.fetchedDataIsEmpty(it.data?.isEmpty() ?: true)
+                    adapter.submitList(it.data?.toMutableList() ?: mutableListOf())
                 }
                 is Resource.ERROR -> {
-                    binding.rvFilms.snack(it.message?.localizedMessage ?: "")
+                    viewModel.fetchedDataIsEmpty(true)
                     viewModel.decPageNumber()
+                    binding.rvFilms.snack(it.message?.localizedMessage ?: "")
                     adapter.isLoading = false
                 }
                 is Resource.LOADING -> {

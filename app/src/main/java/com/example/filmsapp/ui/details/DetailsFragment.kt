@@ -118,13 +118,8 @@ class DetailsFragment :
         viewModel.displayGpsUnavailable.observe(
             viewLifecycleOwner, googleAccountManager::showGooglePlayServicesAvailabilityErrorDialog
         )
-        viewModel.showSnackbar.observe(viewLifecycleOwner) {
-            view?.snack(
-                getString(
-                    R.string.error_occur,
-                    it
-                )
-            )
+        viewModel.showSnackbar.observe(viewLifecycleOwner) { event ->
+            view?.snack(getString(event.getContentIfNotHandled() ?: R.string.error))
         }
         viewModel.isFavorites.observe(viewLifecycleOwner, EventObserver {
             val imageRes = if (it) R.drawable.ic_bookmark_filled else R.drawable.ic_bookmark
