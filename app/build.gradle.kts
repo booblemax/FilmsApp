@@ -132,4 +132,6 @@ dependencies {
     testImplementation(TestLibs.androidx_arch_core_testing)
     testImplementation(TestLibs.coroutines_test)
     testImplementation(TestLibs.room_testing)
+
+    api(TestLibs.guava)
 }

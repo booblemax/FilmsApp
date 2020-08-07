@@ -57,8 +57,8 @@ object Versions {
     const val androidx_test_ext_kotlin_runner = "1.1.1"
     const val arch_testing = "2.0.0"
     const val mockito = "2.23.0"
-    const val robolectric = "4.3.1"
-    const val guava = "17.0"
+    const val robolectric = "4.1"
+    const val guava = "28.0-android"
 }
 
 object Libs {
@@ -122,6 +122,6 @@ object TestLibs {
     const val coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
     const val mockito_unit = "org.mockito:mockito-core:${Versions.mockito}"
     const val mockito_android = "org.mockito:mockito-android:${Versions.mockito}"
-    const val guava = "com.google.guava:guava-jdk5"
+    const val guava = "com.google.guava:guava:${Versions.guava}"
     const val room_testing = "androidx.room:room-testing:${Versions.room}"
 }
