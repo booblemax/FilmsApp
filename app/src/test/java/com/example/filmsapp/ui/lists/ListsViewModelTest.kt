@@ -3,6 +3,8 @@ package com.example.filmsapp.ui.lists
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.filmsapp.CoroutinesTestRule
 import com.example.filmsapp.data.datasource.FakeFilmsApi
+import com.example.filmsapp.data.datasource.FakeFilmsDao
+import com.example.filmsapp.data.datasource.favorites
 import com.example.filmsapp.data.datasource.latest
 import com.example.filmsapp.data.datasource.populars
 import com.example.filmsapp.data.datasource.toprated
@@ -38,7 +40,8 @@ class ListsViewModelTest {
     @Before
     fun setUp() {
         val fakeApi = FakeFilmsApi(latest, populars, toprated, upcoming) { needFailure }
-        repository = FakeFilmsRepository(fakeApi)
+        val fakeDao = FakeFilmsDao(favorites.toMutableList())
+        repository = FakeFilmsRepository(fakeDao, fakeApi)
 
         viewModel = ListsViewModel(coroutinesDispatcher.testDispatcherProvider, repository)
     }

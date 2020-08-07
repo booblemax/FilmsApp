@@ -95,7 +95,7 @@ class FilmsRepositoryImpl(
                         }
                     }
                     val filmModel = filmDto?.toModel(images)
-                    filmModel?.toDataModel()?.let { filmsDao.insert() }
+                    filmModel?.toDataModel()?.let { filmsDao.insert(it) }
                     Resource.SUCCESS(filmModel)
                 } else {
                     Resource.ERROR<FilmModel>(

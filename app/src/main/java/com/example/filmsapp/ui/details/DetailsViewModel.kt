@@ -26,8 +26,8 @@ class DetailsViewModel(
     private val _film = MutableLiveData<Resource<FilmModel>>()
     val film get() = _film
 
-    private val _isFavorite = MutableLiveData<Event<Boolean>>()
-    val isFavorites get() = _isFavorite
+    private val _isFavorites = MutableLiveData<Event<Boolean>>()
+    val isFavorites: LiveData<Event<Boolean>> get() = _isFavorites
 
     private val _requestAuthorizationPermission = MutableLiveData<UserRecoverableAuthIOException>()
     val requestAuthorizationPermission: LiveData<UserRecoverableAuthIOException> get() = _requestAuthorizationPermission
@@ -47,10 +47,10 @@ class DetailsViewModel(
     }
 
     private suspend fun checkFilmStoredInDb(isFavorites: Boolean, id: String) {
-        if (!isFavorites) {
-            _isFavorite.value = Event(filmsRepository.isFilmStoredInDb(id))
+        if (isFavorites) {
+            _isFavorites.value = Event(true)
         } else {
-            _isFavorite.value = Event(true)
+            _isFavorites.value = Event(filmsRepository.isFilmStoredInDb(id))
         }
     }
 
@@ -62,13 +62,13 @@ class DetailsViewModel(
     }
 
     fun favoriteClicked() {
-        isFavorites.value?.let {
+        _isFavorites.value?.let {
             if (it.peekContent()) {
                 removeFilmFromStore()
             } else {
                 storeFilm()
             }
-            isFavorites.value = Event(!it.peekContent())
+            _isFavorites.value = Event(!it.peekContent())
         }
     }
 

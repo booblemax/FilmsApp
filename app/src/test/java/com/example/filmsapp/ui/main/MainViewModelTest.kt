@@ -8,6 +8,7 @@ import com.example.filmsapp.data.datasource.upcoming
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.domain.repos.FilmsRepository
 import com.example.filmsapp.getOrAwaitValue
+import com.example.filmsapp.ui.base.Event
 import com.example.filmsapp.ui.base.models.FilmModel
 import com.example.filmsapp.ui.base.models.ListType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -173,5 +174,23 @@ class MainViewModelTest {
         viewModel.resetPageNumber()
 
         assertThat(viewModel.isFirstPageLoading(), `is`(true))
+    }
+
+    @Test
+    fun `when fetchedDataIsEmpty pass true should pass Event with true`() {
+        viewModel.fetchedDataIsEmpty(true)
+
+        val event = viewModel.emptyData.getOrAwaitValue()
+
+        assertThat(event, IsEqual(Event(true)))
+    }
+
+    @Test
+    fun `when fetchedDataIsEmpty pass false should pass Event with true`() {
+        viewModel.fetchedDataIsEmpty(false)
+
+        val event = viewModel.emptyData.getOrAwaitValue()
+
+        assertThat(event, IsEqual(Event(false)))
     }
 }
