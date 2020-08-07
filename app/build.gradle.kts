@@ -128,17 +128,8 @@ dependencies {
     // jvm testing
     testImplementation(TestLibs.junit_ext_ktx)
     testImplementation(TestLibs.androidx_test_core_ktx)
-    testImplementation(TestLibs.robolectric) {
-        exclude(TestLibs.guava)
-    }
+    testImplementation(TestLibs.robolectric)
     testImplementation(TestLibs.androidx_arch_core_testing)
     testImplementation(TestLibs.coroutines_test)
     testImplementation(TestLibs.room_testing)
-
-    implementation(TestLibs.guava) {
-        version {
-            strictly(Versions.guava)
-            prefer(Versions.guava)
-        }
-    }
 }

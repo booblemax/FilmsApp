@@ -2,7 +2,6 @@ package com.example.filmsapp.ui.details
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.filmsapp.CoroutinesTestRule
 import com.example.filmsapp.FilmsTestApp
 import com.example.filmsapp.R
@@ -26,11 +25,12 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
+import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @ExperimentalCoroutinesApi
 @Config(application = FilmsTestApp::class, sdk = [28])
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class DetailsViewModelTest {
 
     @get:Rule
