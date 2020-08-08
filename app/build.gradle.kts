@@ -128,10 +128,12 @@ dependencies {
     // jvm testing
     testImplementation(TestLibs.junit_ext_ktx)
     testImplementation(TestLibs.androidx_test_core_ktx)
-    testImplementation(TestLibs.robolectric)
+    testImplementation(TestLibs.robolectric) {
+        exclude(TestLibs.guava_jdk5)
+    }
     testImplementation(TestLibs.androidx_arch_core_testing)
     testImplementation(TestLibs.coroutines_test)
     testImplementation(TestLibs.room_testing)
 
-    api(TestLibs.guava)
+    implementation(TestLibs.guava_fix)
 }
