@@ -10,9 +10,11 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
-abstract class BaseViewModel(protected val dispatcherProvider: DispatcherProvider) : ViewModel() {
+abstract class BaseViewModel(private val dispatcherProvider: DispatcherProvider) : ViewModel() {
 
     private val _showSnackbar = MutableLiveData<Event<Int>>()
     val showSnackbar: LiveData<Event<Int>> = _showSnackbar
@@ -34,5 +36,16 @@ abstract class BaseViewModel(protected val dispatcherProvider: DispatcherProvide
 
     protected fun postMessage(@StringRes message: Int) {
         _showSnackbar.value = Event(message)
+    }
+
+    fun runDelayed(timeDelay: Long = TIME_DELAYED_MILLIS, action: () -> Unit) {
+        baseContext.launch {
+            delay(timeDelay)
+            action()
+        }
+    }
+
+    companion object {
+        const val TIME_DELAYED_MILLIS = 3000L
     }
 }

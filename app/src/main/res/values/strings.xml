@@ -15,8 +15,12 @@
     <string name="title_favourites">Favourites</string>
     <string name="title_settings">Settings</string>
 
+    <string name="dialog_permission_accounts">This app needs to access your Google account (via contacts)</string>
+
     <string name="error_occur">Error occur: %s</string>
     <string name="error">Something went wrong</string>
+    <string name="error_no_connection">No network connection available :(</string>
+    <string name="error_require_gpservices">This app requires Google Play Services</string>
     <string name="empty_data">Empty</string>
 
     <string name="time">%sh %sm</string>

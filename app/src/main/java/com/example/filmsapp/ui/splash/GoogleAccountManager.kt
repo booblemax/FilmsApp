@@ -1,4 +1,4 @@
-package com.example.filmsapp.ui.details
+package com.example.filmsapp.ui.splash
 
 import android.app.Activity
 import android.content.Context
@@ -7,12 +7,12 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.util.ExponentialBackOff
+import com.google.api.services.youtube.YouTubeScopes
 
 class GoogleAccountManager(private val context: Context) {
 
     private val credential: GoogleAccountCredential =
-        GoogleAccountCredential.usingOAuth2(context, DetailsFragment.SCOPES)
-            .setBackOff(ExponentialBackOff())
+        GoogleAccountCredential.usingOAuth2(context, SCOPES).setBackOff(ExponentialBackOff())
 
     fun getCredential() = credential
 
@@ -41,14 +41,14 @@ class GoogleAccountManager(private val context: Context) {
         apiAvailability.getErrorDialog(
             context as Activity,
             connectionStatusCode,
-            DetailsFragment.REQUEST_GOOGLE_PLAY_SERVICES
+            REQUEST_GOOGLE_PLAY_SERVICES
         ).show()
     }
 
     fun requestOrSetupAccountName(onAccountNameApplied: () -> Unit) {
         val accountName =
             (context as Activity).getPreferences(Context.MODE_PRIVATE)
-                ?.getString(DetailsFragment.PREF_ACCOUNT_NAME, null)
+                ?.getString(PREF_ACCOUNT_NAME, null)
         if (accountName != null) {
             credential.selectedAccountName = accountName
             onAccountNameApplied()
@@ -56,9 +56,18 @@ class GoogleAccountManager(private val context: Context) {
             ActivityCompat.startActivityForResult(
                 context,
                 credential.newChooseAccountIntent(),
-                DetailsFragment.REQUEST_ACCOUNT_PICKER,
+                REQUEST_ACCOUNT_PICKER,
                 null
             )
         }
+    }
+
+    companion object {
+        const val REQUEST_ACCOUNT_PICKER = 1000
+        const val REQUEST_AUTHORIZATION = 1001
+        const val REQUEST_GOOGLE_PLAY_SERVICES = 1002
+        const val REQUEST_PERMISSION_GET_ACCOUNTS = 1003
+        const val PREF_ACCOUNT_NAME = "accountName"
+        val SCOPES = listOf(YouTubeScopes.YOUTUBE_READONLY)
     }
 }
