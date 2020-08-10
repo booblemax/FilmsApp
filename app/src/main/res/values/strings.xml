@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">FilmsApp</string>
+    <string name="app_name_first_part">FILMS</string>
+    <string name="app_name_second_part">APP</string>
     <string name="transition_carousel_image">id_carousel_image</string>
 
     <string name="popular_title">Popular</string>
