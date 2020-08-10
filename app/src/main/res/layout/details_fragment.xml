@@ -51,7 +51,8 @@
                 android:layout_margin="@dimen/size_12"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="@+id/details_backdrop" />
+                app:layout_constraintBottom_toBottomOf="@+id/details_backdrop"
+                tools:visibility="visible"/>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/details_back"
@@ -63,19 +64,18 @@
                 android:padding="@dimen/size_4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_arrow_back_black" />
+                app:srcCompat="@drawable/ic_arrow_back" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/details_bookmark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_16"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="@dimen/size_20"
                 android:layout_marginEnd="@dimen/size_8"
                 android:padding="@dimen/size_8"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_bookmark"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/details_backdrop"
+                tools:src="@drawable/ic_bookmark" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/details_poster"
@@ -116,7 +116,7 @@
                 tools:text="Genres" />
 
             <View
-                android:id="@+id/details_first_devider"
+                android:id="@+id/details_first_divider"
                 android:layout_width="1dp"
                 android:layout_height="0dp"
                 android:background="@color/white"
@@ -136,7 +136,7 @@
                 android:visibility="@{viewModel.film}"
                 app:layout_constraintTop_toTopOf="@+id/details_genres"
                 app:layout_constraintBottom_toBottomOf="@+id/details_genres"
-                app:layout_constraintStart_toEndOf="@id/details_first_devider"
+                app:layout_constraintStart_toEndOf="@id/details_first_divider"
                 tools:text="2020" />
 
             <View
