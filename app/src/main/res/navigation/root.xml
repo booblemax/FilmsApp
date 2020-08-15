@@ -66,6 +66,9 @@
         <action
             android:id="@+id/action_listsFragment_to_settingsFragment2"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_listsFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/playerFragment"
@@ -86,6 +89,14 @@
         <action
             android:id="@+id/action_splashFragment_to_listsFragment"
             app:destination="@id/listsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.filmsapp.ui.search.SearchFragment"
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
     </fragment>
 
 </navigation>

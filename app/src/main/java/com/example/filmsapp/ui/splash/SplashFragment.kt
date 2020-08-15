@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.filmsapp.R
 import com.example.filmsapp.databinding.SplashFragmentBinding
 import com.example.filmsapp.ui.base.BaseFragment
-import com.example.filmsapp.ui.base.common.networkinfo.NetworkStateHolder
 import com.example.filmsapp.ui.splash.GoogleAccountManager.Companion.PREF_ACCOUNT_NAME
 import com.example.filmsapp.ui.splash.GoogleAccountManager.Companion.REQUEST_ACCOUNT_PICKER
 import com.example.filmsapp.ui.splash.GoogleAccountManager.Companion.REQUEST_AUTHORIZATION
@@ -58,7 +57,6 @@ class SplashFragment : BaseFragment<SplashViewModel, SplashFragmentBinding>(),
             !googleAccountManager.isGooglePlayServicesAvailable() ->
                 googleAccountManager.acquireGooglePlayServices()
             !googleAccountManager.hasAccountName() -> chooseAccount()
-            !NetworkStateHolder.isConnected -> view?.snack(R.string.error_no_connection)
             else -> viewModel.runDelayed { navigateToLists() }
         }
     }

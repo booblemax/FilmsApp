@@ -129,11 +129,11 @@ dependencies {
     testImplementation(TestLibs.junit_ext_ktx)
     testImplementation(TestLibs.androidx_test_core_ktx)
     testImplementation(TestLibs.robolectric) {
-        exclude(TestLibs.guava_jdk5)
+        exclude(group = TestLibs.guava_group, module = TestLibs.guava_jdk5_module)
     }
     testImplementation(TestLibs.androidx_arch_core_testing)
     testImplementation(TestLibs.coroutines_test)
     testImplementation(TestLibs.room_testing)
 
-    implementation(TestLibs.guava_fix)
+    testImplementation(TestLibs.guava_android)
 }

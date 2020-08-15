@@ -33,4 +33,6 @@ interface FilmsRepository {
     suspend fun saveFilm(film: FilmModel)
 
     suspend fun deleteFilm(film: FilmModel)
+
+    suspend fun searchFilms(query: String, page: Int): Resource<List<FilmModel>>
 }

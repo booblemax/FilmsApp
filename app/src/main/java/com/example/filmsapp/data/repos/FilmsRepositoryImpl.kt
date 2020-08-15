@@ -111,6 +111,21 @@ class FilmsRepositoryImpl(
             }
         }
 
+    override suspend fun searchFilms(query: String, page: Int): Resource<List<FilmModel>> =
+        withContext(dispatcher.io()) {
+            val searchResponse = api.searchFilms(query, page)
+            if (searchResponse.isSuccessful && searchResponse.body() != null) {
+                val filmsDto = searchResponse.body()
+                Resource.SUCCESS(
+                    filmsDto?.results?.map { it.toModel() } ?: listOf()
+                )
+            } else {
+                Resource.ERROR<List<FilmModel>>(
+                    RetrofitException(searchResponse.code(), searchResponse.message())
+                )
+            }
+        }
+
     private suspend fun getFilmsCached(
         page: Int,
         forceUpdate: Boolean,
@@ -130,7 +145,7 @@ class FilmsRepositoryImpl(
 
                 filmsCache.addAll(films)
             } else {
-                return Resource.ERROR<List<FilmModel>>(
+                return Resource.ERROR(
                     RetrofitException(response.code(), response.message())
                 )
             }

@@ -180,7 +180,6 @@ class DetailsFragment :
         super.onBackPressed(popTo)
     }
 
-
     companion object {
         const val VISIBLE_PAGE_LIMIT = 3
     }

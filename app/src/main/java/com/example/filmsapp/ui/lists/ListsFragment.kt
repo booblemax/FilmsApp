@@ -134,6 +134,12 @@ class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.search -> {
+                findNavController().navigate(
+                    ListsFragmentDirections.actionListsFragmentToSearchFragment()
+                )
+                true
+            }
             R.id.favorites -> {
                 findNavController().navigate(
                     ListsFragmentDirections.actionListsFragmentToMainFragment(ListType.FAVOURITES)

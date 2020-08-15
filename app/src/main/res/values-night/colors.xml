@@ -6,5 +6,6 @@
 
     <color name="backgroundColor">@color/black</color>
     <color name="colorText">@color/white</color>
+    <color name="iconColor">@color/white</color>
 
 </resources>
