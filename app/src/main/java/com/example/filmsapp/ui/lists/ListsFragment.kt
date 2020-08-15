@@ -1,5 +1,9 @@
 package com.example.filmsapp.ui.lists
 
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +31,8 @@ class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {
             ListsFragmentDirections.actionListsFragmentToDetailsFragment(
                 filmModel.id,
                 filmModel.poster,
-                filmModel.backdropPath
+                filmModel.backdropPath,
+                false
             )
         )
     }
@@ -43,6 +48,9 @@ class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {
     private val upcomingAdapter = ListsAdapter(filmItemClickListener)
 
     override fun init() {
+        setHasOptionsMenu(true)
+        (activity as AppCompatActivity).setSupportActionBar(binding.listsToolbar)
+
         initRecyclerView(binding.listsPopularFilms, popularAdapter)
         initRecyclerView(binding.listsTopratedFilms, topRatedAdapter)
         initRecyclerView(binding.listsUpcomingFilms, upcomingAdapter)
@@ -60,11 +68,20 @@ class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {
     }
 
     private fun initClickListeners() {
-        binding.listsPopularBackground.setOnClickListener { filmsBackgroundItemClickListener(ListType.POPULAR) }
-        binding.listsTopratedBackground.setOnClickListener { filmsBackgroundItemClickListener(ListType.TOP_RATED) }
-        binding.listsUpcomingBackground.setOnClickListener { filmsBackgroundItemClickListener(ListType.UPCOMING) }
-        binding.listsSettings.setOnClickListener {
-            findNavController().navigate(ListsFragmentDirections.actionListsFragmentToSettingsFragment2())
+        binding.listsPopularBackground.setOnClickListener {
+            filmsBackgroundItemClickListener(
+                ListType.POPULAR
+            )
+        }
+        binding.listsTopratedBackground.setOnClickListener {
+            filmsBackgroundItemClickListener(
+                ListType.TOP_RATED
+            )
+        }
+        binding.listsUpcomingBackground.setOnClickListener {
+            filmsBackgroundItemClickListener(
+                ListType.UPCOMING
+            )
         }
     }
 
@@ -78,7 +95,8 @@ class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {
                     }
                 }
                 is Resource.ERROR -> binding.listsLatestFilm.gone()
-                is Resource.LOADING -> { /*do nothing*/ }
+                is Resource.LOADING -> { /*do nothing*/
+                }
             }
         }
         viewModel.popularFilms.observe(viewLifecycleOwner) {
@@ -107,6 +125,28 @@ class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {
                 binding.listsUpcomingFilms.animateVisible()
                 binding.listsUpcomingBackground.visible()
             }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.lists_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.favorites -> {
+                findNavController().navigate(
+                    ListsFragmentDirections.actionListsFragmentToMainFragment(ListType.FAVOURITES)
+                )
+                true
+            }
+            R.id.settings -> {
+                findNavController().navigate(
+                    ListsFragmentDirections.actionListsFragmentToSettingsFragment2()
+                )
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

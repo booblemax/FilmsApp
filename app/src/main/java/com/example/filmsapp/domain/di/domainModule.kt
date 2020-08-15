@@ -11,7 +11,7 @@ import org.koin.dsl.module
 
 val domainModule = module {
 
-    single<FilmsRepository> { FilmsRepositoryImpl(get(), get(), ConstUtil.PAGE_SIZE) }
+    single<FilmsRepository> { FilmsRepositoryImpl(get(), get(), get(), ConstUtil.PAGE_SIZE) }
 
     factory<YoutubeRepository> { YoutubeRepositoryImpl() }
 

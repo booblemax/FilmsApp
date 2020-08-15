@@ -1,11 +1,16 @@
-package com.example.filmsapp.ui.base.models
+package com.example.filmsapp.data.db
 
-import com.example.filmsapp.data.db.FilmDataModel
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import com.example.filmsapp.data.remote.response.films.BackdropsDto
 import com.example.filmsapp.data.remote.response.films.Genre
+import com.example.filmsapp.ui.base.models.FilmModel
 
-data class FilmModel(
-    val id: String = "",
+@Entity(tableName = "films")
+@TypeConverters(FilmsTypeConverter::class)
+data class FilmDataModel(
+    @PrimaryKey val id: String = "",
     val title: String = "",
     val poster: String? = "",
     val runtime: Int = 0,
@@ -16,12 +21,11 @@ data class FilmModel(
     val voteCount: Int = -1,
     val genres: List<Genre>? = null,
     val backdrops: BackdropsDto? = null,
-    val video: Boolean = false,
-    val hasBookmark: Boolean = false
+    val video: Boolean = false
 ) {
 
-    fun toDataModel() =
-        FilmDataModel(
+    fun toModel(): FilmModel {
+        return FilmModel(
             id,
             title,
             poster,
@@ -35,4 +39,5 @@ data class FilmModel(
             backdrops,
             video
         )
+    }
 }

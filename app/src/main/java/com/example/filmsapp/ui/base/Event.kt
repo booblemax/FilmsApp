@@ -42,6 +42,15 @@ open class Event<out T>(private val content: T) {
      * Returns the content, even if it's already been handled.
      */
     fun peekContent(): T = content
+
+    override fun hashCode(): Int = content.hashCode()
+
+    override fun equals(other: Any?): Boolean {
+        if (other == null) return false
+        if (other !is Event<*>) return false
+
+        return content == other.content
+    }
 }
 
 /**

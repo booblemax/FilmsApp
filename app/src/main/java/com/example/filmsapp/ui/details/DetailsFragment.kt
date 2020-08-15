@@ -22,10 +22,11 @@ import com.example.filmsapp.R
 import com.example.filmsapp.databinding.DetailsFragmentBinding
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.ui.base.BaseFragment
+import com.example.filmsapp.ui.base.EventObserver
 import com.example.filmsapp.ui.base.common.networkinfo.NetworkStateHolder
+import com.example.filmsapp.ui.common.SharedViewModel
 import com.example.filmsapp.ui.details.transformers.OffsetTransformer
 import com.example.filmsapp.ui.details.transformers.ScaleTransformer
-import com.example.filmsapp.ui.main.SharedViewModel
 import com.example.filmsapp.util.makeStatusBarTransparent
 import com.example.filmsapp.util.makeStatusBarVisible
 import com.example.filmsapp.util.setMarginTop
@@ -47,7 +48,7 @@ class DetailsFragment :
     override val viewModel: DetailsViewModel by viewModel()
     override val layoutRes: Int = R.layout.details_fragment
 
-    private val googleAccountManager = GoogleAccountManager(requireContext())
+    private lateinit var googleAccountManager: GoogleAccountManager
     private val onItemClickListener = { itemView: View, position: Int ->
         sharedViewModel.backdropCarouselPosition = position
 
@@ -69,18 +70,26 @@ class DetailsFragment :
         super.onCreate(savedInstanceState)
         arguments?.let {
             DetailsFragmentArgs.fromBundle(it).run {
-                viewModel.loadFilm(filmId)
+                viewModel.loadFilm(filmId, isFavorites)
             }
         }
         requireActivity().makeStatusBarTransparent()
+        googleAccountManager = GoogleAccountManager(requireContext())
     }
 
     override fun init() {
-        binding.detailsBack.setOnClickListener { onBackPressed() }
+        initListeners()
         initObservers()
         initImages()
         initViewPager()
         registerInsetsListener()
+    }
+
+    private fun initListeners() {
+        binding.detailsBack.setOnClickListener { onBackPressed() }
+        binding.detailsBookmark.setOnClickListener {
+            viewModel.favoriteClicked()
+        }
     }
 
     private fun initObservers() {
@@ -109,14 +118,13 @@ class DetailsFragment :
         viewModel.displayGpsUnavailable.observe(
             viewLifecycleOwner, googleAccountManager::showGooglePlayServicesAvailabilityErrorDialog
         )
-        viewModel.showSnackbar.observe(viewLifecycleOwner) {
-            view?.snack(
-                getString(
-                    R.string.error_occur,
-                    it
-                )
-            )
+        viewModel.showSnackbar.observe(viewLifecycleOwner) { event ->
+            view?.snack(getString(event.getContentIfNotHandled() ?: R.string.error))
         }
+        viewModel.isFavorites.observe(viewLifecycleOwner, EventObserver {
+            val imageRes = if (it) R.drawable.ic_bookmark_filled else R.drawable.ic_bookmark
+            binding.detailsBookmark.setImageResource(imageRes)
+        })
     }
 
     private fun initImages() {
