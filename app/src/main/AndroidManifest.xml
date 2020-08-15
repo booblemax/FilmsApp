@@ -18,6 +18,7 @@
         android:hardwareAccelerated="true"
         android:theme="@style/AppTheme"
         android:fullBackupContent="@xml/backup_descriptor">
+
         <activity android:name=".ui.common.FilmsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

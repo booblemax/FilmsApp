@@ -65,7 +65,7 @@ class MainViewModel(
     fun isFavoriteList() = listType == ListType.FAVOURITES
 
     fun fetchedDataIsEmpty(isEmpty: Boolean) {
-        _emptyData.value = Event(isEmpty)
+        _emptyData.value = Event(isEmpty && isFirstPageLoading())
     }
 
     companion object {

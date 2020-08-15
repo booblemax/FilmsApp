@@ -6,11 +6,14 @@ import com.example.filmsapp.ui.imagesCarousel.ImagesCarouselViewModel
 import com.example.filmsapp.ui.lists.ListsViewModel
 import com.example.filmsapp.ui.main.MainViewModel
 import com.example.filmsapp.ui.player.PlayerViewModel
+import com.example.filmsapp.ui.search.SearchViewModel
 import com.example.filmsapp.ui.settings.SettingsViewModel
 import com.example.filmsapp.ui.splash.SplashViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
+@ExperimentalCoroutinesApi
 val vmModule = module {
 
     viewModel { SharedViewModel(get()) }
@@ -28,4 +31,6 @@ val vmModule = module {
     viewModel { SettingsViewModel(get(), get()) }
 
     viewModel { SplashViewModel(get()) }
+
+    viewModel { SearchViewModel(get(), get()) }
 }

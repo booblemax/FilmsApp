@@ -2,7 +2,8 @@ package com.example.filmsapp.ui.splash
 
 import android.app.Activity
 import android.content.Context
-import androidx.core.app.ActivityCompat
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
@@ -45,19 +46,17 @@ class GoogleAccountManager(private val context: Context) {
         ).show()
     }
 
-    fun requestOrSetupAccountName(onAccountNameApplied: () -> Unit) {
+    fun requestOrSetupAccountName(fragment: Fragment, onAccountNameApplied: () -> Unit) {
         val accountName =
-            (context as Activity).getPreferences(Context.MODE_PRIVATE)
+            (context as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
                 ?.getString(PREF_ACCOUNT_NAME, null)
         if (accountName != null) {
             credential.selectedAccountName = accountName
             onAccountNameApplied()
         } else {
-            ActivityCompat.startActivityForResult(
-                context,
+            fragment.startActivityForResult(
                 credential.newChooseAccountIntent(),
-                REQUEST_ACCOUNT_PICKER,
-                null
+                REQUEST_ACCOUNT_PICKER
             )
         }
     }

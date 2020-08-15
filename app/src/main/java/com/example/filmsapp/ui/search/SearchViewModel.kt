@@ -9,9 +9,12 @@ import com.example.filmsapp.ui.base.BaseViewModel
 import com.example.filmsapp.ui.base.Event
 import com.example.filmsapp.ui.base.models.FilmModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 class SearchViewModel(
     dispatcherProvider: DispatcherProvider,
@@ -28,9 +31,11 @@ class SearchViewModel(
 
     val textListener = TextListener().apply {
         baseContext.launch {
-            channel.collect {
-                resetPageNumber()
-                loadFilms(it)
+            channel.debounce(DEBOUNCE_TIME).collect {
+                if (it.isNotEmpty()) {
+                    resetPageNumber()
+                    loadFilms(it)
+                }
             }
         }
     }
@@ -50,7 +55,7 @@ class SearchViewModel(
     }
 
     fun fetchedDataIsEmpty(isEmpty: Boolean) {
-        _emptyData.value = Event(isEmpty)
+        _emptyData.value = Event(isEmpty && pageNumber == FIRST_PAGE_NUMBER)
     }
 
     fun resetPageNumber() {
@@ -67,5 +72,6 @@ class SearchViewModel(
 
     companion object {
         private const val FIRST_PAGE_NUMBER = 0
+        private const val DEBOUNCE_TIME = 500L
     }
 }

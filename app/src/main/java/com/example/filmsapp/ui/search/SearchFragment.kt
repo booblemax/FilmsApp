@@ -15,8 +15,10 @@ import com.example.filmsapp.ui.base.common.WrappedGridLayoutManager
 import com.example.filmsapp.util.setupToolbar
 import com.example.filmsapp.util.snack
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 class SearchFragment : BaseFragment<SearchViewModel, SearchFragmentBinding>() {
 
@@ -27,6 +29,7 @@ class SearchFragment : BaseFragment<SearchViewModel, SearchFragmentBinding>() {
     private lateinit var searchView: SearchView
 
     override fun init() {
+        setHasOptionsMenu(true)
         initTitle()
         initAdapter()
         initRecyclerView(adapter)
@@ -87,8 +90,8 @@ class SearchFragment : BaseFragment<SearchViewModel, SearchFragmentBinding>() {
         viewModel.films.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.SUCCESS -> {
-                    adapter.isLoading = false
                     viewModel.fetchedDataIsEmpty(it.data?.isEmpty() ?: true)
+                    adapter.isLoading = false
                     adapter.submitList(it.data?.toMutableList() ?: mutableListOf())
                 }
                 is Resource.ERROR -> {

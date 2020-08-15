@@ -113,23 +113,14 @@ class FilmsRepositoryImpl(
 
     override suspend fun searchFilms(query: String, page: Int): Resource<List<FilmModel>> =
         withContext(dispatcher.io()) {
-            val searchResponse = api.searchFilms(query, page)
-            if (searchResponse.isSuccessful && searchResponse.body() != null) {
-                val filmsDto = searchResponse.body()
-                Resource.SUCCESS(
-                    filmsDto?.results?.map { it.toModel() } ?: listOf()
-                )
-            } else {
-                Resource.ERROR<List<FilmModel>>(
-                    RetrofitException(searchResponse.code(), searchResponse.message())
-                )
-            }
+            getFilmsCached(page, false, FilmType.SEARCH, query)
         }
 
     private suspend fun getFilmsCached(
         page: Int,
         forceUpdate: Boolean,
-        type: FilmType
+        type: FilmType,
+        query: String = ""
     ): Resource<List<FilmModel>> {
         val filmsCache = getCacheForFilmType(type)
 
@@ -137,7 +128,7 @@ class FilmsRepositoryImpl(
             filmsCache.clear()
         }
         if (forceUpdate || filmsCache.size < page * pageSize) {
-            val response = performRequest(page, type)
+            val response = performRequest(page, type, query)
 
             val body = response.body()
             if (response.isSuccessful && body != null) {
@@ -162,16 +153,18 @@ class FilmsRepositoryImpl(
         }
     }
 
-    private suspend fun performRequest(page: Int, type: FilmType) =
+    private suspend fun performRequest(page: Int, type: FilmType, query: String = "") =
         when (type) {
             FilmType.POPULAR -> api.getPopularList(page)
             FilmType.TOP_RATED -> api.getTopRatedList(page)
             FilmType.UPCOMING -> api.getUpcomingList(page)
+            FilmType.SEARCH -> api.searchFilms(query, page)
         }
 
     enum class FilmType {
         POPULAR,
         TOP_RATED,
-        UPCOMING
+        UPCOMING,
+        SEARCH
     }
 }

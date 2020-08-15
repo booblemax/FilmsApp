@@ -63,11 +63,8 @@ class SplashFragment : BaseFragment<SplashViewModel, SplashFragmentBinding>(),
 
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private fun chooseAccount() {
-        if (EasyPermissions.hasPermissions(
-                requireContext(), Manifest.permission.GET_ACCOUNTS
-            )
-        ) {
-            googleAccountManager.requestOrSetupAccountName(this::getResultsFromApi)
+        if (EasyPermissions.hasPermissions(requireContext(), Manifest.permission.GET_ACCOUNTS)) {
+            googleAccountManager.requestOrSetupAccountName(this, this::getResultsFromApi)
         } else {
             EasyPermissions.requestPermissions(
                 this,
