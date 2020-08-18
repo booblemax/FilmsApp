@@ -27,6 +27,7 @@ import com.example.filmsapp.util.setMarginTop
 import com.example.filmsapp.util.snack
 import com.example.filmsapp.util.visible
 import com.example.filmsapp.util.waitForTransition
+import com.google.android.gms.common.GoogleApiAvailability
 import kotlinx.android.synthetic.main.item_backdrop.view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -64,7 +65,7 @@ class DetailsFragment :
             }
         }
         requireActivity().makeStatusBarTransparent()
-        googleAccountManager = GoogleAccountManager(requireContext())
+        googleAccountManager = GoogleAccountManager(requireContext(), GoogleApiAvailability.getInstance())
     }
 
     override fun init() {

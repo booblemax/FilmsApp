@@ -2,15 +2,18 @@ package com.example.filmsapp.ui.splash
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.util.ExponentialBackOff
 import com.google.api.services.youtube.YouTubeScopes
 
-class GoogleAccountManager(private val context: Context) {
+class GoogleAccountManager(
+    private val context: Context,
+    private val apiAvailability: GoogleApiAvailability
+) {
 
     private val credential: GoogleAccountCredential =
         GoogleAccountCredential.usingOAuth2(context, SCOPES).setBackOff(ExponentialBackOff())
@@ -24,13 +27,11 @@ class GoogleAccountManager(private val context: Context) {
     fun hasAccountName() = credential.selectedAccountName != null
 
     fun isGooglePlayServicesAvailable(): Boolean {
-        val apiAvailability = GoogleApiAvailability.getInstance()
         val connectionStatusCode = apiAvailability.isGooglePlayServicesAvailable(context)
         return connectionStatusCode == ConnectionResult.SUCCESS
     }
 
     fun acquireGooglePlayServices() {
-        val apiAvailability = GoogleApiAvailability.getInstance()
         val connectionStatusCode = apiAvailability.isGooglePlayServicesAvailable(context)
         if (apiAvailability.isUserResolvableError(connectionStatusCode)) {
             showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode)
@@ -38,7 +39,6 @@ class GoogleAccountManager(private val context: Context) {
     }
 
     fun showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode: Int) {
-        val apiAvailability = GoogleApiAvailability.getInstance()
         apiAvailability.getErrorDialog(
             context as Activity,
             connectionStatusCode,
@@ -46,18 +46,15 @@ class GoogleAccountManager(private val context: Context) {
         ).show()
     }
 
-    fun requestOrSetupAccountName(fragment: Fragment, onAccountNameApplied: () -> Unit) {
+    fun requestOrSetupAccountName(onSuccess: () -> Unit, onError: (Intent) -> Unit) {
         val accountName =
             (context as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
                 ?.getString(PREF_ACCOUNT_NAME, null)
         if (accountName != null) {
             credential.selectedAccountName = accountName
-            onAccountNameApplied()
+            onSuccess()
         } else {
-            fragment.startActivityForResult(
-                credential.newChooseAccountIntent(),
-                REQUEST_ACCOUNT_PICKER
-            )
+            onError(credential.newChooseAccountIntent())
         }
     }
 

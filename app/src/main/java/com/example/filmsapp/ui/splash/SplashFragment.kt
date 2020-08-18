@@ -19,6 +19,7 @@ import com.example.filmsapp.ui.splash.GoogleAccountManager.Companion.REQUEST_AUT
 import com.example.filmsapp.ui.splash.GoogleAccountManager.Companion.REQUEST_GOOGLE_PLAY_SERVICES
 import com.example.filmsapp.ui.splash.GoogleAccountManager.Companion.REQUEST_PERMISSION_GET_ACCOUNTS
 import com.example.filmsapp.util.snack
+import com.google.android.gms.common.GoogleApiAvailability
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
@@ -35,7 +36,7 @@ class SplashFragment : BaseFragment<SplashViewModel, SplashFragmentBinding>(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         googleAccountManager =
-            GoogleAccountManager(requireContext())
+            GoogleAccountManager(requireContext(), GoogleApiAvailability.getInstance())
     }
 
     override fun init() {
@@ -64,7 +65,9 @@ class SplashFragment : BaseFragment<SplashViewModel, SplashFragmentBinding>(),
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private fun chooseAccount() {
         if (EasyPermissions.hasPermissions(requireContext(), Manifest.permission.GET_ACCOUNTS)) {
-            googleAccountManager.requestOrSetupAccountName(this, this::getResultsFromApi)
+            googleAccountManager.requestOrSetupAccountName(this::getResultsFromApi) {
+                startActivityForResult(it, REQUEST_ACCOUNT_PICKER)
+            }
         } else {
             EasyPermissions.requestPermissions(
                 this,
