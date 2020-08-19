@@ -27,8 +27,8 @@ import com.example.filmsapp.util.setMarginTop
 import com.example.filmsapp.util.snack
 import com.example.filmsapp.util.visible
 import com.example.filmsapp.util.waitForTransition
-import com.google.android.gms.common.GoogleApiAvailability
 import kotlinx.android.synthetic.main.item_backdrop.view.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -38,7 +38,7 @@ class DetailsFragment :
     private val sharedViewModel: SharedViewModel by sharedViewModel()
     override val viewModel: DetailsViewModel by viewModel()
     override val layoutRes: Int = R.layout.details_fragment
-    private lateinit var googleAccountManager: GoogleAccountManager
+    private val googleAccountManager: GoogleAccountManager by inject()
 
     private val onItemClickListener = { itemView: View, position: Int ->
         sharedViewModel.backdropCarouselPosition = position
@@ -65,7 +65,6 @@ class DetailsFragment :
             }
         }
         requireActivity().makeStatusBarTransparent()
-        googleAccountManager = GoogleAccountManager(requireContext(), GoogleApiAvailability.getInstance())
     }
 
     override fun init() {

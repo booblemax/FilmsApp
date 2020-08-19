@@ -14,7 +14,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-abstract class BaseViewModel(private val dispatcherProvider: DispatcherProvider) : ViewModel() {
+abstract class BaseViewModel(protected val dispatcherProvider: DispatcherProvider) : ViewModel() {
 
     private val _showSnackbar = MutableLiveData<Event<Int>>()
     val showSnackbar: LiveData<Event<Int>> = _showSnackbar

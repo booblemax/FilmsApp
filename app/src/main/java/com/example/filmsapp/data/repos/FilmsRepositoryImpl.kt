@@ -111,9 +111,9 @@ class FilmsRepositoryImpl(
             }
         }
 
-    override suspend fun searchFilms(query: String, page: Int): Resource<List<FilmModel>> =
+    override suspend fun searchFilms(query: String, page: Int, needClearCache: Boolean): Resource<List<FilmModel>> =
         withContext(dispatcher.io()) {
-            getFilmsCached(page, false, FilmType.SEARCH, query)
+            getFilmsCached(page, needClearCache, FilmType.SEARCH, query)
         }
 
     private suspend fun getFilmsCached(

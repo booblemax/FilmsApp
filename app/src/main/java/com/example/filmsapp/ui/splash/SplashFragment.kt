@@ -3,23 +3,21 @@ package com.example.filmsapp.ui.splash
 import android.Manifest
 import android.accounts.AccountManager
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.edit
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.example.filmsapp.R
+import com.example.filmsapp.data.prefs.SPreferences
 import com.example.filmsapp.databinding.SplashFragmentBinding
 import com.example.filmsapp.ui.base.BaseFragment
-import com.example.filmsapp.ui.splash.GoogleAccountManager.Companion.PREF_ACCOUNT_NAME
 import com.example.filmsapp.ui.splash.GoogleAccountManager.Companion.REQUEST_ACCOUNT_PICKER
 import com.example.filmsapp.ui.splash.GoogleAccountManager.Companion.REQUEST_AUTHORIZATION
 import com.example.filmsapp.ui.splash.GoogleAccountManager.Companion.REQUEST_GOOGLE_PLAY_SERVICES
 import com.example.filmsapp.ui.splash.GoogleAccountManager.Companion.REQUEST_PERMISSION_GET_ACCOUNTS
 import com.example.filmsapp.util.snack
-import com.google.android.gms.common.GoogleApiAvailability
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
@@ -31,13 +29,8 @@ class SplashFragment : BaseFragment<SplashViewModel, SplashFragmentBinding>(),
     override val viewModel: SplashViewModel by viewModel()
     override val layoutRes: Int = R.layout.splash_fragment
 
-    private lateinit var googleAccountManager: GoogleAccountManager
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        googleAccountManager =
-            GoogleAccountManager(requireContext(), GoogleApiAvailability.getInstance())
-    }
+    private val prefs: SPreferences by inject()
+    private val googleAccountManager: GoogleAccountManager by inject()
 
     override fun init() {
         viewModel.requestAuthorizationPermission.observe(viewLifecycleOwner) {
@@ -95,9 +88,7 @@ class SplashFragment : BaseFragment<SplashViewModel, SplashFragmentBinding>(),
                 if (resultCode == Activity.RESULT_OK && data != null && data.extras != null) {
                     val accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
                     if (accountName != null) {
-                        activity?.getPreferences(Context.MODE_PRIVATE)?.edit {
-                            putString(PREF_ACCOUNT_NAME, accountName)
-                        }
+                        prefs.saveAccountName(accountName)
                         googleAccountManager.setAccountName(accountName)
                         getResultsFromApi()
                     }

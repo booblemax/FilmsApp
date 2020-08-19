@@ -34,5 +34,5 @@ interface FilmsRepository {
 
     suspend fun deleteFilm(film: FilmModel)
 
-    suspend fun searchFilms(query: String, page: Int): Resource<List<FilmModel>>
+    suspend fun searchFilms(query: String, page: Int, needClearCache: Boolean): Resource<List<FilmModel>>
 }

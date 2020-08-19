@@ -68,6 +68,11 @@ class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {
     }
 
     private fun initClickListeners() {
+        binding.listsLatestFilm.setOnClickListener {
+            (viewModel.latestFilm.value as Resource.SUCCESS).data?.let {
+                filmItemClickListener(it)
+            }
+        }
         binding.listsPopularBackground.setOnClickListener {
             filmsBackgroundItemClickListener(
                 ListType.POPULAR

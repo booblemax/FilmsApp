@@ -17,11 +17,7 @@ class TextListener : SearchView.OnQueryTextListener {
 
     private fun postQuery(newText: String?) =
         newText?.let {
-            if (_channel.value != it) {
-                _channel.value = it
-                true
-            } else {
-                false
-            }
+            _channel.value = it
+            true
         } ?: false
 }
