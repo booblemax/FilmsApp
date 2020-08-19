@@ -7,5 +7,4 @@ import org.koin.dsl.module
 val commonModule = module {
 
     single { GoogleAccountManager(get(), get(), GoogleApiAvailability.getInstance()) }
-
 }
