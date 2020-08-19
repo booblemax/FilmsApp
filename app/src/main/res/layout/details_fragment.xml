@@ -44,8 +44,8 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/details_play"
-                android:layout_width="@dimen/size_48"
-                android:layout_height="@dimen/size_48"
+                android:layout_width="@dimen/size_32"
+                android:layout_height="@dimen/size_32"
                 app:srcCompat="@drawable/ic_play"
                 android:background="@drawable/bg_circle_button"
                 android:layout_margin="@dimen/size_12"
@@ -64,7 +64,7 @@
                 android:padding="@dimen/size_4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_arrow_back" />
+                app:srcCompat="@drawable/ic_arrow_back_black" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/details_bookmark"
@@ -92,12 +92,15 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/details_title"
                 style="@style/Text_24.Bold"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_16"
                 android:layout_marginStart="@dimen/size_16"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/size_12"
                 android:text="@{model.title}"
                 android:visibility="@{viewModel.film}"
+                app:layout_constraintEnd_toStartOf="@+id/details_bookmark"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/details_poster"
                 tools:text="Title" />
