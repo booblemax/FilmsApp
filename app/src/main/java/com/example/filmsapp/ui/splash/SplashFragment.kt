@@ -54,11 +54,15 @@ class SplashFragment : BaseFragment<SplashViewModel, SplashFragmentBinding>(),
     }
 
     private fun getResultsFromApi() {
-        when {
-            !googleAccountManager.isGooglePlayServicesAvailable() ->
-                googleAccountManager.acquireGooglePlayServices()
-            !googleAccountManager.hasAccountName() -> chooseAccount()
-            else -> viewModel.runDelayed { navigateToLists() }
+        try {
+            when {
+                !googleAccountManager.isGooglePlayServicesAvailable() ->
+                    googleAccountManager.acquireGooglePlayServices()
+                !googleAccountManager.hasAccountName() -> chooseAccount()
+                else -> viewModel.runDelayed { navigateToLists() }
+            }
+        } catch (exception: Exception) {
+            viewModel.handleException(exception)
         }
     }
 

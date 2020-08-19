@@ -188,7 +188,6 @@ exceptions:
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     exceptionNames:
       - Error
-      - Exception
       - IllegalMonitorStateException
       - NullPointerException
       - RuntimeException

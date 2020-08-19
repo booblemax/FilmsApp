@@ -33,7 +33,7 @@ class ListsViewModel(
     }
 
     private fun loadFilms() {
-        baseContext.launch {
+        baseScope.launch {
             val latestDeferred = async { loadLatest() }
             val popularDeferred = async { loadPopular() }
             val topRatedDeferred = async { loadTopRated() }

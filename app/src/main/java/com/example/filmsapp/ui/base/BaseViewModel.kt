@@ -23,15 +23,15 @@ abstract class BaseViewModel(private val dispatcherProvider: DispatcherProvider)
     private val defaultExceptionHandler = CoroutineExceptionHandler { _, exception ->
         handleException(exception)
     }
-    protected val baseContext = CoroutineScope(job + dispatcherProvider.main() + defaultExceptionHandler)
+    protected val baseScope = CoroutineScope(job + dispatcherProvider.main() + defaultExceptionHandler)
 
-    protected open fun handleException(exception: Throwable) {
+    open fun handleException(exception: Throwable) {
         Timber.e(exception)
         postMessage(R.string.error)
     }
 
     override fun onCleared() {
-        baseContext.cancel()
+        baseScope.cancel()
     }
 
     protected fun postMessage(@StringRes message: Int) {
@@ -39,7 +39,7 @@ abstract class BaseViewModel(private val dispatcherProvider: DispatcherProvider)
     }
 
     fun runDelayed(timeDelay: Long = TIME_DELAYED_MILLIS, action: () -> Unit) {
-        baseContext.launch {
+        baseScope.launch {
             delay(timeDelay)
             action()
         }

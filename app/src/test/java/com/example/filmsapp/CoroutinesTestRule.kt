@@ -29,7 +29,7 @@ class CoroutinesTestRule(
 
     override fun finished(description: Description?) {
         super.finished(description)
-        Dispatchers.resetMain()
         testCoroutineDispatcher.cleanupTestCoroutines()
+        Dispatchers.resetMain()
     }
 }

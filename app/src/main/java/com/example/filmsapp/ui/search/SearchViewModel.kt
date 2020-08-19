@@ -12,6 +12,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
 @FlowPreview
@@ -30,11 +31,11 @@ class SearchViewModel(
     val emptyData: LiveData<Event<Boolean>> get() = _emptyData
 
     val textListener = TextListener().apply {
-        baseContext.launch {
-            channel.debounce(DEBOUNCE_TIME).collect {
+        baseScope.launch {
+            channel.debounce(DEBOUNCE_TIME).flowOn(baseScope.coroutineContext).collect {
                 if (it.isNotEmpty()) {
                     resetPageNumber()
-                    loadFilms(it)
+                    this@SearchViewModel.loadFilms(it)
                 }
             }
         }
@@ -42,16 +43,12 @@ class SearchViewModel(
 
     var lastKnownPosition = -1
 
-    fun callLoad(query: String) {
-        baseContext.launch {
-            loadFilms(query)
+    fun loadFilms(query: String) {
+        baseScope.launch {
+            incPageNumber()
+            _films.value = Resource.LOADING()
+            _films.value = filmsRepository.searchFilms(query, pageNumber)
         }
-    }
-
-    private suspend fun loadFilms(query: String) {
-        incPageNumber()
-        _films.value = Resource.LOADING()
-        _films.value = filmsRepository.searchFilms(query, pageNumber)
     }
 
     fun fetchedDataIsEmpty(isEmpty: Boolean) {
@@ -69,6 +66,8 @@ class SearchViewModel(
     fun decPageNumber() {
         pageNumber--
     }
+
+    fun isFirstPageLoading() = pageNumber == FIRST_PAGE_NUMBER
 
     companion object {
         private const val FIRST_PAGE_NUMBER = 0

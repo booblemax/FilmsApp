@@ -30,7 +30,7 @@ class DetailsViewModel(
     val youtubeMovieSearchResult: LiveData<YoutubeFilmModel> get() = _youtubeMovieSearchResult
 
     fun loadFilm(id: String, isFavorites: Boolean) {
-        baseContext.launch {
+        baseScope.launch {
             _film.value = Resource.LOADING()
             checkFilmStoredInDb(isFavorites, id)
             _film.value = filmsRepository.getFilm(id, !isFavorites)
@@ -46,7 +46,7 @@ class DetailsViewModel(
     }
 
     fun requestFilmTrailer(filmName: String, credential: GoogleAccountCredential) {
-        baseContext.launch {
+        baseScope.launch {
             val model = youtubeRepository.getTrailerForFilm(filmName, credential)
             _youtubeMovieSearchResult.value = model
         }
@@ -65,7 +65,7 @@ class DetailsViewModel(
 
     private fun storeFilm() {
         (film.value as? Resource.SUCCESS)?.data?.let {
-            baseContext.launch {
+            baseScope.launch {
                 filmsRepository.saveFilm(it)
                 postMessage(R.string.film_saved)
             }
@@ -74,7 +74,7 @@ class DetailsViewModel(
 
     private fun removeFilmFromStore() {
         (film.value as? Resource.SUCCESS)?.data?.let {
-            baseContext.launch {
+            baseScope.launch {
                 filmsRepository.deleteFilm(it)
                 postMessage(R.string.film_removed)
             }

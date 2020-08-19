@@ -71,7 +71,7 @@ class SearchFragment : BaseFragment<SearchViewModel, SearchFragmentBinding>() {
 
             addOnScrollListener(object : EndlessRecyclerScrollListener(gridLayoutManager) {
                     override fun loadMoreItems() {
-                        viewModel.callLoad(searchView.query.toString())
+                        viewModel.loadFilms(searchView.query.toString())
                     }
 
                     override fun isLastPage(): Boolean = false

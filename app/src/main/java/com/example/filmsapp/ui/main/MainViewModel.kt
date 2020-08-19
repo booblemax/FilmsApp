@@ -33,7 +33,7 @@ class MainViewModel(
     var lastKnownPosition = -1
 
     fun loadFilms(forceUpdate: Boolean = false) {
-        baseContext.launch {
+        baseScope.launch {
             incPageNumber()
             _films.value = Resource.LOADING()
             _films.value = loadByListType(forceUpdate)
