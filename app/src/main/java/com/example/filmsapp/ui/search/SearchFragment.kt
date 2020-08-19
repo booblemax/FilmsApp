@@ -2,6 +2,7 @@ package com.example.filmsapp.ui.search
 
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -103,11 +104,28 @@ class SearchFragment : BaseFragment<SearchViewModel, SearchFragmentBinding>() {
                 is Resource.LOADING -> adapter.isLoading = true
             }
         }
+        viewModel.emptyQuery.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let {
+                binding.mainLabel.text = if (it) {
+                    getString(R.string.empty_data)
+                } else {
+                    getString(R.string.label_input_film_name)
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.search_menu, menu)
         menu.findItem(R.id.search)?.let {
+            it.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+                override fun onMenuItemActionExpand(item: MenuItem?): Boolean { return true }
+
+                override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                    onBackPressed()
+                    return false
+                }
+            })
             it.expandActionView()
             searchView = it.actionView as SearchView
             searchView.setOnQueryTextListener(viewModel.textListener)

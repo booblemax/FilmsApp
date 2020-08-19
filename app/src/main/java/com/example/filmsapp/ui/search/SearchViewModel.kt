@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -28,6 +27,9 @@ class SearchViewModel(
     private val _films = MutableLiveData<Resource<List<FilmModel>>>()
     val films: LiveData<Resource<List<FilmModel>>> get() = _films
 
+    private val _emptyQuery = MutableLiveData<Event<Boolean>>()
+    val emptyQuery: LiveData<Event<Boolean>> get() = _emptyQuery
+
     private val _emptyData = MutableLiveData<Event<Boolean>>()
     val emptyData: LiveData<Event<Boolean>> get() = _emptyData
 
@@ -35,11 +37,12 @@ class SearchViewModel(
         baseScope.launch {
             channel
                 .debounce(DEBOUNCE_TIME)
-                .filter { it.isNotEmpty() }
+                .filter { query ->
+                    query.isNotEmpty().also { _emptyQuery.postValue(Event(it)) }
+                }
                 .distinctUntilChanged()
                 .flowOn(dispatcherProvider.default())
                 .collect {
-                    Timber.e(it)
                     resetPageNumber()
                     this@SearchViewModel.loadFilms(it, true)
                 }

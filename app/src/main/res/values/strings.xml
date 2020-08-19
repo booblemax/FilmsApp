@@ -22,6 +22,7 @@
     <string name="error_no_connection">No network connection available :(</string>
     <string name="error_require_gpservices">This app requires Google Play Services</string>
     <string name="empty_data">Empty</string>
+    <string name="label_input_film_name">Please, input film name</string>
 
     <string name="time">%sh %sm</string>
     <string name="switch_theme">Light Theme</string>
