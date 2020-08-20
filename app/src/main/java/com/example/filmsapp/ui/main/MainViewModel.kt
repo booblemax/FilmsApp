@@ -3,8 +3,8 @@ package com.example.filmsapp.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.example.filmsapp.domain.DispatcherProvider
 import com.example.filmsapp.domain.Resource
+import com.example.filmsapp.domain.dispatcherProvider.DispatcherProvider
 import com.example.filmsapp.domain.repos.FilmsRepository
 import com.example.filmsapp.ui.base.Event
 import com.example.filmsapp.ui.base.PagedViewModel

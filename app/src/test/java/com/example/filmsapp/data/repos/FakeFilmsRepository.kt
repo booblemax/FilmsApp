@@ -85,7 +85,7 @@ class FakeFilmsRepository(
         filmsDao.delete(film.toDataModel())
     }
 
-    override suspend fun searchFilms(query: String, page: Int): Resource<List<FilmModel>> {
+    override suspend fun searchFilms(query: String, page: Int, needClearCache: Boolean): Resource<List<FilmModel>> {
         val response = filmsApi.searchFilms(query, page)
         return if (response.isSuccessful && response.body() != null) {
             val films = response.body()?.results?.map { it.toModel() }

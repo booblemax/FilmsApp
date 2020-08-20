@@ -2,19 +2,21 @@ package com.example.filmsapp.ui.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.filmsapp.domain.DispatcherProvider
 import com.example.filmsapp.domain.Resource
+import com.example.filmsapp.domain.dispatcherProvider.DispatcherProvider
 import com.example.filmsapp.domain.repos.FilmsRepository
 import com.example.filmsapp.ui.base.Event
 import com.example.filmsapp.ui.base.PagedViewModel
 import com.example.filmsapp.ui.base.models.FilmModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @FlowPreview
@@ -33,20 +35,21 @@ class SearchViewModel(
     private val _emptyData = MutableLiveData<Event<Boolean>>()
     val emptyData: LiveData<Event<Boolean>> get() = _emptyData
 
+    private lateinit var textListenerJob: Job
+
     val textListener = TextListener().apply {
-        baseScope.launch {
-            channel
-                .debounce(DEBOUNCE_TIME)
-                .filter { query ->
-                    query.isNotEmpty().also { _emptyQuery.postValue(Event(it)) }
-                }
-                .distinctUntilChanged()
-                .flowOn(dispatcherProvider.default())
-                .collect {
-                    resetPageNumber()
-                    this@SearchViewModel.loadFilms(it, true)
-                }
-        }
+        textListenerJob = channel
+            .debounce(DEBOUNCE_TIME)
+            .filter { query ->
+                query.isNotEmpty().also { _emptyQuery.postValue(Event(it)) }
+            }
+            .distinctUntilChanged()
+            .flowOn(dispatcherProvider.default())
+            .onEach {
+                resetPageNumber()
+                this@SearchViewModel.loadFilms(it, true)
+            }
+            .launchIn(baseScope)
     }
 
     var lastKnownPosition = -1
@@ -61,6 +64,13 @@ class SearchViewModel(
 
     fun fetchedDataIsEmpty(isEmpty: Boolean) {
         _emptyData.value = Event(isEmpty && isFirstPageLoading())
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        if (textListenerJob.isActive) {
+            textListenerJob.cancel()
+        }
     }
 
     companion object {

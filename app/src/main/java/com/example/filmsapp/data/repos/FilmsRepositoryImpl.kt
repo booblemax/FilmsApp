@@ -5,8 +5,8 @@ import androidx.core.util.contains
 import com.example.filmsapp.data.db.FilmsDao
 import com.example.filmsapp.data.remote.FilmsApi
 import com.example.filmsapp.data.remote.response.films.BackdropsDto
-import com.example.filmsapp.domain.DispatcherProvider
 import com.example.filmsapp.domain.Resource
+import com.example.filmsapp.domain.dispatcherProvider.DispatcherProvider
 import com.example.filmsapp.domain.exceptions.RetrofitException
 import com.example.filmsapp.domain.repos.FilmsRepository
 import com.example.filmsapp.ui.base.models.FilmModel

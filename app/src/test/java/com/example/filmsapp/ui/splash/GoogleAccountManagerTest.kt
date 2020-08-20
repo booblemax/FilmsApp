@@ -3,6 +3,7 @@ package com.example.filmsapp.ui.splash
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import com.example.filmsapp.FilmsTestApp
+import com.example.filmsapp.data.prefs.SPreferences
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -29,6 +30,7 @@ class GoogleAccountManagerTest {
     var instantexecutorRule = InstantTaskExecutorRule()
 
     private val apiAvailability = mock(GoogleApiAvailability::class.java)
+    private val prefs = SPreferences(ApplicationProvider.getApplicationContext())
     private lateinit var googleAccountManager: GoogleAccountManager
     private var needError = false
 
@@ -37,6 +39,7 @@ class GoogleAccountManagerTest {
         needError = false
         googleAccountManager = GoogleAccountManager(
             ApplicationProvider.getApplicationContext(),
+            prefs,
             apiAvailability
         )
 

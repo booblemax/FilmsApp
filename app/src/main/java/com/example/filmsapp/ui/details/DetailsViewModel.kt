@@ -3,8 +3,8 @@ package com.example.filmsapp.ui.details
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.filmsapp.R
-import com.example.filmsapp.domain.DispatcherProvider
 import com.example.filmsapp.domain.Resource
+import com.example.filmsapp.domain.dispatcherProvider.DispatcherProvider
 import com.example.filmsapp.domain.repos.FilmsRepository
 import com.example.filmsapp.domain.repos.YoutubeRepository
 import com.example.filmsapp.ui.base.BaseViewModel

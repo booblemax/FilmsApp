@@ -51,7 +51,7 @@ class DetailsViewModelTest {
         repository = mock(FilmsRepository::class.java)
         youtubeRepository = mock(YoutubeRepository::class.java)
 
-        coroutinesRule.testCoroutineDispatcher.runBlockingTest {
+        coroutinesRule.dispatcher.runBlockingTest {
             Mockito.`when`(repository.getFilm(anyString(), anyBoolean())).thenReturn(Resource.SUCCESS(latest.toModel()))
             Mockito.`when`(repository.isFilmStoredInDb(latest.id.toString())).thenReturn(true)
             Mockito.`when`(repository.isFilmStoredInDb(anyString())).thenReturn(false)
@@ -82,7 +82,7 @@ class DetailsViewModelTest {
 
     @Test
     fun `given film model don't place in db, bookmark false when storeFilm should pass success message`() =
-        coroutinesRule.testCoroutineDispatcher.runBlockingTest {
+        coroutinesRule.dispatcher.runBlockingTest {
             viewModel.loadFilm("any", false)
 
             viewModel.favoriteClicked()
@@ -94,7 +94,7 @@ class DetailsViewModelTest {
 
     @Test
     fun `given film model don't place in db, bookmark true when removeFilm should pass success message`() =
-        coroutinesRule.testCoroutineDispatcher.runBlockingTest {
+        coroutinesRule.dispatcher.runBlockingTest {
             viewModel.loadFilm("any", true)
 
             viewModel.favoriteClicked()
