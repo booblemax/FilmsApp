@@ -20,6 +20,12 @@ android {
 
         testInstrumentationRunner = Classpath.testInstrumentalRunner
         vectorDrawables.useSupportLibrary = true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                argument("room.incremental", "true")
+            }
+        }
     }
 
     buildTypes {
@@ -122,14 +128,12 @@ dependencies {
     // jvm testing
     testImplementation(TestLibs.junit_ext_ktx)
     testImplementation(TestLibs.androidx_test_core_ktx)
-    testImplementation(TestLibs.robolectric)
+    testImplementation(TestLibs.robolectric) {
+        exclude(group = TestLibs.guava_group, module = TestLibs.guava_jdk5_module)
+    }
     testImplementation(TestLibs.androidx_arch_core_testing)
     testImplementation(TestLibs.coroutines_test)
+    testImplementation(TestLibs.room_testing)
 
-    implementation(TestLibs.guava) {
-        version {
-            strictly(Versions.guava)
-            prefer(Versions.guava)
-        }
-    }
+    testImplementation(TestLibs.guava_android)
 }

@@ -44,10 +44,12 @@ class FakeFilmsApi(
     }
 
     override suspend fun getFilm(id: String): Response<FilmDto> =
-        if (needFailureResult?.invoke() == true) throw RetrofitException(404, "wrong id")
-        else Response.success(
-            populars.find { it.id.toString() == id } ?: throw RetrofitException(404, "wrong id")
-        )
+        if (needFailureResult?.invoke() == true) getError()
+        else {
+            val film = populars.find { it.id.toString() == id }
+            if (film != null) Response.success(film)
+            else getError()
+        }
 
     override suspend fun getBackdrops(id: String): BackdropsDto {
         if (needFailureResult?.invoke() == true) throw RetrofitException(404, "wrong id")
@@ -57,6 +59,13 @@ class FakeFilmsApi(
             listOf(BackdropDto(0.0, dto.backdropPath ?: "", 1, 1, 0.0, 0.0, 0)),
             dto.id
         )
+    }
+
+    override suspend fun searchFilms(query: String, page: Int): Response<FilmsDto> {
+        if (needFailureResult?.invoke() == true) throw RetrofitException(404, "wrong id")
+        populars.filter { it.title.contains(query, true) }.let {
+            return Response.success(FilmsDto(page, it, 15, it.size))
+        }
     }
 
     private fun getIndexRangeForPage(page: Int): IntRange =

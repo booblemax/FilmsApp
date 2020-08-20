@@ -1,16 +1,16 @@
 package com.example.filmsapp.ui.details
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.filmsapp.CoroutinesTestRule
 import com.example.filmsapp.FilmsTestApp
+import com.example.filmsapp.R
 import com.example.filmsapp.data.datasource.latest
 import com.example.filmsapp.data.datasource.youtubeDataModel
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.domain.repos.FilmsRepository
 import com.example.filmsapp.domain.repos.YoutubeRepository
 import com.example.filmsapp.getOrAwaitValue
+import com.example.filmsapp.ui.base.Event
 import com.example.filmsapp.ui.base.models.FilmModel
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,13 +21,16 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
+import org.mockito.Mockito.mock
+import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @ExperimentalCoroutinesApi
 @Config(application = FilmsTestApp::class, sdk = [28])
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class DetailsViewModelTest {
 
     @get:Rule
@@ -39,17 +42,19 @@ class DetailsViewModelTest {
     private lateinit var viewModel: DetailsViewModel
     private lateinit var repository: FilmsRepository
     private lateinit var youtubeRepository: YoutubeRepository
-    private val creds = GoogleAccountCredential(ApplicationProvider.getApplicationContext(), "1234")
-    private val connectionStatusCode = 1
-    private val errorMessage = "Error"
+    private val creds: GoogleAccountCredential = mock(GoogleAccountCredential::class.java)
+    private val savedMessageId: Int = R.string.film_saved
+    private val removedMessageId: Int = R.string.film_removed
 
     @Before
     fun setUp() {
-        repository = Mockito.mock(FilmsRepository::class.java)
-        youtubeRepository = Mockito.mock(YoutubeRepository::class.java)
+        repository = mock(FilmsRepository::class.java)
+        youtubeRepository = mock(YoutubeRepository::class.java)
 
-        coroutinesRule.testCoroutineDispatcher.runBlockingTest {
-            Mockito.`when`(repository.getFilm(anyString())).thenReturn(Resource.SUCCESS(latest.toModel()))
+        coroutinesRule.dispatcher.runBlockingTest {
+            Mockito.`when`(repository.getFilm(anyString(), anyBoolean())).thenReturn(Resource.SUCCESS(latest.toModel()))
+            Mockito.`when`(repository.isFilmStoredInDb(latest.id.toString())).thenReturn(true)
+            Mockito.`when`(repository.isFilmStoredInDb(anyString())).thenReturn(false)
             Mockito.`when`(youtubeRepository.getTrailerForFilm("trailer", creds)).thenReturn(youtubeDataModel)
         }
 
@@ -58,7 +63,7 @@ class DetailsViewModelTest {
 
     @Test
     fun `when getFilm should return film model`() {
-        viewModel.loadFilm("trailer")
+        viewModel.loadFilm("trailer", false)
         val origin: Resource<FilmModel> = Resource.SUCCESS(latest.toModel())
 
         val value = viewModel.film.getOrAwaitValue()
@@ -74,4 +79,28 @@ class DetailsViewModelTest {
 
         assertThat(value, IsEqual(youtubeDataModel))
     }
+
+    @Test
+    fun `given film model don't place in db, bookmark false when storeFilm should pass success message`() =
+        coroutinesRule.dispatcher.runBlockingTest {
+            viewModel.loadFilm("any", false)
+
+            viewModel.favoriteClicked()
+            val message = viewModel.showSnackbar.getOrAwaitValue()
+
+            Mockito.verify(repository, Mockito.times(1)).saveFilm(latest.toModel())
+            assertThat(message, IsEqual(Event(savedMessageId)))
+        }
+
+    @Test
+    fun `given film model don't place in db, bookmark true when removeFilm should pass success message`() =
+        coroutinesRule.dispatcher.runBlockingTest {
+            viewModel.loadFilm("any", true)
+
+            viewModel.favoriteClicked()
+            val message = viewModel.showSnackbar.getOrAwaitValue()
+
+            Mockito.verify(repository, Mockito.times(1)).deleteFilm(latest.toModel())
+            assertThat(message, IsEqual(Event(removedMessageId)))
+        }
 }

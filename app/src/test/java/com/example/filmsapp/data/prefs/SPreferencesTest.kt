@@ -2,17 +2,17 @@ package com.example.filmsapp.data.prefs
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.filmsapp.FilmsTestApp
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @Config(application = FilmsTestApp::class, sdk = [28])
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class SPreferencesTest {
 
     private val prefs: SPreferences = SPreferences(ApplicationProvider.getApplicationContext())

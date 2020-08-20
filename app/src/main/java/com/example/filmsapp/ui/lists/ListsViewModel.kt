@@ -2,8 +2,8 @@ package com.example.filmsapp.ui.lists
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.filmsapp.domain.DispatcherProvider
 import com.example.filmsapp.domain.Resource
+import com.example.filmsapp.domain.dispatcherProvider.DispatcherProvider
 import com.example.filmsapp.domain.repos.FilmsRepository
 import com.example.filmsapp.ui.base.BaseViewModel
 import com.example.filmsapp.ui.base.models.FilmModel
@@ -33,7 +33,7 @@ class ListsViewModel(
     }
 
     private fun loadFilms() {
-        baseContext.launch {
+        baseScope.launch {
             val latestDeferred = async { loadLatest() }
             val popularDeferred = async { loadPopular() }
             val topRatedDeferred = async { loadTopRated() }

@@ -1,5 +1,6 @@
 package com.example.filmsapp.data.datasource
 
+import com.example.filmsapp.data.db.FilmDataModel
 import com.example.filmsapp.data.remote.response.films.FilmDto
 import com.example.filmsapp.ui.base.models.YoutubeFilmModel
 
@@ -23,6 +24,13 @@ val upcoming = listOf(
     FilmDto(id = 798, title = "6hED2", backdropPath = "t6NVfMSR"),
     FilmDto(id = 632, title = "2rT9", backdropPath = "hM7dO3i"),
     FilmDto(id = 360, title = "rqt7O", backdropPath = "cdtM")
+)
+
+val favorites = listOf(
+    FilmDataModel("591", "YJQ60UK", "HIea9W22"),
+    FilmDataModel("I63Zx18", "n4XW", "SfVzv5W"),
+    FilmDataModel("94b", "g3m0hC", "8ie97ofW"),
+    FilmDataModel("SO4", "o97smPV", "M2gLc5Qc")
 )
 
 val youtubeDataModel = YoutubeFilmModel("Film", "1", "1")

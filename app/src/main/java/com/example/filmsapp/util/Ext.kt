@@ -1,29 +1,22 @@
 package com.example.filmsapp.util
 
 import android.app.Activity
-import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import com.example.filmsapp.R
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
-val Int.dp: Int
-    get() = (this / Resources.getSystem().displayMetrics.density).toInt()
-val Int.px: Int
-    get() = (this * Resources.getSystem().displayMetrics.density).toInt()
-
-fun startCoroutinesTimer(delay: Long, action: () -> Unit) = GlobalScope.launch {
-    kotlinx.coroutines.delay(delay)
-    action()
+fun Activity.setupToolbar(toolbar: Toolbar) {
+    (this as AppCompatActivity).setSupportActionBar(toolbar)
 }
 
 inline fun View.snack(

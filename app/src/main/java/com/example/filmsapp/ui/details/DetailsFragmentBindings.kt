@@ -21,9 +21,9 @@ fun setGenres(textView: AppCompatTextView, genres: List<Genre>?) {
 
 @BindingAdapter("year")
 fun setYear(textView: AppCompatTextView, releaseDate: String?) {
-    releaseDate?.let {
+    if (!releaseDate.isNullOrEmpty()) {
         val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val date = LocalDate.parse(it, dateFormatter)
+        val date = LocalDate.parse(releaseDate, dateFormatter)
         val zoneDate = date.atStartOfDay(ZoneId.systemDefault())
         textView.text = zoneDate.year.toString()
     }

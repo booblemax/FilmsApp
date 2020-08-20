@@ -21,7 +21,7 @@ class MainAdapter(
     var isLoading = false
 
     override fun getItemViewType(position: Int): Int =
-        if (isLoading && position == items.size) {
+        if (isLoading && (position == items.size || items.size == 0)) {
             R.layout.item_loading
         } else {
             R.layout.item_film

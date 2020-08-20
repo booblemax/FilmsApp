@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.filmsapp.R
 import com.example.filmsapp.databinding.ImageCarouselFragmentBinding
 import com.example.filmsapp.ui.base.BaseFragment
-import com.example.filmsapp.ui.main.SharedViewModel
+import com.example.filmsapp.ui.common.SharedViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.collections.set

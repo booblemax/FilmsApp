@@ -1,19 +1,36 @@
 <resources>
     <string name="app_name">FilmsApp</string>
+    <string name="app_name_first_part">FILMS</string>
+    <string name="app_name_second_part">APP</string>
     <string name="transition_carousel_image">id_carousel_image</string>
 
     <string name="popular_title">Popular</string>
     <string name="toprated_title">Top Rated</string>
     <string name="upcoming_title">Upcoming</string>
 
+    <string name="title_lists">Films</string>
     <string name="title_popular">Popular</string>
     <string name="title_toprated">Top Rated</string>
     <string name="title_upcoming">Upcoming</string>
+    <string name="title_favourites">Favourites</string>
     <string name="title_settings">Settings</string>
 
+    <string name="dialog_permission_accounts">This app needs to access your Google account (via contacts)</string>
+
     <string name="error_occur">Error occur: %s</string>
+    <string name="error">Something went wrong</string>
+    <string name="error_no_connection">No network connection available :(</string>
+    <string name="error_require_gpservices">This app requires Google Play Services</string>
+    <string name="empty_data">Empty</string>
+    <string name="label_input_film_name">Please, input film name</string>
 
     <string name="time">%sh %sm</string>
-
     <string name="switch_theme">Light Theme</string>
+    <string name="film_saved">Film saved</string>
+    <string name="film_removed">Film removed</string>
+
+    <string name="menu_favorites">Favorites</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_search">Search</string>
+
 </resources>

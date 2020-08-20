@@ -42,7 +42,7 @@ val dataModule = module {
     single { configRetrofit(get<OkHttpClient>(), get<Gson>(), BuildConfig.BASE_URL) }
 
     factory { createService(get(), FilmsApi::class.java) }
-}
+} + dbModule
 
 private fun configRetrofit(client: OkHttpClient, gson: Gson, baseUrl: String): Retrofit =
     Retrofit.Builder()

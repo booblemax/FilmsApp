@@ -42,4 +42,7 @@ interface FilmsApi {
         @Path("id")
         id: String
     ): BackdropsDto
+
+    @GET("search/movie")
+    suspend fun searchFilms(@Query("query") query: String, @Query("page") page: Int): Response<FilmsDto>
 }

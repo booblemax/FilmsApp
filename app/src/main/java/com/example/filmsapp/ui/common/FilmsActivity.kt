@@ -1,4 +1,4 @@
-package com.example.filmsapp.ui.main
+package com.example.filmsapp.ui.common
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -7,7 +7,7 @@ import com.example.filmsapp.R
 import com.example.filmsapp.data.prefs.SPreferences
 import org.koin.android.ext.android.inject
 
-class MainActivity : AppCompatActivity() {
+class FilmsActivity : AppCompatActivity() {
 
     private val sharedPreferences: SPreferences by inject()
 
