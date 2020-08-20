@@ -61,6 +61,13 @@ class FakeFilmsApi(
         )
     }
 
+    override suspend fun searchFilms(query: String, page: Int): Response<FilmsDto> {
+        if (needFailureResult?.invoke() == true) throw RetrofitException(404, "wrong id")
+        populars.filter { it.title.contains(query, true) }.let {
+            return Response.success(FilmsDto(page, it, 15, it.size))
+        }
+    }
+
     private fun getIndexRangeForPage(page: Int): IntRange =
         if (page == 1) 0..2
         else page..(page + 2)

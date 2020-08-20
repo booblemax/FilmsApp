@@ -36,7 +36,7 @@ class MainViewModelTest {
     @Before
     fun setUp() {
         repository = Mockito.mock(FilmsRepository::class.java)
-        coroutinesDispatcher.testCoroutineDispatcher.runBlockingTest {
+        coroutinesDispatcher.dispatcher.runBlockingTest {
             Mockito.`when`(repository.getPopularFilms(1)).thenReturn(
                 Resource.SUCCESS(
                     populars.take(2).map { it.toModel() }
@@ -80,7 +80,7 @@ class MainViewModelTest {
         viewModel.loadFilms()
         val value = viewModel.films.getOrAwaitValue()
 
-        coroutinesDispatcher.testCoroutineDispatcher.runBlockingTest {
+        coroutinesDispatcher.dispatcher.runBlockingTest {
             Mockito.verify(repository, Mockito.times(1)).getPopularFilms(1, false)
         }
         assertThat(value, IsEqual(origin))
@@ -93,7 +93,7 @@ class MainViewModelTest {
         viewModel.loadFilms()
         viewModel.loadFilms()
 
-        coroutinesDispatcher.testCoroutineDispatcher.runBlockingTest {
+        coroutinesDispatcher.dispatcher.runBlockingTest {
             Mockito.verify(repository, Mockito.times(1)).getPopularFilms(2, false)
         }
     }
@@ -106,7 +106,7 @@ class MainViewModelTest {
         viewModel.loadFilms()
         val value = viewModel.films.getOrAwaitValue()
 
-        coroutinesDispatcher.testCoroutineDispatcher.runBlockingTest {
+        coroutinesDispatcher.dispatcher.runBlockingTest {
             Mockito.verify(repository, Mockito.times(1)).getTopRatedFilms(1, false)
         }
         assertThat(value, IsEqual(origin))
@@ -119,7 +119,7 @@ class MainViewModelTest {
         viewModel.loadFilms()
         viewModel.loadFilms()
 
-        coroutinesDispatcher.testCoroutineDispatcher.runBlockingTest {
+        coroutinesDispatcher.dispatcher.runBlockingTest {
             Mockito.verify(repository, Mockito.times(1)).getTopRatedFilms(2, false)
         }
     }
@@ -132,7 +132,7 @@ class MainViewModelTest {
         viewModel.loadFilms()
         val value = viewModel.films.getOrAwaitValue()
 
-        coroutinesDispatcher.testCoroutineDispatcher.runBlockingTest {
+        coroutinesDispatcher.dispatcher.runBlockingTest {
             Mockito.verify(repository, Mockito.times(1)).getUpcomingFilms(1, false)
         }
         assertThat(value, IsEqual(origin))
@@ -145,7 +145,7 @@ class MainViewModelTest {
         viewModel.loadFilms()
         viewModel.loadFilms()
 
-        coroutinesDispatcher.testCoroutineDispatcher.runBlockingTest {
+        coroutinesDispatcher.dispatcher.runBlockingTest {
             Mockito.verify(repository, Mockito.times(1)).getUpcomingFilms(2, false)
         }
     }
@@ -154,7 +154,7 @@ class MainViewModelTest {
     fun `given page 0 when incPage should pageNumber not be first page`() {
         viewModel.incPageNumber()
 
-        assertThat(viewModel.isFirstPageLoading(), `is`(false))
+        assertThat(viewModel.isFirstPageLoading(), `is`(true))
     }
 
     @Test
@@ -162,7 +162,7 @@ class MainViewModelTest {
         viewModel.incPageNumber()
         viewModel.decPageNumber()
 
-        assertThat(viewModel.isFirstPageLoading(), `is`(true))
+        assertThat(viewModel.isFirstPageLoading(), `is`(false))
     }
 
     @Test
@@ -173,11 +173,12 @@ class MainViewModelTest {
 
         viewModel.resetPageNumber()
 
-        assertThat(viewModel.isFirstPageLoading(), `is`(true))
+        assertThat(viewModel.isFirstPageLoading(), `is`(false))
     }
 
     @Test
     fun `when fetchedDataIsEmpty pass true should pass Event with true`() {
+        viewModel.incPageNumber()
         viewModel.fetchedDataIsEmpty(true)
 
         val event = viewModel.emptyData.getOrAwaitValue()
@@ -187,6 +188,7 @@ class MainViewModelTest {
 
     @Test
     fun `when fetchedDataIsEmpty pass false should pass Event with true`() {
+        viewModel.incPageNumber()
         viewModel.fetchedDataIsEmpty(false)
 
         val event = viewModel.emptyData.getOrAwaitValue()

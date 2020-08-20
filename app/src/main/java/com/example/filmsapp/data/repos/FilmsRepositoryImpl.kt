@@ -5,8 +5,8 @@ import androidx.core.util.contains
 import com.example.filmsapp.data.db.FilmsDao
 import com.example.filmsapp.data.remote.FilmsApi
 import com.example.filmsapp.data.remote.response.films.BackdropsDto
-import com.example.filmsapp.domain.DispatcherProvider
 import com.example.filmsapp.domain.Resource
+import com.example.filmsapp.domain.dispatcherProvider.DispatcherProvider
 import com.example.filmsapp.domain.exceptions.RetrofitException
 import com.example.filmsapp.domain.repos.FilmsRepository
 import com.example.filmsapp.ui.base.models.FilmModel
@@ -111,10 +111,16 @@ class FilmsRepositoryImpl(
             }
         }
 
+    override suspend fun searchFilms(query: String, page: Int, needClearCache: Boolean): Resource<List<FilmModel>> =
+        withContext(dispatcher.io()) {
+            getFilmsCached(page, needClearCache, FilmType.SEARCH, query)
+        }
+
     private suspend fun getFilmsCached(
         page: Int,
         forceUpdate: Boolean,
-        type: FilmType
+        type: FilmType,
+        query: String = ""
     ): Resource<List<FilmModel>> {
         val filmsCache = getCacheForFilmType(type)
 
@@ -122,7 +128,7 @@ class FilmsRepositoryImpl(
             filmsCache.clear()
         }
         if (forceUpdate || filmsCache.size < page * pageSize) {
-            val response = performRequest(page, type)
+            val response = performRequest(page, type, query)
 
             val body = response.body()
             if (response.isSuccessful && body != null) {
@@ -130,7 +136,7 @@ class FilmsRepositoryImpl(
 
                 filmsCache.addAll(films)
             } else {
-                return Resource.ERROR<List<FilmModel>>(
+                return Resource.ERROR(
                     RetrofitException(response.code(), response.message())
                 )
             }
@@ -147,16 +153,18 @@ class FilmsRepositoryImpl(
         }
     }
 
-    private suspend fun performRequest(page: Int, type: FilmType) =
+    private suspend fun performRequest(page: Int, type: FilmType, query: String = "") =
         when (type) {
             FilmType.POPULAR -> api.getPopularList(page)
             FilmType.TOP_RATED -> api.getTopRatedList(page)
             FilmType.UPCOMING -> api.getUpcomingList(page)
+            FilmType.SEARCH -> api.searchFilms(query, page)
         }
 
     enum class FilmType {
         POPULAR,
         TOP_RATED,
-        UPCOMING
+        UPCOMING,
+        SEARCH
     }
 }

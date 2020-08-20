@@ -1,16 +1,10 @@
 package com.example.filmsapp.ui.details
 
-import android.Manifest
-import android.accounts.AccountManager
 import android.annotation.SuppressLint
-import android.app.Activity.RESULT_OK
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.SharedElementCallback
-import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.get
 import androidx.lifecycle.observe
@@ -23,32 +17,29 @@ import com.example.filmsapp.databinding.DetailsFragmentBinding
 import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.ui.base.BaseFragment
 import com.example.filmsapp.ui.base.EventObserver
-import com.example.filmsapp.ui.base.common.networkinfo.NetworkStateHolder
 import com.example.filmsapp.ui.common.SharedViewModel
 import com.example.filmsapp.ui.details.transformers.OffsetTransformer
 import com.example.filmsapp.ui.details.transformers.ScaleTransformer
+import com.example.filmsapp.ui.splash.GoogleAccountManager
 import com.example.filmsapp.util.makeStatusBarTransparent
 import com.example.filmsapp.util.makeStatusBarVisible
 import com.example.filmsapp.util.setMarginTop
 import com.example.filmsapp.util.snack
 import com.example.filmsapp.util.visible
 import com.example.filmsapp.util.waitForTransition
-import com.google.api.services.youtube.YouTubeScopes
 import kotlinx.android.synthetic.main.item_backdrop.view.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import pub.devrel.easypermissions.AfterPermissionGranted
-import pub.devrel.easypermissions.EasyPermissions
 
 class DetailsFragment :
-    BaseFragment<DetailsViewModel, DetailsFragmentBinding>(),
-    EasyPermissions.PermissionCallbacks {
+    BaseFragment<DetailsViewModel, DetailsFragmentBinding>() {
 
     private val sharedViewModel: SharedViewModel by sharedViewModel()
     override val viewModel: DetailsViewModel by viewModel()
     override val layoutRes: Int = R.layout.details_fragment
+    private val googleAccountManager: GoogleAccountManager by inject()
 
-    private lateinit var googleAccountManager: GoogleAccountManager
     private val onItemClickListener = { itemView: View, position: Int ->
         sharedViewModel.backdropCarouselPosition = position
 
@@ -74,7 +65,6 @@ class DetailsFragment :
             }
         }
         requireActivity().makeStatusBarTransparent()
-        googleAccountManager = GoogleAccountManager(requireContext())
     }
 
     override fun init() {
@@ -95,13 +85,15 @@ class DetailsFragment :
     private fun initObservers() {
         viewModel.film.observe(viewLifecycleOwner) { resource ->
             if (resource is Resource.SUCCESS) {
-                binding.model = resource.data
-                adapter.submitList(resource.data?.backdrops?.backdrops)
+                resource.data?.let {
+                    binding.model = it
+                    adapter.submitList(it.backdrops?.backdrops)
+                    viewModel.requestFilmTrailer(it.title, googleAccountManager.getCredential())
+                }
                 binding.detailsBackdrops.setCurrentItem(
                     sharedViewModel.backdropCarouselPosition,
                     false
                 )
-                getResultsFromApi()
             }
         }
         viewModel.youtubeMovieSearchResult.observe(viewLifecycleOwner) { model ->
@@ -112,12 +104,7 @@ class DetailsFragment :
             }
             binding.detailsPlay.visible()
         }
-        viewModel.requestAuthorizationPermission.observe(viewLifecycleOwner) {
-            startActivityForResult(it.intent, REQUEST_AUTHORIZATION)
-        }
-        viewModel.displayGpsUnavailable.observe(
-            viewLifecycleOwner, googleAccountManager::showGooglePlayServicesAvailabilityErrorDialog
-        )
+
         viewModel.showSnackbar.observe(viewLifecycleOwner) { event ->
             view?.snack(getString(event.getContentIfNotHandled() ?: R.string.error))
         }
@@ -193,96 +180,7 @@ class DetailsFragment :
         super.onBackPressed(popTo)
     }
 
-    //region google_api
-
-    private fun getResultsFromApi() {
-        when {
-            !googleAccountManager.isGooglePlayServicesAvailable() ->
-                googleAccountManager.acquireGooglePlayServices()
-            !googleAccountManager.hasAccountName() -> chooseAccount()
-            !NetworkStateHolder.isConnected -> view?.snack("No network connection available :(")
-            else -> binding.model?.let {
-                viewModel.requestFilmTrailer(it.title, googleAccountManager.getCredential())
-            }
-        }
-    }
-
-    @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
-    private fun chooseAccount() {
-        if (EasyPermissions.hasPermissions(
-            requireContext(), Manifest.permission.GET_ACCOUNTS
-        )
-        ) {
-            googleAccountManager.requestOrSetupAccountName(this::getResultsFromApi)
-        } else {
-            EasyPermissions.requestPermissions(
-                this,
-                "This app needs to access your Google account (via contacts)",
-                REQUEST_PERMISSION_GET_ACCOUNTS,
-                Manifest.permission.GET_ACCOUNTS
-            )
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_GOOGLE_PLAY_SERVICES -> {
-                if (resultCode != RESULT_OK) {
-                    view?.snack("This app requires Google Play Services")
-                } else {
-                    getResultsFromApi()
-                }
-            }
-            REQUEST_ACCOUNT_PICKER -> {
-                if (resultCode == RESULT_OK && data != null && data.extras != null) {
-                    val accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
-                    if (accountName != null) {
-                        activity?.getPreferences(Context.MODE_PRIVATE)?.edit {
-                            putString(PREF_ACCOUNT_NAME, accountName)
-                        }
-                        googleAccountManager.setAccountName(accountName)
-                        getResultsFromApi()
-                    }
-                }
-            }
-            REQUEST_AUTHORIZATION -> {
-                if (resultCode == RESULT_OK) {
-                    getResultsFromApi()
-                }
-            }
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(
-            requestCode, permissions, grantResults, this
-        )
-    }
-
-    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        // do nothing
-    }
-
-    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        // do nothing
-    }
-
-    //endregion
-
     companion object {
-        const val REQUEST_ACCOUNT_PICKER = 1000
-        const val REQUEST_AUTHORIZATION = 1001
-        const val REQUEST_GOOGLE_PLAY_SERVICES = 1002
-        const val REQUEST_PERMISSION_GET_ACCOUNTS = 1003
-        const val PREF_ACCOUNT_NAME = "accountName"
         const val VISIBLE_PAGE_LIMIT = 3
-
-        val SCOPES = listOf(YouTubeScopes.YOUTUBE_READONLY)
     }
 }

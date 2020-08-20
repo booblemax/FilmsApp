@@ -1,4 +1,4 @@
-package com.example.filmsapp.domain
+package com.example.filmsapp.domain.dispatcherProvider
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

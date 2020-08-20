@@ -85,6 +85,16 @@ class FakeFilmsRepository(
         filmsDao.delete(film.toDataModel())
     }
 
+    override suspend fun searchFilms(query: String, page: Int, needClearCache: Boolean): Resource<List<FilmModel>> {
+        val response = filmsApi.searchFilms(query, page)
+        return if (response.isSuccessful && response.body() != null) {
+            val films = response.body()?.results?.map { it.toModel() }
+            Resource.SUCCESS(films)
+        } else {
+            Resource.ERROR(RetrofitException(response.code(), response.message()))
+        }
+    }
+
     private fun <R, T> getResult(call: () -> Response<R>, mapper: (R?) -> T?): Resource<T> {
         val response = call()
         return if (response.isSuccessful) {
