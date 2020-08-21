@@ -1,8 +1,8 @@
 package com.example.filmsapp.data.datasource
 
-import com.example.filmsapp.data.db.FilmDataModel
+import com.example.data.db.FilmDataModel
+import com.example.domain.models.YoutubeFilmModel
 import com.example.filmsapp.data.remote.response.films.FilmDto
-import com.example.filmsapp.ui.base.models.YoutubeFilmModel
 
 val latest = FilmDto()
 val populars = listOf(

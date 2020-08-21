@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.domain.models.FilmModel
 import com.example.filmsapp.R
 import com.example.filmsapp.databinding.ItemFilmBinding
 import com.example.filmsapp.databinding.ItemLoadingBinding
 import com.example.filmsapp.ui.base.BaseViewHolder
-import com.example.filmsapp.ui.base.models.FilmModel
 import com.example.filmsapp.util.visible
 
 class MainAdapter(

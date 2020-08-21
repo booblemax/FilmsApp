@@ -2,17 +2,17 @@ package com.example.filmsapp.ui.details
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
+import com.example.domain.Resource
+import com.example.domain.models.FilmModel
+import com.example.domain.repos.FilmsRepository
+import com.example.domain.repos.YoutubeRepository
 import com.example.filmsapp.CoroutinesTestRule
 import com.example.filmsapp.FilmsTestApp
 import com.example.filmsapp.R
 import com.example.filmsapp.data.datasource.latest
 import com.example.filmsapp.data.datasource.youtubeDataModel
-import com.example.filmsapp.domain.Resource
-import com.example.filmsapp.domain.repos.FilmsRepository
-import com.example.filmsapp.domain.repos.YoutubeRepository
 import com.example.filmsapp.getOrAwaitValue
 import com.example.filmsapp.ui.base.Event
-import com.example.filmsapp.ui.base.models.FilmModel
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest

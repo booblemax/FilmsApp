@@ -6,12 +6,12 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.domain.models.FilmModel
 import com.example.filmsapp.R
 import com.example.filmsapp.databinding.ItemFilmLoadingBinding
 import com.example.filmsapp.databinding.ItemListsFilmBinding
 import com.example.filmsapp.ui.base.BaseViewHolder
 import com.example.filmsapp.ui.base.common.FilmsDiffUtils
-import com.example.filmsapp.ui.base.models.FilmModel
 
 class ListsAdapter(
     private val onItemClickListener: (FilmModel) -> Unit

@@ -1,6 +1,9 @@
 package com.example.filmsapp.ui.lists
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.domain.Resource
+import com.example.domain.models.FilmModel
+import com.example.domain.repos.FilmsRepository
 import com.example.filmsapp.CoroutinesTestRule
 import com.example.filmsapp.data.datasource.FakeFilmsApi
 import com.example.filmsapp.data.datasource.FakeFilmsDao
@@ -10,10 +13,7 @@ import com.example.filmsapp.data.datasource.populars
 import com.example.filmsapp.data.datasource.toprated
 import com.example.filmsapp.data.datasource.upcoming
 import com.example.filmsapp.data.repos.FakeFilmsRepository
-import com.example.filmsapp.domain.Resource
-import com.example.filmsapp.domain.repos.FilmsRepository
 import com.example.filmsapp.getOrAwaitValue
-import com.example.filmsapp.ui.base.models.FilmModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual

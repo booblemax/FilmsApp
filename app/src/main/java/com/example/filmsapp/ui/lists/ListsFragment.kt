@@ -7,14 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.example.domain.Resource
+import com.example.domain.models.FilmModel
 import com.example.filmsapp.R
 import com.example.filmsapp.databinding.ListsFragmentBinding
-import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.ui.base.BaseFragment
+import com.example.filmsapp.ui.base.ListType
 import com.example.filmsapp.ui.base.common.SimpleItemDecoration
 import com.example.filmsapp.ui.base.common.WrappedLinearLayoutManager
-import com.example.filmsapp.ui.base.models.FilmModel
-import com.example.filmsapp.ui.base.models.ListType
 import com.example.filmsapp.util.animateVisible
 import com.example.filmsapp.util.gone
 import com.example.filmsapp.util.src

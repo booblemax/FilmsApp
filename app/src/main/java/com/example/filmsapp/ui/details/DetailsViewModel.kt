@@ -2,15 +2,15 @@ package com.example.filmsapp.ui.details
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.domain.Resource
+import com.example.domain.dispatchers.DispatcherProvider
+import com.example.domain.models.FilmModel
+import com.example.domain.models.YoutubeFilmModel
+import com.example.domain.repos.FilmsRepository
+import com.example.domain.repos.YoutubeRepository
 import com.example.filmsapp.R
-import com.example.filmsapp.domain.DispatcherProvider
-import com.example.filmsapp.domain.Resource
-import com.example.filmsapp.domain.repos.FilmsRepository
-import com.example.filmsapp.domain.repos.YoutubeRepository
 import com.example.filmsapp.ui.base.BaseViewModel
 import com.example.filmsapp.ui.base.Event
-import com.example.filmsapp.ui.base.models.FilmModel
-import com.example.filmsapp.ui.base.models.YoutubeFilmModel
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException

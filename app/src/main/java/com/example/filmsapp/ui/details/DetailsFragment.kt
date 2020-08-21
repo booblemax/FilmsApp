@@ -18,9 +18,9 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
+import com.example.domain.Resource
 import com.example.filmsapp.R
 import com.example.filmsapp.databinding.DetailsFragmentBinding
-import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.ui.base.BaseFragment
 import com.example.filmsapp.ui.base.EventObserver
 import com.example.filmsapp.ui.base.common.networkinfo.NetworkStateHolder

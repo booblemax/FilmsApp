@@ -1,8 +1,8 @@
 package com.example.filmsapp
 
 import android.app.Application
+import com.example.domain.di.domainModule
 import com.example.filmsapp.data.di.dataModule
-import com.example.filmsapp.domain.di.domainModule
 import com.example.filmsapp.ui.base.common.networkinfo.NetworkStateHolder.registerConnectivityMonitor
 import com.example.filmsapp.ui.di.vmModule
 import com.jakewharton.threetenabp.AndroidThreeTen

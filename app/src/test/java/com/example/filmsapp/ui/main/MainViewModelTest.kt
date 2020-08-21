@@ -1,16 +1,16 @@
 package com.example.filmsapp.ui.main
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.domain.Resource
+import com.example.domain.models.FilmModel
+import com.example.domain.repos.FilmsRepository
 import com.example.filmsapp.CoroutinesTestRule
 import com.example.filmsapp.data.datasource.populars
 import com.example.filmsapp.data.datasource.toprated
 import com.example.filmsapp.data.datasource.upcoming
-import com.example.filmsapp.domain.Resource
-import com.example.filmsapp.domain.repos.FilmsRepository
 import com.example.filmsapp.getOrAwaitValue
 import com.example.filmsapp.ui.base.Event
-import com.example.filmsapp.ui.base.models.FilmModel
-import com.example.filmsapp.ui.base.models.ListType
+import com.example.filmsapp.ui.base.ListType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.MatcherAssert.assertThat

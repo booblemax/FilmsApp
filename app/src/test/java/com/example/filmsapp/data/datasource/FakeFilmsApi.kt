@@ -1,11 +1,11 @@
 package com.example.filmsapp.data.datasource
 
+import com.example.domain.exceptions.RetrofitException
 import com.example.filmsapp.data.remote.FilmsApi
 import com.example.filmsapp.data.remote.response.films.BackdropDto
 import com.example.filmsapp.data.remote.response.films.BackdropsDto
 import com.example.filmsapp.data.remote.response.films.FilmDto
 import com.example.filmsapp.data.remote.response.films.FilmsDto
-import com.example.filmsapp.domain.exceptions.RetrofitException
 import okhttp3.internal.http.RealResponseBody
 import okio.Buffer
 import retrofit2.Response

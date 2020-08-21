@@ -1,7 +1,7 @@
 package com.example.filmsapp.data.datasource
 
-import com.example.filmsapp.data.db.FilmDataModel
-import com.example.filmsapp.data.db.FilmsDao
+import com.example.data.db.FilmDataModel
+import com.example.data.db.FilmsDao
 
 class FakeFilmsDao(private val films: MutableList<FilmDataModel>) : FilmsDao {
 

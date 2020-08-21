@@ -4,8 +4,8 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.domain.dispatchers.DispatcherProvider
 import com.example.filmsapp.R
-import com.example.filmsapp.domain.DispatcherProvider
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

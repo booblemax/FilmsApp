@@ -5,9 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import com.example.domain.Resource
 import com.example.filmsapp.R
 import com.example.filmsapp.databinding.MainFragmentBinding
-import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.ui.base.BaseFragment
 import com.example.filmsapp.ui.base.common.EndlessRecyclerScrollListener
 import com.example.filmsapp.ui.base.common.SimpleItemDecoration

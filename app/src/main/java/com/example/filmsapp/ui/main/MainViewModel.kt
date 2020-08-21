@@ -3,13 +3,13 @@ package com.example.filmsapp.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.example.filmsapp.domain.DispatcherProvider
-import com.example.filmsapp.domain.Resource
-import com.example.filmsapp.domain.repos.FilmsRepository
+import com.example.domain.Resource
+import com.example.domain.dispatchers.DispatcherProvider
+import com.example.domain.models.FilmModel
+import com.example.domain.repos.FilmsRepository
 import com.example.filmsapp.ui.base.BaseViewModel
 import com.example.filmsapp.ui.base.Event
-import com.example.filmsapp.ui.base.models.FilmModel
-import com.example.filmsapp.ui.base.models.ListType
+import com.example.filmsapp.ui.base.ListType
 import kotlinx.coroutines.launch
 
 class MainViewModel(

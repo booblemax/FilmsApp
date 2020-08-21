@@ -5,9 +5,10 @@ plugins {
 
 buildscript {
 
+    val kotlin_version by extra("1.4.0")
     repositories {
         google()
-        jcenter() {
+        jcenter {
             content {
                 includeGroup("org.jetbrains.kotlinx")
             }
@@ -19,6 +20,7 @@ buildscript {
         classpath(Classpath.kotlinGradlePlugin)
         classpath(Classpath.navigationSafeArgs)
         classpath(Classpath.ktlinGradlePlugin)
+        "classpath"("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
     }
 }
 

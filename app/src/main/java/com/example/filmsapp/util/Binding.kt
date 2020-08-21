@@ -12,9 +12,9 @@ import coil.api.load
 import coil.request.LoadRequest
 import coil.request.Request
 import coil.transform.RoundedCornersTransformation
+import com.example.domain.Resource
 import com.example.filmsapp.BuildConfig
 import com.example.filmsapp.R
-import com.example.filmsapp.domain.Resource
 
 @BindingAdapter("textOrGone")
 fun AppCompatTextView.setTextOrGone(text: String?) {

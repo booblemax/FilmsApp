@@ -1,6 +1,6 @@
 package com.example.filmsapp.ui.common
 
-import com.example.filmsapp.domain.DispatcherProvider
+import com.example.domain.dispatchers.DispatcherProvider
 import com.example.filmsapp.ui.base.BaseViewModel
 
 class SharedViewModel(dispatcherProvider: DispatcherProvider) : BaseViewModel(dispatcherProvider) {

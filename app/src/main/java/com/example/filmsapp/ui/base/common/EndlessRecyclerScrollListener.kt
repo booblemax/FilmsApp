@@ -3,7 +3,7 @@ package com.example.filmsapp.ui.base.common
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.filmsapp.util.ConstUtil
+import com.example.domain.ConstUtil
 
 abstract class EndlessRecyclerScrollListener(private var layoutManager: RecyclerView.LayoutManager) :
     RecyclerView.OnScrollListener() {

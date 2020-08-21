@@ -1,6 +1,9 @@
 package com.example.filmsapp.data.repos
 
 import android.os.Build
+import com.example.data.db.FilmsDao
+import com.example.domain.Resource
+import com.example.domain.models.FilmModel
 import com.example.filmsapp.CoroutinesTestRule
 import com.example.filmsapp.FilmsTestApp
 import com.example.filmsapp.data.datasource.FakeFilmsApi
@@ -10,12 +13,9 @@ import com.example.filmsapp.data.datasource.latest
 import com.example.filmsapp.data.datasource.populars
 import com.example.filmsapp.data.datasource.toprated
 import com.example.filmsapp.data.datasource.upcoming
-import com.example.filmsapp.data.db.FilmsDao
 import com.example.filmsapp.data.remote.FilmsApi
 import com.example.filmsapp.data.remote.response.films.BackdropsDto
 import com.example.filmsapp.data.remote.response.films.FilmsDto
-import com.example.filmsapp.domain.Resource
-import com.example.filmsapp.ui.base.models.FilmModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.MatcherAssert.assertThat

@@ -1,13 +1,13 @@
 package com.example.filmsapp.data.repos
 
-import com.example.filmsapp.data.db.FilmsDao
+import com.example.data.db.FilmsDao
+import com.example.domain.Resource
+import com.example.domain.exceptions.RetrofitException
+import com.example.domain.models.FilmModel
+import com.example.domain.repos.FilmsRepository
 import com.example.filmsapp.data.remote.FilmsApi
 import com.example.filmsapp.data.remote.response.films.FilmDto
 import com.example.filmsapp.data.remote.response.films.FilmsDto
-import com.example.filmsapp.domain.Resource
-import com.example.filmsapp.domain.exceptions.RetrofitException
-import com.example.filmsapp.domain.repos.FilmsRepository
-import com.example.filmsapp.ui.base.models.FilmModel
 import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 
@@ -19,7 +19,7 @@ class FakeFilmsRepository(
     override suspend fun getLatestFilm(): Resource<FilmModel> {
         return getResult(
             { runBlocking { filmsApi.getLatestFilm() } },
-            { dto: FilmDto? -> dto?.toModel() }
+            { dto: FilmDto? -> dto.toModel() }
         )
     }
 
@@ -29,7 +29,7 @@ class FakeFilmsRepository(
     ): Resource<List<FilmModel>> {
         return getResult(
             { runBlocking { filmsApi.getPopularList(page) } },
-            { dto: FilmsDto? -> dto?.results?.map { it.toModel() } }
+            { dto: FilmsDto? -> dto.results.map { it.toModel() } }
         )
     }
 
@@ -39,7 +39,7 @@ class FakeFilmsRepository(
     ): Resource<List<FilmModel>> {
         return getResult(
             { runBlocking { filmsApi.getTopRatedList(page) } },
-            { dto: FilmsDto? -> dto?.results?.map { it.toModel() } }
+            { dto: FilmsDto? -> dto.results.map { it.toModel() } }
         )
     }
 
@@ -49,7 +49,7 @@ class FakeFilmsRepository(
     ): Resource<List<FilmModel>> {
         return getResult(
             { runBlocking { filmsApi.getUpcomingList(page) } },
-            { dto: FilmsDto? -> dto?.results?.map { it.toModel() } }
+            { dto: FilmsDto? -> dto.results.map { it.toModel() } }
         )
     }
 
@@ -57,8 +57,8 @@ class FakeFilmsRepository(
         return if (needUpdate) {
             val filmResponse = filmsApi.getFilm(id)
             if (filmResponse.isSuccessful && filmResponse.body() != null) {
-                val film = filmResponse.body()?.toModel()
-                filmsDao.update(film?.toDataModel()!!)
+                val film = filmResponse.body().toModel()
+                filmsDao.update(film.toDataModel()!!)
                 Resource.SUCCESS(film)
             } else {
                 Resource.ERROR(RetrofitException(filmResponse.code(), filmResponse.message()))

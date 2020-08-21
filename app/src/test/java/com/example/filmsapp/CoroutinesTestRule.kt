@@ -1,6 +1,6 @@
 package com.example.filmsapp
 
-import com.example.filmsapp.domain.DispatcherProvider
+import com.example.domain.dispatchers.DispatcherProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
