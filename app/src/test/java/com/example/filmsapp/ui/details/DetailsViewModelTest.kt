@@ -43,11 +43,8 @@ class DetailsViewModelTest {
     private lateinit var repository: FilmsRepository
     private lateinit var youtubeRepository: YoutubeRepository
     private val creds = GoogleAccountCredential(ApplicationProvider.getApplicationContext(), "1234")
-    private val connectionStatusCode = 1
-    private val errorMessage = "Error"
     private val savedMessageId: Int = R.string.film_saved
     private val removedMessageId: Int = R.string.film_removed
-    private val errMessage: Int = R.string.error
 
     @Before
     fun setUp() {

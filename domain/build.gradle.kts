@@ -8,6 +8,10 @@ dependencies {
     implementation(Libs.kotlin)
     implementation(Libs.coroutines)
 
+    implementation(Libs.google_api_client) {
+        exclude(group = Libs.excludePackage)
+    }
+
     implementation(Libs.koin_core)
 
     testImplementation(TestLibs.junit)

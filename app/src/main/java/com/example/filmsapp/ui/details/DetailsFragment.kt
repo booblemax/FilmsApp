@@ -24,16 +24,17 @@ import com.example.filmsapp.databinding.DetailsFragmentBinding
 import com.example.filmsapp.ui.base.BaseFragment
 import com.example.filmsapp.ui.base.EventObserver
 import com.example.filmsapp.ui.base.common.networkinfo.NetworkStateHolder
+import com.example.filmsapp.ui.common.GoogleAccountManager
 import com.example.filmsapp.ui.common.SharedViewModel
 import com.example.filmsapp.ui.details.transformers.OffsetTransformer
 import com.example.filmsapp.ui.details.transformers.ScaleTransformer
+import com.example.filmsapp.util.GSUtils
 import com.example.filmsapp.util.makeStatusBarTransparent
 import com.example.filmsapp.util.makeStatusBarVisible
 import com.example.filmsapp.util.setMarginTop
 import com.example.filmsapp.util.snack
 import com.example.filmsapp.util.visible
 import com.example.filmsapp.util.waitForTransition
-import com.google.api.services.youtube.YouTubeScopes
 import kotlinx.android.synthetic.main.item_backdrop.view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -116,8 +117,10 @@ class DetailsFragment :
             startActivityForResult(it.intent, REQUEST_AUTHORIZATION)
         }
         viewModel.displayGpsUnavailable.observe(
-            viewLifecycleOwner, googleAccountManager::showGooglePlayServicesAvailabilityErrorDialog
-        )
+            viewLifecycleOwner
+        ) {
+            GSUtils.showGooglePlayServicesAvailabilityErrorDialog(requireContext(), it)
+        }
         viewModel.showSnackbar.observe(viewLifecycleOwner) { event ->
             view?.snack(getString(event.getContentIfNotHandled() ?: R.string.error))
         }
@@ -193,12 +196,10 @@ class DetailsFragment :
         super.onBackPressed(popTo)
     }
 
-    //region google_api
-
     private fun getResultsFromApi() {
         when {
-            !googleAccountManager.isGooglePlayServicesAvailable() ->
-                googleAccountManager.acquireGooglePlayServices()
+            !GSUtils.isGooglePlayServicesAvailable(requireContext()) ->
+                GSUtils.acquireGooglePlayServices(requireContext())
             !googleAccountManager.hasAccountName() -> chooseAccount()
             !NetworkStateHolder.isConnected -> view?.snack("No network connection available :(")
             else -> binding.model?.let {
@@ -210,10 +211,20 @@ class DetailsFragment :
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private fun chooseAccount() {
         if (EasyPermissions.hasPermissions(
-            requireContext(), Manifest.permission.GET_ACCOUNTS
-        )
+                requireContext(), Manifest.permission.GET_ACCOUNTS
+            )
         ) {
-            googleAccountManager.requestOrSetupAccountName(this::getResultsFromApi)
+            val accountName = requireActivity().getPreferences(Context.MODE_PRIVATE)
+                ?.getString(PREF_ACCOUNT_NAME, null)
+            if (accountName != null) {
+                googleAccountManager.setAccountName(accountName)
+                getResultsFromApi()
+            } else {
+                startActivityForResult(
+                    googleAccountManager.getChooseAccountIntent(),
+                    REQUEST_ACCOUNT_PICKER
+                )
+            }
         } else {
             EasyPermissions.requestPermissions(
                 this,
@@ -273,8 +284,6 @@ class DetailsFragment :
         // do nothing
     }
 
-    //endregion
-
     companion object {
         const val REQUEST_ACCOUNT_PICKER = 1000
         const val REQUEST_AUTHORIZATION = 1001
@@ -282,7 +291,5 @@ class DetailsFragment :
         const val REQUEST_PERMISSION_GET_ACCOUNTS = 1003
         const val PREF_ACCOUNT_NAME = "accountName"
         const val VISIBLE_PAGE_LIMIT = 3
-
-        val SCOPES = listOf(YouTubeScopes.YOUTUBE_READONLY)
     }
 }

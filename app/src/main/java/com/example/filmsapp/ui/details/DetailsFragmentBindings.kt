@@ -4,8 +4,8 @@ import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
 import com.example.domain.Resource
+import com.example.domain.models.GenreModel
 import com.example.filmsapp.R
-import com.example.filmsapp.data.remote.response.films.Genre
 import com.example.filmsapp.util.gone
 import com.example.filmsapp.util.visible
 import org.threeten.bp.LocalDate
@@ -13,7 +13,7 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 
 @BindingAdapter("genres")
-fun setGenres(textView: AppCompatTextView, genres: List<Genre>?) {
+fun setGenres(textView: AppCompatTextView, genres: List<GenreModel>?) {
     genres?.let {
         textView.text = genres.joinToString { genre -> genre.name }
     }

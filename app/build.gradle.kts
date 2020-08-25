@@ -54,8 +54,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":data"))
     implementation(project(":domain"))
+    implementation(project(":data"))
 
     implementation(Libs.kotlin)
     implementation(Libs.appcompat)
@@ -71,6 +71,12 @@ dependencies {
     implementation(Libs.viewpager2)
     implementation(Libs.material)
 
+    implementation(Libs.google_api_client) {
+        exclude(group = Libs.excludePackage)
+    }
+    implementation(Libs.google_api_youtube) {
+        exclude(group = Libs.excludePackage)
+    }
     implementation(Libs.youtube_player)
     implementation(Libs.play_services)
 

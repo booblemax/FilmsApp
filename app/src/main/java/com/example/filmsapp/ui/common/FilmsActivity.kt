@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.filmsapp.R
-import com.example.filmsapp.data.prefs.SPreferences
+import com.example.filmsapp.ui.base.prefs.SPreferences
 import org.koin.android.ext.android.inject
 
 class FilmsActivity : AppCompatActivity() {

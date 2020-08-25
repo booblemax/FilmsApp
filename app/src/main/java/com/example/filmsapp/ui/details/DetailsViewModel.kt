@@ -54,9 +54,9 @@ class DetailsViewModel(
         }
     }
 
-    fun requestFilmTrailer(filmName: String, credential: GoogleAccountCredential) {
+    fun requestFilmTrailer(filmName: String, creds: GoogleAccountCredential) {
         baseContext.launch {
-            val model = youtubeRepository.getTrailerForFilm(filmName, credential)
+            val model = youtubeRepository.getTrailerForFilm(filmName, creds)
             _youtubeMovieSearchResult.value = model
         }
     }

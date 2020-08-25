@@ -1,8 +1,8 @@
 package com.example.filmsapp.ui.settings
 
 import com.example.domain.dispatchers.DispatcherProvider
-import com.example.filmsapp.data.prefs.SPreferences
 import com.example.filmsapp.ui.base.BaseViewModel
+import com.example.filmsapp.ui.base.prefs.SPreferences
 
 class SettingsViewModel(
     dispatcherProvider: DispatcherProvider,

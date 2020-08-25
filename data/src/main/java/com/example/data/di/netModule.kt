@@ -3,11 +3,6 @@ package com.example.data.di
 import com.example.data.Urls
 import com.example.data.interceptor.AuthHeaderInterceptor
 import com.example.data.remote.FilmsApi
-import com.google.api.client.extensions.android.http.AndroidHttp
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
-import com.google.api.client.json.jackson2.JacksonFactory
-import com.google.api.services.youtube.YouTube
-import com.google.api.services.youtube.YouTubeRequestInitializer
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -35,15 +30,6 @@ val netModule = module {
             .addInterceptor(httpInterceptor)
             .addInterceptor(authHeaderInterceptor)
             .build()
-
-    fun configYoutubeClient(credential: GoogleAccountCredential): YouTube {
-        val transport = AndroidHttp.newCompatibleTransport()
-        val factory = JacksonFactory.getDefaultInstance()
-        return YouTube.Builder(transport, factory, credential)
-            .setApplicationName("FilmsApp")
-            .setYouTubeRequestInitializer(YouTubeRequestInitializer(BuildConfig.GOOGLE_API_KEY))
-            .build()
-    }
 
     factory { Gson() }
 

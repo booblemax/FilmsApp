@@ -13,7 +13,6 @@ import coil.request.LoadRequest
 import coil.request.Request
 import coil.transform.RoundedCornersTransformation
 import com.example.domain.Resource
-import com.example.filmsapp.BuildConfig
 import com.example.filmsapp.R
 
 @BindingAdapter("textOrGone")
@@ -35,7 +34,7 @@ fun AppCompatImageView.src(url: String?, requestListener: Request.Listener? = nu
         .transformations(RoundedCornersTransformation(radius.toFloat()))
         .listener(requestListener)
         .error(R.drawable.ic_error)
-        .data(BuildConfig.REDUCED_IMAGE_URL + url)
+        .data(Urls.REDUCED_IMAGE_URL + url)
         .target(this)
         .build()
 
@@ -44,7 +43,7 @@ fun AppCompatImageView.src(url: String?, requestListener: Request.Listener? = nu
 
 @BindingAdapter("backdrop", "requestListener", requireAll = false)
 fun setBackdrop(imageView: AppCompatImageView, url: String?, requestListener: Request.Listener? = null) {
-    imageView.load(BuildConfig.FULL_IMAGE_URL + url) {
+    imageView.load(Urls.FULL_IMAGE_URL + url) {
         listener(requestListener)
         error(R.drawable.ic_error)
     }

@@ -13,7 +13,7 @@
             app:destination="@id/detailsFragment" />
         <argument
             android:name="listType"
-            app:argType="com.example.filmsapp.ui.base.models.ListType" />
+            app:argType="com.example.filmsapp.ui.base.ListType" />
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"

@@ -5,18 +5,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.filmsapp.data.remote.response.films.BackdropDto
+import com.example.domain.models.BackdropModel
 import com.example.filmsapp.databinding.ItemBackdropBinding
 import com.example.filmsapp.ui.base.BaseViewHolder
 
 class BackdropsViewPagerAdapter(
     private val onClickListener: (View, Int) -> Unit
-) : ListAdapter<BackdropDto, BackdropViewHolder>(
-    object : DiffUtil.ItemCallback<BackdropDto>() {
-        override fun areItemsTheSame(oldItem: BackdropDto, newItem: BackdropDto): Boolean =
+) : ListAdapter<BackdropModel, BackdropViewHolder>(
+    object : DiffUtil.ItemCallback<BackdropModel>() {
+        override fun areItemsTheSame(oldItem: BackdropModel, newItem: BackdropModel): Boolean =
             oldItem.filePath == newItem.filePath
 
-        override fun areContentsTheSame(oldItem: BackdropDto, newItem: BackdropDto): Boolean =
+        override fun areContentsTheSame(oldItem: BackdropModel, newItem: BackdropModel): Boolean =
             oldItem == newItem
     }
 ) {
@@ -43,7 +43,7 @@ class BackdropsViewPagerAdapter(
 class BackdropViewHolder(private val binding: ItemBackdropBinding) : BaseViewHolder(binding.root) {
 
     override fun bind(model: Any?) {
-        val url = (model as? BackdropDto)?.filePath
+        val url = (model as? BackdropModel)?.filePath
         binding.url = url
         binding.imageBackdrop.transitionName = url
     }
