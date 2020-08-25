@@ -1,21 +1,14 @@
-package com.example.filmsapp.data.repos
+package com.example.data
 
-import android.os.Build
 import com.example.data.db.FilmsDao
+import com.example.data.mapper.toDataModel
+import com.example.data.mapper.toModel
+import com.example.data.remote.FilmsApi
+import com.example.data.remote.response.films.BackdropsDto
+import com.example.data.remote.response.films.FilmsDto
+import com.example.data.repos.FilmsRepositoryImpl
 import com.example.domain.Resource
 import com.example.domain.models.FilmModel
-import com.example.filmsapp.CoroutinesTestRule
-import com.example.filmsapp.FilmsTestApp
-import com.example.filmsapp.data.datasource.FakeFilmsApi
-import com.example.filmsapp.data.datasource.FakeFilmsDao
-import com.example.filmsapp.data.datasource.favorites
-import com.example.filmsapp.data.datasource.latest
-import com.example.filmsapp.data.datasource.populars
-import com.example.filmsapp.data.datasource.toprated
-import com.example.filmsapp.data.datasource.upcoming
-import com.example.filmsapp.data.remote.FilmsApi
-import com.example.filmsapp.data.remote.response.films.BackdropsDto
-import com.example.filmsapp.data.remote.response.films.FilmsDto
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -34,7 +27,7 @@ import retrofit2.Response
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
-@Config(application = FilmsTestApp::class, sdk = [Build.VERSION_CODES.P])
+@Config(minSdk = 28, manifest = Config.NONE)
 class FilmsRepositoryImplTest {
 
     @get:Rule
@@ -257,14 +250,15 @@ class FilmsRepositoryImplTest {
     fun `given need update true when getFilm should return from api and save in db`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             val id = populars[1].id.toString()
-            val model = populars[1].toModel(BackdropsDto(listOf(), 0))
+            val backdrops = BackdropsDto(listOf(), 0)
+            val model = populars[1].toModel(backdrops)
             val checkingFilm = Resource.SUCCESS(model) as Resource<FilmModel>
             val dataModel = model.toDataModel()
             Mockito.`when`(mockedDao.getFilm(anyString())).thenReturn(null)
             Mockito.`when`(mockedApi.getFilm(id))
                 .thenReturn(Response.success(populars[1]))
             Mockito.`when`(mockedApi.getBackdrops(anyString()))
-                .thenReturn(BackdropsDto(listOf(), 0))
+                .thenReturn(backdrops)
 
             val film = mockedRepositoryImpl.getFilm(id, true)
 
@@ -278,7 +272,8 @@ class FilmsRepositoryImplTest {
     fun `given need update false when getFilm should return from dao`() =
         coroutinesTestRule.testCoroutineDispatcher.runBlockingTest {
             val id = populars[1].id.toString()
-            Mockito.`when`(mockedDao.getFilm(anyString())).thenReturn(populars[1].toModel().toDataModel())
+            Mockito.`when`(mockedDao.getFilm(anyString()))
+                .thenReturn(populars[1].toModel().toDataModel())
             Mockito.`when`(mockedApi.getFilm(id))
                 .thenReturn(Response.success(populars[1]))
 

@@ -1,13 +1,11 @@
 package com.example.filmsapp.ui.lists
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.data.mapper.toModel
 import com.example.domain.Resource
 import com.example.domain.models.FilmModel
 import com.example.domain.repos.FilmsRepository
 import com.example.filmsapp.CoroutinesTestRule
-import com.example.filmsapp.data.datasource.FakeFilmsApi
-import com.example.filmsapp.data.datasource.FakeFilmsDao
-import com.example.filmsapp.data.datasource.favorites
 import com.example.filmsapp.data.datasource.latest
 import com.example.filmsapp.data.datasource.populars
 import com.example.filmsapp.data.datasource.toprated
@@ -39,9 +37,7 @@ class ListsViewModelTest {
 
     @Before
     fun setUp() {
-        val fakeApi = FakeFilmsApi(latest, populars, toprated, upcoming) { needFailure }
-        val fakeDao = FakeFilmsDao(favorites.toMutableList())
-        repository = FakeFilmsRepository(fakeDao, fakeApi)
+        repository = FakeFilmsRepository { needFailure }
 
         viewModel = ListsViewModel(coroutinesDispatcher.testDispatcherProvider, repository)
     }
@@ -49,9 +45,12 @@ class ListsViewModelTest {
     @Test
     fun `when loadFilms should return all data`() {
         val originLatest: Resource<FilmModel> = Resource.SUCCESS(latest.toModel())
-        val pagePopular: Resource<List<FilmModel>> = Resource.SUCCESS(populars.subList(0, pageSize).map { it.toModel() })
-        val pageToprated: Resource<List<FilmModel>> = Resource.SUCCESS(toprated.subList(0, pageSize).map { it.toModel() })
-        val pageUpcoming: Resource<List<FilmModel>> = Resource.SUCCESS(upcoming.subList(0, pageSize).map { it.toModel() })
+        val pagePopular: Resource<List<FilmModel>> =
+            Resource.SUCCESS(populars.subList(0, pageSize).map { it.toModel() })
+        val pageToprated: Resource<List<FilmModel>> =
+            Resource.SUCCESS(toprated.subList(0, pageSize).map { it.toModel() })
+        val pageUpcoming: Resource<List<FilmModel>> =
+            Resource.SUCCESS(upcoming.subList(0, pageSize).map { it.toModel() })
         val viewModel = ListsViewModel(coroutinesDispatcher.testDispatcherProvider, repository)
 
         val ldLatestFilm = viewModel.latestFilm.getOrAwaitValue()

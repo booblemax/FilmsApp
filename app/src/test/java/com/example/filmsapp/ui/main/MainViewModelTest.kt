@@ -1,6 +1,7 @@
 package com.example.filmsapp.ui.main
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.data.mapper.toModel
 import com.example.domain.Resource
 import com.example.domain.models.FilmModel
 import com.example.domain.repos.FilmsRepository

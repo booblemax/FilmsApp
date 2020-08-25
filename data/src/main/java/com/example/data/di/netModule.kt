@@ -50,5 +50,4 @@ val netModule = module {
     single { configRetrofit(get<OkHttpClient>(), get<Gson>(), Urls.BASE_URL) }
 
     factory { createService(get(), FilmsApi::class.java) }
-
 }

@@ -2,6 +2,7 @@ package com.example.filmsapp.ui.details
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
+import com.example.data.mapper.toModel
 import com.example.domain.Resource
 import com.example.domain.models.FilmModel
 import com.example.domain.repos.FilmsRepository

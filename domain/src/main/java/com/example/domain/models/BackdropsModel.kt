@@ -1,6 +1,6 @@
 package com.example.domain.models
 
-class BackdropsModel (
+data class BackdropsModel(
     val id: Int,
     val backdrops: List<BackdropModel>
 )

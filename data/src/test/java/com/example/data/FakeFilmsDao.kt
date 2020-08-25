@@ -1,4 +1,4 @@
-package com.example.filmsapp.data.datasource
+package com.example.data
 
 import com.example.data.db.FilmDataModel
 import com.example.data.db.FilmsDao

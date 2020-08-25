@@ -79,4 +79,8 @@ dependencies {
     testImplementation(TestLibs.androidx_test_core_ktx)
     testImplementation(TestLibs.coroutines_test)
     testImplementation(TestLibs.room_testing)
+    testImplementation(TestLibs.robolectric) {
+        exclude(group = TestLibs.guava_group, module = TestLibs.guava_jdk5_module)
+    }
+    testImplementation(TestLibs.guava_android)
 }

@@ -1,25 +1,25 @@
 package com.example.filmsapp.data.repos
 
-import com.example.data.db.FilmsDao
+import com.example.data.mapper.toModel
+import com.example.data.remote.response.films.FilmDto
+import com.example.data.remote.response.films.FilmsDto
 import com.example.domain.Resource
 import com.example.domain.exceptions.RetrofitException
 import com.example.domain.models.FilmModel
 import com.example.domain.repos.FilmsRepository
-import com.example.filmsapp.data.remote.FilmsApi
-import com.example.filmsapp.data.remote.response.films.FilmDto
-import com.example.filmsapp.data.remote.response.films.FilmsDto
+import com.example.filmsapp.data.datasource.favorites
+import com.example.filmsapp.data.datasource.latest
+import com.example.filmsapp.data.datasource.populars
+import com.example.filmsapp.data.datasource.toprated
+import com.example.filmsapp.data.datasource.upcoming
 import kotlinx.coroutines.runBlocking
-import retrofit2.Response
 
-class FakeFilmsRepository(
-    private val filmsDao: FilmsDao,
-    private val filmsApi: FilmsApi
-) : FilmsRepository {
+class FakeFilmsRepository(private val needFailureProvider: () -> Boolean) : FilmsRepository {
 
     override suspend fun getLatestFilm(): Resource<FilmModel> {
         return getResult(
-            { runBlocking { filmsApi.getLatestFilm() } },
-            { dto: FilmDto? -> dto.toModel() }
+            { runBlocking { latest } },
+            { dto: FilmDto? -> dto?.toModel() }
         )
     }
 
@@ -28,8 +28,13 @@ class FakeFilmsRepository(
         forceUpdate: Boolean
     ): Resource<List<FilmModel>> {
         return getResult(
-            { runBlocking { filmsApi.getPopularList(page) } },
-            { dto: FilmsDto? -> dto.results.map { it.toModel() } }
+            {
+                runBlocking {
+                    val range = getIndexRangeForPage(page)
+                    FilmsDto(page, populars.subList(range.first, range.last), 100, 100)
+                }
+            },
+            { dto: FilmsDto? -> dto?.results?.map { it.toModel() } }
         )
     }
 
@@ -38,8 +43,13 @@ class FakeFilmsRepository(
         forceUpdate: Boolean
     ): Resource<List<FilmModel>> {
         return getResult(
-            { runBlocking { filmsApi.getTopRatedList(page) } },
-            { dto: FilmsDto? -> dto.results.map { it.toModel() } }
+            {
+                runBlocking {
+                    val range = getIndexRangeForPage(page)
+                    FilmsDto(page, toprated.subList(range.first, range.last), 100, 100)
+                }
+            },
+            { dto: FilmsDto? -> dto?.results?.map { it.toModel() } }
         )
     }
 
@@ -48,47 +58,55 @@ class FakeFilmsRepository(
         forceUpdate: Boolean
     ): Resource<List<FilmModel>> {
         return getResult(
-            { runBlocking { filmsApi.getUpcomingList(page) } },
-            { dto: FilmsDto? -> dto.results.map { it.toModel() } }
+            {
+                runBlocking {
+                    val range = getIndexRangeForPage(page)
+                    FilmsDto(page, upcoming.subList(range.first, range.last), 100, 100)
+                }
+            },
+            { dto: FilmsDto? -> dto?.results?.map { it.toModel() } }
         )
     }
 
     override suspend fun getFilm(id: String, needUpdate: Boolean): Resource<FilmModel> {
         return if (needUpdate) {
-            val filmResponse = filmsApi.getFilm(id)
-            if (filmResponse.isSuccessful && filmResponse.body() != null) {
-                val film = filmResponse.body().toModel()
-                filmsDao.update(film.toDataModel()!!)
+            val filmResponse = populars.find { it.id.toString() == id && !needFailureProvider() }
+            if (filmResponse != null) {
+                val film = filmResponse.toModel()
                 Resource.SUCCESS(film)
             } else {
-                Resource.ERROR(RetrofitException(filmResponse.code(), filmResponse.message()))
+                Resource.ERROR(RetrofitException(404, ""))
             }
         } else {
-            val film = filmsDao.getFilm(id)
+            val film = populars.find { it.id.toString() == id }
             Resource.SUCCESS(film?.toModel())
         }
     }
 
     override suspend fun getFavouritesFilms(page: Int): Resource<List<FilmModel>> {
-        return Resource.SUCCESS(filmsDao.getFilms().map { it.toModel() })
+        return Resource.SUCCESS(favorites.map { it.toModel() })
     }
 
     override suspend fun isFilmStoredInDb(id: String): Boolean {
-        return filmsDao.contains(id) > 0
+        return favorites.find { it.id.toString() == id } != null
     }
 
     override suspend fun saveFilm(film: FilmModel) {
-        filmsDao.insert(film.toDataModel())
+        // filmsDao.insert(film.toDataModel())
     }
 
     override suspend fun deleteFilm(film: FilmModel) {
-        filmsDao.delete(film.toDataModel())
+        // filmsDao.delete(film.toDataModel())
     }
 
-    private fun <R, T> getResult(call: () -> Response<R>, mapper: (R?) -> T?): Resource<T> {
+    private fun <R, T> getResult(call: () -> R, mapper: (R?) -> T?): Resource<T> {
         val response = call()
-        return if (response.isSuccessful) {
-            Resource.SUCCESS(mapper(response.body()))
-        } else Resource.ERROR(RetrofitException(response.code(), response.message()))
+        return if (needFailureProvider()) {
+            Resource.ERROR(RetrofitException(404, ""))
+        } else Resource.SUCCESS(mapper(response))
     }
+
+    private fun getIndexRangeForPage(page: Int): IntRange =
+        if (page == 1) 0..2
+        else page..(page + 2)
 }
