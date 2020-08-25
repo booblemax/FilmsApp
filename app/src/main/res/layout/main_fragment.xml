@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.filmsapp.ui.main.MainViewModel" />
+            type="com.example.filmsapp.main.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/backgroundColor"
-        tools:context=".ui.main.MainFragment">
+        tools:context="com.example.filmsapp.main.MainFragment">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/main_appbar"

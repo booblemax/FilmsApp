@@ -2,7 +2,7 @@ package com.example.filmsapp.util
 
 import android.app.Activity
 import android.content.Context
-import com.example.filmsapp.ui.details.DetailsFragment
+import com.example.filmsapp.details.DetailsFragment
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 

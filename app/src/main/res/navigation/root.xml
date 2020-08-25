@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.filmsapp.ui.main.MainFragment"
+        android:name="com.example.filmsapp.main.MainFragment"
         android:label="MainFragment" >
         <action
             android:id="@+id/action_mainFragment_to_detailsFragment"
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"
-        android:name="com.example.filmsapp.ui.details.DetailsFragment"
+        android:name="com.example.filmsapp.details.DetailsFragment"
         android:label="DetailsFragment" >
         <argument
             android:name="filmId"
@@ -44,7 +44,7 @@
     </fragment>
     <fragment
         android:id="@+id/imagesCarouselFragment"
-        android:name="com.example.filmsapp.ui.imagesCarousel.ImagesCarouselFragment"
+        android:name="com.example.filmsapp.imagesCarousel.ImagesCarouselFragment"
         android:label="ImagesCarouselFragment" >
         <argument
             android:name="urls"
@@ -55,7 +55,7 @@
     </fragment>
     <fragment
         android:id="@+id/listsFragment"
-        android:name="com.example.filmsapp.ui.lists.ListsFragment"
+        android:name="com.example.filmsapp.lists.ListsFragment"
         android:label="ListsFragment" >
         <action
             android:id="@+id/action_listsFragment_to_mainFragment"
@@ -72,7 +72,7 @@
     </fragment>
     <fragment
         android:id="@+id/playerFragment"
-        android:name="com.example.filmsapp.ui.player.PlayerFragment"
+        android:name="com.example.filmsapp.player.PlayerFragment"
         android:label="PlayerFragment" >
         <argument
             android:name="videoId"
@@ -80,11 +80,11 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.filmsapp.ui.settings.SettingsFragment"
+        android:name="com.example.filmsapp.settings.SettingsFragment"
         android:label="SettingsFragment" />
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.filmsapp.ui.splash.SplashFragment"
+        android:name="com.example.filmsapp.splash.SplashFragment"
         android:label="SplashFragment" >
         <action
             android:id="@+id/action_splashFragment_to_listsFragment"
@@ -94,7 +94,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.filmsapp.ui.search.SearchFragment"
+        android:name="com.example.filmsapp.search.SearchFragment"
         android:label="SearchFragment" >
         <action
             android:id="@+id/action_searchFragment_to_detailsFragment"
