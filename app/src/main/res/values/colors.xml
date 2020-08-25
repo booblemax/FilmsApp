@@ -6,6 +6,7 @@
 
     <color name="backgroundColor">@color/white</color>
     <color name="colorText">@color/black</color>
+    <color name="iconColor">@color/black</color>
 
     <color name="black">#000</color>
     <color name="black_60">#66000000</color>

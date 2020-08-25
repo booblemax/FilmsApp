@@ -68,6 +68,11 @@ class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {
     }
 
     private fun initClickListeners() {
+        binding.listsLatestFilm.setOnClickListener {
+            (viewModel.latestFilm.value as Resource.SUCCESS).data?.let {
+                filmItemClickListener(it)
+            }
+        }
         binding.listsPopularBackground.setOnClickListener {
             filmsBackgroundItemClickListener(
                 ListType.POPULAR
@@ -134,6 +139,12 @@ class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.search -> {
+                findNavController().navigate(
+                    ListsFragmentDirections.actionListsFragmentToSearchFragment()
+                )
+                true
+            }
             R.id.favorites -> {
                 findNavController().navigate(
                     ListsFragmentDirections.actionListsFragmentToMainFragment(ListType.FAVOURITES)

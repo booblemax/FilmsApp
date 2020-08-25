@@ -7,10 +7,12 @@ import com.example.filmsapp.ui.base.common.networkinfo.NetworkStateHolder.regist
 import com.example.filmsapp.ui.di.commonModule
 import com.example.filmsapp.ui.di.vmModule
 import com.jakewharton.threetenabp.AndroidThreeTen
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
 
+@ExperimentalCoroutinesApi
 class FilmsApp : Application() {
 
     override fun onCreate() {
