@@ -17,6 +17,15 @@ class SPreferences(private val context: Context) {
         }
     }
 
+    fun saveAccountName(accountName: String) {
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit {
+            putString(PREF_ACCOUNT_NAME, accountName)
+        }
+    }
+
+    fun getAccountName(): String? =
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).getString(PREF_ACCOUNT_NAME, null)
+
     fun clearPrefs() {
         context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE).edit {
             clear()
@@ -26,5 +35,6 @@ class SPreferences(private val context: Context) {
     companion object {
         private const val PREF_NAME = "films_prefs"
         private const val THEME_NAME = "theme"
+        private const val PREF_ACCOUNT_NAME = "accountName"
     }
 }
