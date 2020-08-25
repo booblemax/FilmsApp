@@ -1,6 +1,6 @@
 package com.example.filmsapp.base
 
-import com.example.filmsapp.domain.dispatcherProvider.DispatcherProvider
+import com.example.domain.dispatchers.DispatcherProvider
 
 abstract class PagedViewModel(
     dispatcherProvider: DispatcherProvider

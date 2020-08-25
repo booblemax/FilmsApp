@@ -8,10 +8,12 @@ import com.example.filmsapp.di.commonModule
 import com.example.filmsapp.di.vmModule
 import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 class FilmsApp : Application() {
 

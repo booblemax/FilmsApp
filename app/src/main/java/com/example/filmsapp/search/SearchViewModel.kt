@@ -2,12 +2,12 @@ package com.example.filmsapp.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.filmsapp.domain.Resource
-import com.example.filmsapp.domain.dispatcherProvider.DispatcherProvider
-import com.example.filmsapp.domain.repos.FilmsRepository
+import com.example.domain.Resource
+import com.example.domain.dispatchers.DispatcherProvider
+import com.example.domain.models.FilmModel
+import com.example.domain.repos.FilmsRepository
 import com.example.filmsapp.base.Event
 import com.example.filmsapp.base.PagedViewModel
-import com.example.filmsapp.base.models.FilmModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 @FlowPreview
 @ExperimentalCoroutinesApi

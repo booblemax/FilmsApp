@@ -1,6 +1,7 @@
 package com.example.filmsapp.settings
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.filmsapp.R
 import com.example.filmsapp.databinding.SettingsFragmentBinding
 import com.example.filmsapp.base.BaseFragment

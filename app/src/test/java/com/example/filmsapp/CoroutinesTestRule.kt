@@ -5,31 +5,36 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import org.junit.rules.TestWatcher
+import org.junit.rules.TestRule
 import org.junit.runner.Description
+import org.junit.runners.model.Statement
+import kotlin.coroutines.ContinuationInterceptor
 
 @ExperimentalCoroutinesApi
-class CoroutinesTestRule(
-    val testCoroutineDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
-) : TestWatcher() {
+class CoroutinesTestRule : TestRule, TestCoroutineScope by TestCoroutineScope() {
+
+    val dispatcher = coroutineContext[ContinuationInterceptor] as TestCoroutineDispatcher
 
     val testDispatcherProvider = object : DispatcherProvider {
-        override fun default(): CoroutineDispatcher = testCoroutineDispatcher
-        override fun io(): CoroutineDispatcher = testCoroutineDispatcher
-        override fun main(): CoroutineDispatcher = testCoroutineDispatcher
-        override fun unconfined(): CoroutineDispatcher = testCoroutineDispatcher
+        override fun default(): CoroutineDispatcher = dispatcher
+        override fun io(): CoroutineDispatcher = dispatcher
+        override fun main(): CoroutineDispatcher = dispatcher
+        override fun unconfined(): CoroutineDispatcher = dispatcher
     }
 
-    override fun starting(description: Description?) {
-        super.starting(description)
-        Dispatchers.setMain(testCoroutineDispatcher)
-    }
+    override fun apply(base: Statement?, description: Description?): Statement =
+        object : Statement() {
+            @Throws(Throwable::class)
+            override fun evaluate() {
+                Dispatchers.setMain(dispatcher)
 
-    override fun finished(description: Description?) {
-        super.finished(description)
-        Dispatchers.resetMain()
-        testCoroutineDispatcher.cleanupTestCoroutines()
-    }
+                base?.evaluate()
+
+                Dispatchers.resetMain()
+                cleanupTestCoroutines()
+            }
+        }
 }

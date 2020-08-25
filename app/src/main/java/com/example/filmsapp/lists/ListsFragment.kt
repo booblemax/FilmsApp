@@ -15,6 +15,10 @@ import com.example.filmsapp.base.BaseFragment
 import com.example.filmsapp.base.ListType
 import com.example.filmsapp.base.common.SimpleItemDecoration
 import com.example.filmsapp.base.common.WrappedLinearLayoutManager
+import com.example.filmsapp.util.animateVisible
+import com.example.filmsapp.util.gone
+import com.example.filmsapp.util.src
+import com.example.filmsapp.util.visible
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {

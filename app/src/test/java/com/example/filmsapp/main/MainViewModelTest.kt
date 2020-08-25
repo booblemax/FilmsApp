@@ -6,13 +6,14 @@ import com.example.domain.Resource
 import com.example.domain.models.FilmModel
 import com.example.domain.repos.FilmsRepository
 import com.example.filmsapp.CoroutinesTestRule
+import com.example.filmsapp.base.Event
+import com.example.filmsapp.base.ListType
 import com.example.filmsapp.data.datasource.populars
 import com.example.filmsapp.data.datasource.toprated
 import com.example.filmsapp.data.datasource.upcoming
 import com.example.filmsapp.getOrAwaitValue
-import com.example.filmsapp.base.Event
-import com.example.filmsapp.base.ListType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.hamcrest.core.IsEqual

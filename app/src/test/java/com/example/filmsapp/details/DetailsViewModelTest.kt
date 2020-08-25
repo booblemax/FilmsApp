@@ -1,7 +1,6 @@
 package com.example.filmsapp.details
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
 import com.example.data.mapper.toModel
 import com.example.domain.Resource
 import com.example.domain.models.FilmModel
@@ -26,6 +25,7 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
+import org.mockito.Mockito.mock
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -43,16 +43,16 @@ class DetailsViewModelTest {
     private lateinit var viewModel: DetailsViewModel
     private lateinit var repository: FilmsRepository
     private lateinit var youtubeRepository: YoutubeRepository
-    private val creds = GoogleAccountCredential(ApplicationProvider.getApplicationContext(), "1234")
+    private val creds: GoogleAccountCredential = mock(GoogleAccountCredential::class.java)
     private val savedMessageId: Int = R.string.film_saved
     private val removedMessageId: Int = R.string.film_removed
 
     @Before
     fun setUp() {
-        repository = Mockito.mock(FilmsRepository::class.java)
-        youtubeRepository = Mockito.mock(YoutubeRepository::class.java)
+        repository = mock(FilmsRepository::class.java)
+        youtubeRepository = mock(YoutubeRepository::class.java)
 
-        coroutinesRule.testCoroutineDispatcher.runBlockingTest {
+        coroutinesRule.dispatcher.runBlockingTest {
             Mockito.`when`(repository.getFilm(anyString(), anyBoolean())).thenReturn(Resource.SUCCESS(latest.toModel()))
             Mockito.`when`(repository.isFilmStoredInDb(latest.id.toString())).thenReturn(true)
             Mockito.`when`(repository.isFilmStoredInDb(anyString())).thenReturn(false)
@@ -83,7 +83,7 @@ class DetailsViewModelTest {
 
     @Test
     fun `given film model don't place in db, bookmark false when storeFilm should pass success message`() =
-        coroutinesRule.testCoroutineDispatcher.runBlockingTest {
+        coroutinesRule.dispatcher.runBlockingTest {
             viewModel.loadFilm("any", false)
 
             viewModel.favoriteClicked()
@@ -95,7 +95,7 @@ class DetailsViewModelTest {
 
     @Test
     fun `given film model don't place in db, bookmark true when removeFilm should pass success message`() =
-        coroutinesRule.testCoroutineDispatcher.runBlockingTest {
+        coroutinesRule.dispatcher.runBlockingTest {
             viewModel.loadFilm("any", true)
 
             viewModel.favoriteClicked()

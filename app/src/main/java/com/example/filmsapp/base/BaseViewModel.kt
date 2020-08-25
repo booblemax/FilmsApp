@@ -10,6 +10,8 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 abstract class BaseViewModel(protected val dispatcherProvider: DispatcherProvider) : ViewModel() {
@@ -21,18 +23,29 @@ abstract class BaseViewModel(protected val dispatcherProvider: DispatcherProvide
     private val defaultExceptionHandler = CoroutineExceptionHandler { _, exception ->
         handleException(exception)
     }
-    protected val baseContext = CoroutineScope(job + dispatcherProvider.main() + defaultExceptionHandler)
+    protected val baseScope = CoroutineScope(job + dispatcherProvider.main() + defaultExceptionHandler)
 
-    protected open fun handleException(exception: Throwable) {
+    open fun handleException(exception: Throwable) {
         Timber.e(exception)
         postMessage(R.string.error)
     }
 
     override fun onCleared() {
-        baseContext.cancel()
+        baseScope.cancel()
     }
 
     protected fun postMessage(@StringRes message: Int) {
         _showSnackbar.value = Event(message)
+    }
+
+    fun runDelayed(timeDelay: Long = TIME_DELAYED_MILLIS, action: () -> Unit) {
+        baseScope.launch {
+            delay(timeDelay)
+            action()
+        }
+    }
+
+    companion object {
+        const val TIME_DELAYED_MILLIS = 3000L
     }
 }

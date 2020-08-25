@@ -6,13 +6,13 @@ import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import com.example.domain.Resource
 import com.example.filmsapp.R
-import com.example.filmsapp.databinding.SearchFragmentBinding
-import com.example.filmsapp.domain.Resource
 import com.example.filmsapp.base.BaseFragment
 import com.example.filmsapp.base.common.EndlessRecyclerScrollListener
 import com.example.filmsapp.base.common.SimpleItemDecoration
 import com.example.filmsapp.base.common.WrappedGridLayoutManager
+import com.example.filmsapp.databinding.SearchFragmentBinding
 import com.example.filmsapp.util.setupToolbar
 import com.example.filmsapp.util.snack
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -91,22 +91,22 @@ class SearchFragment : BaseFragment<SearchViewModel, SearchFragmentBinding>() {
         viewModel.films.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.SUCCESS -> {
-                    viewModel.fetchedDataIsEmpty(it.data.isEmpty() ?: true)
+                    viewModel.fetchedDataIsEmpty(it.data?.isEmpty() ?: true)
                     adapter.isLoading = false
-                    adapter.submitList(it.data.toMutableList() ?: mutableListOf())
+                    adapter.submitList(it.data?.toMutableList() ?: mutableListOf())
                 }
                 is Resource.ERROR -> {
                     adapter.isLoading = false
                     viewModel.fetchedDataIsEmpty(true)
                     viewModel.decPageNumber()
-                    binding.searchList.snack(it.message.localizedMessage ?: "")
+                    binding.searchList.snack(it.message?.localizedMessage ?: "")
                 }
                 is Resource.LOADING -> adapter.isLoading = true
             }
         }
         viewModel.emptyQuery.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let {
-                binding.mainLabel.text = if (it) {
+            it.getContentIfNotHandled()?.let { context ->
+                binding.mainLabel.text = if (context) {
                     getString(R.string.empty_data)
                 } else {
                     getString(R.string.label_input_film_name)

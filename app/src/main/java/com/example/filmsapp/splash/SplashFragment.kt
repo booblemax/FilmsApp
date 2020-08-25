@@ -9,13 +9,15 @@ import android.view.View
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.example.filmsapp.R
-import com.example.filmsapp.data.prefs.SPreferences
 import com.example.filmsapp.databinding.SplashFragmentBinding
 import com.example.filmsapp.base.BaseFragment
-import com.example.filmsapp.splash.GoogleAccountManager.Companion.REQUEST_ACCOUNT_PICKER
-import com.example.filmsapp.splash.GoogleAccountManager.Companion.REQUEST_AUTHORIZATION
-import com.example.filmsapp.splash.GoogleAccountManager.Companion.REQUEST_GOOGLE_PLAY_SERVICES
-import com.example.filmsapp.splash.GoogleAccountManager.Companion.REQUEST_PERMISSION_GET_ACCOUNTS
+import com.example.filmsapp.base.prefs.SPreferences
+import com.example.filmsapp.common.GoogleAccountManager
+import com.example.filmsapp.common.GoogleAccountManager.Companion.REQUEST_ACCOUNT_PICKER
+import com.example.filmsapp.common.GoogleAccountManager.Companion.REQUEST_AUTHORIZATION
+import com.example.filmsapp.common.GoogleAccountManager.Companion.REQUEST_GOOGLE_PLAY_SERVICES
+import com.example.filmsapp.common.GoogleAccountManager.Companion.REQUEST_PERMISSION_GET_ACCOUNTS
+import com.example.filmsapp.util.GSUtils
 import com.example.filmsapp.util.snack
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,9 +38,9 @@ class SplashFragment : BaseFragment<SplashViewModel, SplashFragmentBinding>(),
         viewModel.requestAuthorizationPermission.observe(viewLifecycleOwner) {
             startActivityForResult(it.intent, REQUEST_AUTHORIZATION)
         }
-        viewModel.displayGpsUnavailable.observe(
-            viewLifecycleOwner, googleAccountManager::showGooglePlayServicesAvailabilityErrorDialog
-        )
+        viewModel.displayGpsUnavailable.observe(viewLifecycleOwner) {
+            GSUtils.showGooglePlayServicesAvailabilityErrorDialog(requireContext(), it)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,8 +51,8 @@ class SplashFragment : BaseFragment<SplashViewModel, SplashFragmentBinding>(),
     private fun getResultsFromApi() {
         try {
             when {
-                !googleAccountManager.isGooglePlayServicesAvailable() ->
-                    googleAccountManager.acquireGooglePlayServices()
+                !GSUtils.isGooglePlayServicesAvailable(requireContext()) ->
+                    GSUtils.acquireGooglePlayServices(requireContext())
                 !googleAccountManager.hasAccountName() -> chooseAccount()
                 else -> viewModel.runDelayed { navigateToLists() }
             }
@@ -62,8 +64,15 @@ class SplashFragment : BaseFragment<SplashViewModel, SplashFragmentBinding>(),
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private fun chooseAccount() {
         if (EasyPermissions.hasPermissions(requireContext(), Manifest.permission.GET_ACCOUNTS)) {
-            googleAccountManager.requestOrSetupAccountName(this::getResultsFromApi) {
-                startActivityForResult(it, REQUEST_ACCOUNT_PICKER)
+            val accountName = prefs.getAccountName()
+            if (accountName != null) {
+                googleAccountManager.setAccountName(accountName)
+                getResultsFromApi()
+            } else {
+                startActivityForResult(
+                    googleAccountManager.getChooseAccountIntent(),
+                    REQUEST_ACCOUNT_PICKER
+                )
             }
         } else {
             EasyPermissions.requestPermissions(

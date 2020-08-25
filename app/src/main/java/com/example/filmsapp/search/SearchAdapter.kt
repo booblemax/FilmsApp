@@ -5,11 +5,12 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.domain.models.FilmModel
 import com.example.filmsapp.R
 import com.example.filmsapp.databinding.ItemFilmBinding
 import com.example.filmsapp.databinding.ItemLoadingBinding
 import com.example.filmsapp.base.BaseViewHolder
-import com.example.filmsapp.base.models.FilmModel
+import com.example.filmsapp.util.visible
 
 class SearchAdapter(
     private val onItemClickListener: (FilmModel) -> Unit
@@ -32,7 +33,7 @@ class SearchAdapter(
                 val binding = ItemFilmBinding.inflate(LayoutInflater.from(parent.context))
                 MainViewHolder(binding).also { holder ->
                     holder.itemView.setOnClickListener {
-                        getItem(holder.adapterPosition).let { item -> onItemClickListener(item) }
+                        getItem(holder.adapterPosition)?.let { item -> onItemClickListener(item) }
                     }
                 }
             }
@@ -86,7 +87,7 @@ class MainViewHolder(
 ) : BaseViewHolder(binding.root) {
 
     override fun bind(model: Any?) {
-        (model as? FilmModel).let {
+        (model as? FilmModel)?.let {
             binding.model = it
             if (it.video) binding.filmPlay.visible()
             binding.executePendingBindings()

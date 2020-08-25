@@ -99,6 +99,18 @@ class FakeFilmsRepository(private val needFailureProvider: () -> Boolean) : Film
         // filmsDao.delete(film.toDataModel())
     }
 
+    override suspend fun searchFilms(query: String, page: Int, needClearCache: Boolean): Resource<List<FilmModel>> {
+        return getResult(
+            {
+                runBlocking {
+                    val range = getIndexRangeForPage(page)
+                    FilmsDto(page, populars.subList(range.first, range.last), 100, 100)
+                }
+            },
+            { dto: FilmsDto? -> dto?.results?.map { it.toModel() } }
+        )
+    }
+
     private fun <R, T> getResult(call: () -> R, mapper: (R?) -> T?): Resource<T> {
         val response = call()
         return if (needFailureProvider()) {

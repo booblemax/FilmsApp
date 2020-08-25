@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.models.FilmModel
 import com.example.filmsapp.R
+import com.example.filmsapp.base.BaseViewHolder
 import com.example.filmsapp.databinding.ItemFilmBinding
 import com.example.filmsapp.databinding.ItemLoadingBinding
-import com.example.filmsapp.base.BaseViewHolder
+import com.example.filmsapp.util.visible
 
 class MainAdapter(
     private val onItemClickListener: (FilmModel) -> Unit

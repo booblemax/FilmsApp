@@ -2,7 +2,7 @@ package com.example.filmsapp.util
 
 import android.app.Activity
 import android.content.Context
-import com.example.filmsapp.details.DetailsFragment
+import com.example.filmsapp.common.GoogleAccountManager.Companion.REQUEST_GOOGLE_PLAY_SERVICES
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 
@@ -27,7 +27,7 @@ object GSUtils {
         apiAvailability.getErrorDialog(
             context as Activity,
             connectionStatusCode,
-            DetailsFragment.REQUEST_GOOGLE_PLAY_SERVICES
+            REQUEST_GOOGLE_PLAY_SERVICES
         ).show()
     }
 }

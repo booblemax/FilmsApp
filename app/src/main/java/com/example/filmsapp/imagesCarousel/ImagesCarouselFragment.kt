@@ -6,6 +6,8 @@ import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.SharedElementCallback
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.filmsapp.R
 import com.example.filmsapp.databinding.ImageCarouselFragmentBinding
 import com.example.filmsapp.base.BaseFragment

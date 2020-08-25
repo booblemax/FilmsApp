@@ -10,6 +10,7 @@ import com.example.data.repos.FilmsRepositoryImpl
 import com.example.domain.Resource
 import com.example.domain.models.FilmModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.hamcrest.core.IsEqual

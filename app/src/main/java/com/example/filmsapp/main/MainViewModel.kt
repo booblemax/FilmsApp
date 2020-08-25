@@ -7,17 +7,15 @@ import com.example.domain.Resource
 import com.example.domain.dispatchers.DispatcherProvider
 import com.example.domain.models.FilmModel
 import com.example.domain.repos.FilmsRepository
-import com.example.filmsapp.base.BaseViewModel
 import com.example.filmsapp.base.Event
 import com.example.filmsapp.base.ListType
+import com.example.filmsapp.base.PagedViewModel
 import kotlinx.coroutines.launch
 
 class MainViewModel(
     dispatcherProvider: DispatcherProvider,
     private val repository: FilmsRepository
-) : BaseViewModel(dispatcherProvider) {
-
-    private var pageNumber = FIRST_PAGE_NUMBER
+) : PagedViewModel(dispatcherProvider) {
 
     private val _films = MutableLiveData<Resource<List<FilmModel>>>()
     val films: LiveData<Resource<List<FilmModel>>> get() = _films
@@ -26,14 +24,14 @@ class MainViewModel(
     val emptyData: LiveData<Event<Boolean>> get() = _emptyData
 
     val isFirstLoading = Transformations.map(films) {
-        it is Resource.LOADING<*> && pageNumber == FIRST_PAGE_NUMBER
+        it is Resource.LOADING<*> && isFirstPageLoading()
     }
 
     lateinit var listType: ListType
     var lastKnownPosition = -1
 
     fun loadFilms(forceUpdate: Boolean = false) {
-        baseContext.launch {
+        baseScope.launch {
             incPageNumber()
             _films.value = Resource.LOADING()
             _films.value = loadByListType(forceUpdate)
@@ -48,27 +46,9 @@ class MainViewModel(
             ListType.FAVOURITES -> repository.getFavouritesFilms(pageNumber)
         }
 
-    fun resetPageNumber() {
-        pageNumber = FIRST_PAGE_NUMBER
-    }
-
-    fun incPageNumber() {
-        pageNumber++
-    }
-
-    fun decPageNumber() {
-        pageNumber--
-    }
-
-    fun isFirstPageLoading() = pageNumber == FIRST_PAGE_NUMBER
-
     fun isFavoriteList() = listType == ListType.FAVOURITES
 
     fun fetchedDataIsEmpty(isEmpty: Boolean) {
-        _emptyData.value = Event(isEmpty)
-    }
-
-    companion object {
-        private const val FIRST_PAGE_NUMBER = 0
+        _emptyData.value = Event(isEmpty && isFirstPageLoading())
     }
 }
