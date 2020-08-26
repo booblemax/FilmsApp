@@ -35,10 +35,8 @@ class SearchViewModel(
     private val _emptyData = MutableLiveData<Event<Boolean>>()
     val emptyData: LiveData<Event<Boolean>> get() = _emptyData
 
-    private lateinit var textListenerJob: Job
-
     val textListener = TextListener().apply {
-        textListenerJob = channel
+            channel
             .debounce(DEBOUNCE_TIME)
             .filter { query ->
                 query.isNotEmpty().also { _emptyQuery.postValue(Event(it)) }
@@ -64,13 +62,6 @@ class SearchViewModel(
 
     fun fetchedDataIsEmpty(isEmpty: Boolean) {
         _emptyData.value = Event(isEmpty && isFirstPageLoading())
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        if (textListenerJob.isActive) {
-            textListenerJob.cancel()
-        }
     }
 
     companion object {

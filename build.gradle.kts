@@ -20,7 +20,6 @@ buildscript {
         classpath(Classpath.kotlinGradlePlugin)
         classpath(Classpath.navigationSafeArgs)
         classpath(Classpath.ktlinGradlePlugin)
-        "classpath"("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
 
