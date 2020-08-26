@@ -5,9 +5,10 @@ plugins {
 
 buildscript {
 
+    val kotlinVersion by extra("1.4.0")
     repositories {
         google()
-        jcenter() {
+        jcenter {
             content {
                 includeGroup("org.jetbrains.kotlinx")
             }

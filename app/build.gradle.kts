@@ -20,29 +20,14 @@ android {
 
         testInstrumentationRunner = Classpath.testInstrumentalRunner
         vectorDrawables.useSupportLibrary = true
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                argument("room.incremental", "true")
-            }
-        }
     }
 
     buildTypes {
         getByName("debug") {
-            buildConfigField("String", "TOKEN", project.property("token") as String)
-            buildConfigField("String", "BASE_URL", project.property("baseurl") as String)
-            buildConfigField("String", "FULL_IMAGE_URL", project.property("fullImageUrl") as String)
-            buildConfigField("String", "REDUCED_IMAGE_URL", project.property("reducedImageUrl") as String)
-            buildConfigField("String", "GOOGLE_API_KEY", project.property("googleApiKey") as String)
+            isMinifyEnabled = false
         }
         getByName("release") {
-            buildConfigField("String", "TOKEN", project.property("token") as String)
-            buildConfigField("String", "BASE_URL", project.property("baseurl") as String)
-            buildConfigField("String", "FULL_IMAGE_URL", project.property("fullImageUrl") as String)
-            buildConfigField("String", "REDUCED_IMAGE_URL", project.property("reducedImageUrl") as String)
-            buildConfigField("String", "GOOGLE_API_KEY", project.property("googleApiKey") as String)
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -69,6 +54,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
+    implementation(project(":data"))
+
     implementation(Libs.kotlin)
     implementation(Libs.appcompat)
     implementation(Libs.coroutines)
@@ -96,15 +84,8 @@ dependencies {
     implementation(Libs.koin_androidx_scope)
     implementation(Libs.koin_androidx_viewmodel)
 
-    implementation(Libs.room_runtime)
-    kapt(Libs.room_compiler)
-    implementation(Libs.room_ktx)
-
     implementation(Libs.navigation_fragment_ktx)
     implementation(Libs.navigation_ui_ktx)
-
-    implementation(Libs.retrofit)
-    implementation(Libs.retrofit_gson)
 
     implementation(Libs.conscrypt)
     implementation(Libs.threetenabp)
@@ -112,8 +93,6 @@ dependencies {
     implementation(Libs.coil)
 
     implementation(Libs.timber)
-
-    implementation(Libs.logging_interceptor)
 
     // local tests
     testImplementation(TestLibs.junit)
@@ -133,7 +112,6 @@ dependencies {
     }
     testImplementation(TestLibs.androidx_arch_core_testing)
     testImplementation(TestLibs.coroutines_test)
-    testImplementation(TestLibs.room_testing)
 
     testImplementation(TestLibs.guava_android)
 }

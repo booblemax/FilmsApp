@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.filmsapp.ui.search.SearchViewModel" />
+            type="com.example.filmsapp.search.SearchViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -3,8 +3,9 @@ package com.example.filmsapp.data.prefs
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.test.core.app.ApplicationProvider
 import com.example.filmsapp.FilmsTestApp
+import com.example.filmsapp.base.prefs.SPreferences
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.`is`
+import org.hamcrest.core.Is.`is`
 import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -56,8 +56,8 @@ object Versions {
     const val androidx_test_core = "1.2.0"
     const val androidx_test_ext_kotlin_runner = "1.1.1"
     const val arch_testing = "2.0.0"
-    const val mockito = "2.23.0"
-    const val robolectric = "4.1"
+    const val mockito = "3.5.7"
+    const val robolectric = "4.4"
     const val guava_android = "28.0-android"
 }
 

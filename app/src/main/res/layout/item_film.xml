@@ -6,7 +6,7 @@
 
         <variable
             name="model"
-            type="com.example.filmsapp.ui.base.models.FilmModel" />
+            type="com.example.domain.models.FilmModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
