@@ -27,6 +27,7 @@ val netModule = module {
         authHeaderInterceptor: AuthHeaderInterceptor
     ): OkHttpClient =
         OkHttpClient.Builder()
+            .retryOnConnectionFailure(true)
             .addInterceptor(httpInterceptor)
             .addInterceptor(authHeaderInterceptor)
             .build()
