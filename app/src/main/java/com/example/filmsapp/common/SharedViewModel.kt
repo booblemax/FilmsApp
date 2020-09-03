@@ -1,9 +1,8 @@
 package com.example.filmsapp.common
 
-import com.example.domain.dispatchers.DispatcherProvider
-import com.example.filmsapp.base.BaseViewModel
+import androidx.lifecycle.ViewModel
 
-class SharedViewModel(dispatcherProvider: DispatcherProvider) : BaseViewModel(dispatcherProvider) {
+class SharedViewModel : ViewModel() {
 
     var backdropCarouselPosition: Int =
         DEFAULT_POSITION

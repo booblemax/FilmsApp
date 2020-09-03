@@ -4,48 +4,114 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.observe
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.example.domain.Resource
 import com.example.domain.models.FilmModel
 import com.example.filmsapp.R
-import com.example.filmsapp.databinding.ListsFragmentBinding
 import com.example.filmsapp.base.BaseFragment
 import com.example.filmsapp.base.ListType
 import com.example.filmsapp.base.common.SimpleItemDecoration
 import com.example.filmsapp.base.common.WrappedLinearLayoutManager
+import com.example.filmsapp.databinding.ListsFragmentBinding
 import com.example.filmsapp.util.animateVisible
-import com.example.filmsapp.util.gone
 import com.example.filmsapp.util.src
 import com.example.filmsapp.util.visible
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
-class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {
+@ExperimentalCoroutinesApi
+class ListsFragment :
+    BaseFragment<ListsViewModel, ListsFragmentBinding, ListsState, ListsIntents>() {
 
     override val viewModel: ListsViewModel by viewModel()
     override val layoutRes: Int = R.layout.lists_fragment
 
     private val filmItemClickListener: (FilmModel) -> Unit = { filmModel: FilmModel ->
-        findNavController().navigate(
-            ListsFragmentDirections.actionListsFragmentToDetailsFragment(
+        viewModel.pushIntent(
+            ListsIntents.OpenFilm(
                 filmModel.id,
                 filmModel.poster,
-                filmModel.backdropPath,
-                false
+                filmModel.backdropPath
             )
-        )
-    }
-
-    private val filmsBackgroundItemClickListener: (ListType) -> Unit = { type ->
-        findNavController().navigate(
-            ListsFragmentDirections.actionListsFragmentToMainFragment(type)
         )
     }
 
     private val popularAdapter = ListsAdapter(filmItemClickListener)
     private val topRatedAdapter = ListsAdapter(filmItemClickListener)
     private val upcomingAdapter = ListsAdapter(filmItemClickListener)
+
+    override fun render(state: ListsState) {
+        Timber.i(state.toString())
+        with(state) {
+            uiEvent?.let { processUiEvent(it) }
+
+            popularAdapter.isLoading = popularLoading
+            topRatedAdapter.isLoading = topratedLoading
+            upcomingAdapter.isLoading = upcomingLoading
+
+            latestFilm?.let { initLatestFilm(it) }
+            initPopularList(popularFilms)
+            initTopratedList(topRatedFilms)
+            initUpcomingList(upcomingFilms)
+        }
+    }
+
+    private fun processUiEvent(event: ListsUiEvent) {
+        when (event) {
+            is ListsUiEvent.OpenList -> {
+                navigate(ListsFragmentDirections.actionListsFragmentToMainFragment(event.type))
+            }
+            is ListsUiEvent.OpenFilm -> {
+                navigate(
+                    ListsFragmentDirections.actionListsFragmentToDetailsFragment(
+                        event.id, event.posterUrl, event.backdropUrl, event.isFavorite
+                    )
+                )
+            }
+            is ListsUiEvent.OpenSearch ->
+                navigate(ListsFragmentDirections.actionListsFragmentToSearchFragment())
+            is ListsUiEvent.OpenSettings ->
+                navigate(ListsFragmentDirections.actionListsFragmentToSettingsFragment2())
+        }
+    }
+
+    private fun navigate(navigation: NavDirections) {
+        findNavController().navigate(navigation)
+    }
+
+    private fun initLatestFilm(model: FilmModel) {
+        binding.listsLatestFilm.src(model.poster)
+        binding.listsLatestFilm.animateVisible()
+    }
+
+    private fun initPopularList(list: List<FilmModel>) {
+        popularAdapter.submitList(list)
+        if (list.isNotEmpty()) {
+            binding.listsPopularTitle.animateVisible()
+            binding.listsPopularFilms.animateVisible()
+            binding.listsPopularBackground.visible()
+        }
+    }
+
+    private fun initTopratedList(list: List<FilmModel>) {
+        topRatedAdapter.submitList(list)
+        if (list.isNotEmpty()) {
+            binding.listsTopratedTitle.animateVisible()
+            binding.listsTopratedFilms.animateVisible()
+            binding.listsTopratedBackground.visible()
+        }
+    }
+
+    private fun initUpcomingList(list: List<FilmModel>) {
+        upcomingAdapter.submitList(list)
+        if (list.isNotEmpty()) {
+            binding.listsUpcomingTitle.animateVisible()
+            binding.listsUpcomingFilms.animateVisible()
+            binding.listsUpcomingBackground.visible()
+        }
+    }
 
     override fun init() {
         setHasOptionsMenu(true)
@@ -56,7 +122,6 @@ class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {
         initRecyclerView(binding.listsUpcomingFilms, upcomingAdapter)
 
         initClickListeners()
-        initListener()
     }
 
     private fun initRecyclerView(recyclerView: RecyclerView, adapter: ListsAdapter) {
@@ -69,67 +134,19 @@ class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {
 
     private fun initClickListeners() {
         binding.listsLatestFilm.setOnClickListener {
-            (viewModel.latestFilm.value as Resource.SUCCESS).data?.let {
-                filmItemClickListener(it)
+            viewModel.state.value.latestFilm?.let {
+                    viewModel.pushIntent(ListsIntents.OpenFilm(it.id, it.poster, it.backdropPath))
+                }
             }
-        }
+
         binding.listsPopularBackground.setOnClickListener {
-            filmsBackgroundItemClickListener(
-                ListType.POPULAR
-            )
+            viewModel.pushIntent(ListsIntents.OpenLists(ListType.POPULAR))
         }
         binding.listsTopratedBackground.setOnClickListener {
-            filmsBackgroundItemClickListener(
-                ListType.TOP_RATED
-            )
+            viewModel.pushIntent(ListsIntents.OpenLists(ListType.TOP_RATED))
         }
         binding.listsUpcomingBackground.setOnClickListener {
-            filmsBackgroundItemClickListener(
-                ListType.UPCOMING
-            )
-        }
-    }
-
-    private fun initListener() {
-        viewModel.latestFilm.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.SUCCESS -> it.data?.let { model ->
-                    if (model.poster != null) {
-                        binding.listsLatestFilm.src(model.poster)
-                        binding.listsLatestFilm.animateVisible()
-                    }
-                }
-                is Resource.ERROR -> binding.listsLatestFilm.gone()
-                is Resource.LOADING -> { /*do nothing*/
-                }
-            }
-        }
-        viewModel.popularFilms.observe(viewLifecycleOwner) {
-            popularAdapter.isLoading = it is Resource.LOADING
-            if (it is Resource.SUCCESS) it.data?.let { models ->
-                popularAdapter.submitList(models.toMutableList())
-                binding.listsPopularTitle.animateVisible()
-                binding.listsPopularFilms.animateVisible()
-                binding.listsPopularBackground.visible()
-            }
-        }
-        viewModel.topRatedFilms.observe(viewLifecycleOwner) {
-            topRatedAdapter.isLoading = it is Resource.LOADING
-            if (it is Resource.SUCCESS) it.data?.let { models ->
-                topRatedAdapter.submitList(models)
-                binding.listsTopratedTitle.animateVisible()
-                binding.listsTopratedFilms.animateVisible()
-                binding.listsTopratedBackground.visible()
-            }
-        }
-        viewModel.upcomingFilms.observe(viewLifecycleOwner) {
-            upcomingAdapter.isLoading = it is Resource.LOADING
-            if (it is Resource.SUCCESS) it.data?.let { models ->
-                upcomingAdapter.submitList(models)
-                binding.listsUpcomingTitle.animateVisible()
-                binding.listsUpcomingFilms.animateVisible()
-                binding.listsUpcomingBackground.visible()
-            }
+            viewModel.pushIntent(ListsIntents.OpenLists(ListType.UPCOMING))
         }
     }
 
@@ -140,21 +157,15 @@ class ListsFragment : BaseFragment<ListsViewModel, ListsFragmentBinding>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.search -> {
-                findNavController().navigate(
-                    ListsFragmentDirections.actionListsFragmentToSearchFragment()
-                )
+                viewModel.pushIntent(ListsIntents.OpenSearch)
                 true
             }
             R.id.favorites -> {
-                findNavController().navigate(
-                    ListsFragmentDirections.actionListsFragmentToMainFragment(ListType.FAVOURITES)
-                )
+                viewModel.pushIntent(ListsIntents.OpenLists(ListType.FAVOURITES))
                 true
             }
             R.id.settings -> {
-                findNavController().navigate(
-                    ListsFragmentDirections.actionListsFragmentToSettingsFragment2()
-                )
+                viewModel.pushIntent(ListsIntents.OpenSettings)
                 true
             }
             else -> super.onOptionsItemSelected(item)

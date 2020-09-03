@@ -11,14 +11,19 @@ import com.example.domain.repos.YoutubeRepository
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseViewModel
 import com.example.filmsapp.base.Event
+import com.example.filmsapp.base.mvi.EmptyState
+import com.example.filmsapp.base.mvi.IState
+import com.example.filmsapp.base.mvi.Intention
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
+@ExperimentalCoroutinesApi
 class DetailsViewModel(
     dispatcherProvider: DispatcherProvider,
     private val filmsRepository: FilmsRepository,
     private val youtubeRepository: YoutubeRepository
-) : BaseViewModel(dispatcherProvider) {
+) : BaseViewModel<IState, Intention>(dispatcherProvider, EmptyState()) {
 
     private val _film = MutableLiveData<Resource<FilmModel>>()
     val film get() = _film

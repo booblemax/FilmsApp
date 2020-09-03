@@ -3,14 +3,22 @@ package com.example.filmsapp.settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.filmsapp.R
-import com.example.filmsapp.databinding.SettingsFragmentBinding
 import com.example.filmsapp.base.BaseFragment
+import com.example.filmsapp.base.mvi.IState
+import com.example.filmsapp.base.mvi.Intention
+import com.example.filmsapp.databinding.SettingsFragmentBinding
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsFragment : BaseFragment<SettingsViewModel, SettingsFragmentBinding>() {
+@ExperimentalCoroutinesApi
+class SettingsFragment : BaseFragment<SettingsViewModel, SettingsFragmentBinding, IState, Intention>() {
 
     override val viewModel: SettingsViewModel by viewModel()
     override val layoutRes: Int = R.layout.settings_fragment
+
+    override fun render(state: IState) {
+        TODO("Not yet implemented")
+    }
 
     override fun init() {
         with(binding) {

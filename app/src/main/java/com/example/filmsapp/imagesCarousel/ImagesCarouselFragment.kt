@@ -9,15 +9,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmsapp.R
-import com.example.filmsapp.databinding.ImageCarouselFragmentBinding
 import com.example.filmsapp.base.BaseFragment
+import com.example.filmsapp.base.mvi.IState
+import com.example.filmsapp.base.mvi.Intention
 import com.example.filmsapp.common.SharedViewModel
+import com.example.filmsapp.databinding.ImageCarouselFragmentBinding
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.collections.set
 
+@ExperimentalCoroutinesApi
 class ImagesCarouselFragment :
-    BaseFragment<ImagesCarouselViewModel, ImageCarouselFragmentBinding>() {
+    BaseFragment<ImagesCarouselViewModel, ImageCarouselFragmentBinding, IState, Intention>() {
 
     private val sharedViewModel: SharedViewModel by sharedViewModel()
     override val viewModel: ImagesCarouselViewModel by viewModel()
@@ -34,6 +38,10 @@ class ImagesCarouselFragment :
                 .inflateTransition(R.transition.shared_carousel_transition)
 
         prepareTransition()
+    }
+
+    override fun render(state: IState) {
+        TODO("Not yet implemented")
     }
 
     override fun init() {

@@ -18,7 +18,7 @@ import org.koin.dsl.module
 @ExperimentalCoroutinesApi
 val vmModule = module {
 
-    viewModel { SharedViewModel(get()) }
+    viewModel { SharedViewModel() }
 
     viewModel { ListsViewModel(get(), get()) }
 

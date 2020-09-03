@@ -1,35 +1,40 @@
 package com.example.filmsapp.lists
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.domain.Resource
 import com.example.domain.dispatchers.DispatcherProvider
-import com.example.domain.models.FilmModel
 import com.example.domain.repos.FilmsRepository
+import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
+@ExperimentalCoroutinesApi
 class ListsViewModel(
     dispatcherProvider: DispatcherProvider,
     private val repository: FilmsRepository
-) : BaseViewModel(dispatcherProvider) {
-
-    private val _latestFilm = MutableLiveData<Resource<FilmModel>>()
-    val latestFilm: LiveData<Resource<FilmModel>> get() = _latestFilm
-
-    private val _popularFilms = MutableLiveData<Resource<List<FilmModel>>>()
-    val popularFilms: LiveData<Resource<List<FilmModel>>> get() = _popularFilms
-
-    private val _topratedFilms = MutableLiveData<Resource<List<FilmModel>>>()
-    val topRatedFilms: LiveData<Resource<List<FilmModel>>> get() = _topratedFilms
-
-    private val _upcomingFilms = MutableLiveData<Resource<List<FilmModel>>>()
-    val upcomingFilms: LiveData<Resource<List<FilmModel>>> get() = _upcomingFilms
+) : BaseViewModel<ListsState, ListsIntents>(dispatcherProvider, ListsState()) {
 
     init {
-        loadFilms()
+        pushIntent(ListsIntents.InitialIntent)
+    }
+
+    override suspend fun processIntention(intent: ListsIntents) {
+        when (intent) {
+            is ListsIntents.InitialIntent -> loadFilms()
+            is ListsIntents.OpenLists -> reduce { it.copy(uiEvent = ListsUiEvent.OpenList(intent.type)) }
+            is ListsIntents.OpenFilm -> reduce {
+                val isFavourite = repository.isFilmStoredInDb(intent.id)
+                it.copy(uiEvent = ListsUiEvent.OpenFilm(
+                        intent.id, intent.posterUrl, intent.backdropUrl, isFavourite
+                    )
+                )
+            }
+            is ListsIntents.OpenSearch -> reduce { it.copy(uiEvent = ListsUiEvent.OpenSearch) }
+            is ListsIntents.OpenSettings -> reduce { it.copy(uiEvent = ListsUiEvent.OpenSettings) }
+        }
     }
 
     private fun loadFilms() {
@@ -43,22 +48,86 @@ class ListsViewModel(
     }
 
     private suspend fun loadLatest() {
-        _latestFilm.postValue(Resource.LOADING())
-        _latestFilm.postValue(repository.getLatestFilm())
+        val latestFilmResource = repository.getLatestFilm()
+        reduce { oldState ->
+            when (latestFilmResource) {
+                is Resource.SUCCESS -> oldState.copy(
+                    latestFilm = latestFilmResource.data
+                )
+                is Resource.ERROR -> oldState.copy(latestFilm = null)
+                else -> {
+                    Timber.e("Wrong result latest")
+                    oldState.copy(errorMessage = R.string.error)
+                }
+            }
+        }
     }
 
     private suspend fun loadPopular() {
-        _popularFilms.postValue(Resource.LOADING())
-        _popularFilms.postValue(repository.getPopularFilms())
+        reduce { it.copy(popularLoading = true) }
+        val popularFilmResource = repository.getPopularFilms()
+        reduce { oldState ->
+            when (popularFilmResource) {
+                is Resource.SUCCESS -> oldState.copy(
+                    popularLoading = false,
+                    popularFilms = popularFilmResource.data ?: listOf()
+                )
+                is Resource.ERROR -> oldState.copy(
+                    popularLoading = false,
+                    popularFilms = listOf()
+                )
+                else -> {
+                    Timber.e("Wrong result popular")
+                    oldState.copy(errorMessage = R.string.error)
+                }
+            }
+        }
     }
 
     private suspend fun loadTopRated() {
-        _topratedFilms.postValue(Resource.LOADING())
-        _topratedFilms.postValue(repository.getTopRatedFilms())
+        reduce { it.copy(topratedLoading = true) }
+        val topratedFilmResource = repository.getTopRatedFilms()
+        reduce { oldState ->
+            when (topratedFilmResource) {
+                is Resource.SUCCESS -> oldState.copy(
+                    topratedLoading = false,
+                    topRatedFilms = topratedFilmResource.data ?: listOf()
+                )
+                is Resource.ERROR -> oldState.copy(
+                    topratedLoading = false,
+                    topRatedFilms = listOf()
+                )
+                else -> {
+                    Timber.e("Wrong result toprated")
+                    oldState.copy(errorMessage = R.string.error)
+                }
+            }
+        }
     }
 
     private suspend fun loadUpcoming() {
-        _upcomingFilms.postValue(Resource.LOADING())
-        _upcomingFilms.postValue(repository.getUpcomingFilms())
+        reduce { it.copy(upcomingLoading = true) }
+        val upcomingFilmResource = repository.getUpcomingFilms()
+        reduce { oldState ->
+            when (upcomingFilmResource) {
+                is Resource.SUCCESS -> oldState.copy(
+                    upcomingLoading = false,
+                    upcomingFilms = upcomingFilmResource.data ?: listOf()
+                )
+                is Resource.ERROR -> oldState.copy(
+                    upcomingLoading = false,
+                    upcomingFilms = listOf()
+                )
+                else -> {
+                    Timber.e("Wrong result upcoming")
+                    oldState.copy(errorMessage = R.string.error)
+                }
+            }
+        }
+    }
+
+    override fun handleException(exception: Throwable) {
+        Timber.e(exception)
+        pushIntent(ListsIntents.Exception(exception))
     }
 }

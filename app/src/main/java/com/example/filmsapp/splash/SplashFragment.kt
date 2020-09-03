@@ -6,10 +6,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.example.filmsapp.R
-import com.example.filmsapp.databinding.SplashFragmentBinding
 import com.example.filmsapp.base.BaseFragment
 import com.example.filmsapp.base.prefs.SPreferences
 import com.example.filmsapp.common.GoogleAccountManager
@@ -17,15 +15,21 @@ import com.example.filmsapp.common.GoogleAccountManager.Companion.REQUEST_ACCOUN
 import com.example.filmsapp.common.GoogleAccountManager.Companion.REQUEST_AUTHORIZATION
 import com.example.filmsapp.common.GoogleAccountManager.Companion.REQUEST_GOOGLE_PLAY_SERVICES
 import com.example.filmsapp.common.GoogleAccountManager.Companion.REQUEST_PERMISSION_GET_ACCOUNTS
+import com.example.filmsapp.databinding.SplashFragmentBinding
 import com.example.filmsapp.util.GSUtils
 import com.example.filmsapp.util.snack
+import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 
-class SplashFragment : BaseFragment<SplashViewModel, SplashFragmentBinding>(),
+@ExperimentalCoroutinesApi
+class SplashFragment :
+    BaseFragment<SplashViewModel, SplashFragmentBinding, SplashState, SplashIntents>(),
     EasyPermissions.PermissionCallbacks {
 
     override val viewModel: SplashViewModel by viewModel()
@@ -34,14 +38,34 @@ class SplashFragment : BaseFragment<SplashViewModel, SplashFragmentBinding>(),
     private val prefs: SPreferences by inject()
     private val googleAccountManager: GoogleAccountManager by inject()
 
-    override fun init() {
-        viewModel.requestAuthorizationPermission.observe(viewLifecycleOwner) {
-            startActivityForResult(it.intent, REQUEST_AUTHORIZATION)
-        }
-        viewModel.displayGpsUnavailable.observe(viewLifecycleOwner) {
-            GSUtils.showGooglePlayServicesAvailabilityErrorDialog(requireContext(), it)
+    override fun render(state: SplashState) {
+        Timber.i(state.toString())
+        with(state) {
+            try {
+                when {
+                    error is GooglePlayServicesAvailabilityIOException ->
+                        GSUtils.showGooglePlayServicesAvailabilityErrorDialog(
+                            requireContext(),
+                            error.connectionStatusCode
+                        )
+                    error is UserRecoverableAuthIOException ->
+                        startActivityForResult(
+                            error.intent,
+                            REQUEST_AUTHORIZATION
+                        )
+                    error != null -> Timber.e(getString(R.string.error_occur, state.toString()))
+                }
+                errorMessage?.let { view?.snack(it) }
+
+                if (loading) getResultsFromApi()
+                else viewModel.runDelayed { navigateToLists() }
+            } catch (exception: Exception) {
+                viewModel.pushIntent(SplashIntents.Exception(exception))
+            }
         }
     }
+
+    override fun init() { /* nothing to init in ui */ }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,11 +77,12 @@ class SplashFragment : BaseFragment<SplashViewModel, SplashFragmentBinding>(),
             when {
                 !GSUtils.isGooglePlayServicesAvailable(requireContext()) ->
                     GSUtils.acquireGooglePlayServices(requireContext())
-                !googleAccountManager.hasAccountName() -> chooseAccount()
-                else -> viewModel.runDelayed { navigateToLists() }
+                !googleAccountManager.hasAccountName() ->
+                    chooseAccount()
+                else -> viewModel.pushIntent(SplashIntents.Loaded)
             }
         } catch (exception: Exception) {
-            viewModel.handleException(exception)
+            viewModel.pushIntent(SplashIntents.Exception(exception))
         }
     }
 

@@ -7,15 +7,19 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.example.domain.Resource
 import com.example.filmsapp.R
-import com.example.filmsapp.databinding.MainFragmentBinding
 import com.example.filmsapp.base.BaseFragment
 import com.example.filmsapp.base.common.EndlessRecyclerScrollListener
 import com.example.filmsapp.base.common.SimpleItemDecoration
 import com.example.filmsapp.base.common.WrappedGridLayoutManager
+import com.example.filmsapp.base.mvi.IState
+import com.example.filmsapp.base.mvi.Intention
+import com.example.filmsapp.databinding.MainFragmentBinding
 import com.example.filmsapp.util.snack
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
+@ExperimentalCoroutinesApi
+class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding, IState, Intention>() {
 
     override val layoutRes: Int = R.layout.main_fragment
     override val viewModel: MainViewModel by viewModel()
@@ -29,6 +33,10 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding>() {
         args = MainFragmentArgs.fromBundle(requireArguments())
         viewModel.listType = args.listType
         viewModel.loadFilms(true)
+    }
+
+    override fun render(state: IState) {
+        TODO("Not yet implemented")
     }
 
     override fun init() {

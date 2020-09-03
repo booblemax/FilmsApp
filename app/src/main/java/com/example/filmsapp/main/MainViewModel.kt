@@ -10,12 +10,17 @@ import com.example.domain.repos.FilmsRepository
 import com.example.filmsapp.base.Event
 import com.example.filmsapp.base.ListType
 import com.example.filmsapp.base.PagedViewModel
+import com.example.filmsapp.base.mvi.EmptyState
+import com.example.filmsapp.base.mvi.IState
+import com.example.filmsapp.base.mvi.Intention
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
+@ExperimentalCoroutinesApi
 class MainViewModel(
     dispatcherProvider: DispatcherProvider,
     private val repository: FilmsRepository
-) : PagedViewModel(dispatcherProvider) {
+) : PagedViewModel<IState, Intention>(dispatcherProvider, EmptyState()) {
 
     private val _films = MutableLiveData<Resource<List<FilmModel>>>()
     val films: LiveData<Resource<List<FilmModel>>> get() = _films

@@ -12,6 +12,8 @@ import com.example.filmsapp.base.BaseFragment
 import com.example.filmsapp.base.common.EndlessRecyclerScrollListener
 import com.example.filmsapp.base.common.SimpleItemDecoration
 import com.example.filmsapp.base.common.WrappedGridLayoutManager
+import com.example.filmsapp.base.mvi.IState
+import com.example.filmsapp.base.mvi.Intention
 import com.example.filmsapp.databinding.SearchFragmentBinding
 import com.example.filmsapp.util.setupToolbar
 import com.example.filmsapp.util.snack
@@ -21,13 +23,17 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class SearchFragment : BaseFragment<SearchViewModel, SearchFragmentBinding>() {
+class SearchFragment : BaseFragment<SearchViewModel, SearchFragmentBinding, IState, Intention>() {
 
     override val viewModel: SearchViewModel by viewModel()
     override val layoutRes: Int = R.layout.search_fragment
 
     private lateinit var adapter: SearchAdapter
     private lateinit var searchView: SearchView
+
+    override fun render(state: IState) {
+        TODO("Not yet implemented")
+    }
 
     override fun init() {
         setHasOptionsMenu(true)

@@ -11,10 +11,17 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.filmsapp.BR
+import com.example.filmsapp.base.mvi.IState
+import com.example.filmsapp.base.mvi.Intention
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
-abstract class BaseFragment<VM : BaseViewModel, B : ViewDataBinding> : Fragment() {
+@ExperimentalCoroutinesApi
+abstract class BaseFragment<VM : BaseViewModel<S, I>, B : ViewDataBinding, S : IState, I : Intention> : Fragment() {
 
     protected abstract val viewModel: VM
 
@@ -26,6 +33,8 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewDataBinding> : Fragment(
     private val dispatcher by lazy { requireActivity().onBackPressedDispatcher }
 
     private lateinit var onBackPressedCallback: OnBackPressedCallback
+
+    abstract fun render(state: S)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,6 +57,10 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewDataBinding> : Fragment(
         onBackPressedCallback = dispatcher.addCallback(this) {
             onBackPressed()
         }
+
+        viewModel.state
+            .onEach { state -> render(state) }
+            .launchIn(lifecycleScope)
     }
 
     /**
@@ -57,8 +70,7 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewDataBinding> : Fragment(
 
     open fun onBackPressed(@IdRes popTo: Int? = null) {
         if (!(popTo?.let { findNavController().popBackStack(it, false) }
-                ?: findNavController().popBackStack())
-        ) {
+                ?: findNavController().popBackStack())) {
             requireActivity().finish()
         }
     }

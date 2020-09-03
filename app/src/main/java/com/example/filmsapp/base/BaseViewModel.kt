@@ -6,15 +6,34 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.domain.dispatchers.DispatcherProvider
 import com.example.filmsapp.R
+import com.example.filmsapp.base.mvi.BaseIntent
+import com.example.filmsapp.base.mvi.IState
+import com.example.filmsapp.base.mvi.Intention
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-abstract class BaseViewModel(protected val dispatcherProvider: DispatcherProvider) : ViewModel() {
+@Suppress("UNCHECKED_CAST")
+@ExperimentalCoroutinesApi
+abstract class BaseViewModel<S : IState, I : Intention>(
+    protected val dispatcherProvider: DispatcherProvider,
+    initialState: S
+) : ViewModel() {
+
+    private val intents: Channel<I> = Channel(Channel.UNLIMITED)
+
+    private val _state = MutableStateFlow(initialState)
+    val state: StateFlow<S> get() = _state
 
     private val _showSnackbar = MutableLiveData<Event<Int>>()
     val showSnackbar: LiveData<Event<Int>> = _showSnackbar
@@ -23,7 +42,35 @@ abstract class BaseViewModel(protected val dispatcherProvider: DispatcherProvide
     private val defaultExceptionHandler = CoroutineExceptionHandler { _, exception ->
         handleException(exception)
     }
+
     protected val baseScope = CoroutineScope(job + dispatcherProvider.main() + defaultExceptionHandler)
+
+    init {
+        handleIntentions()
+    }
+
+    private fun handleIntentions() {
+        baseScope.launch {
+            intents.consumeAsFlow().collect {
+                if (it is BaseIntent.Error) handleException(it.error)
+                else processIntention(it)
+            }
+        }
+    }
+
+    open suspend fun processIntention(intent: I) {
+        Timber.i(intent::class.simpleName)
+    }
+
+    protected suspend fun reduce(handler: suspend (intent: S) -> S) {
+        _state.value = handler(_state.value)
+    }
+
+    fun pushIntent(intent: I) {
+        baseScope.launch {
+            intents.send(intent)
+        }
+    }
 
     open fun handleException(exception: Throwable) {
         Timber.e(exception)

@@ -43,7 +43,7 @@ val netModule = module {
                     Timber.tag("OkHttp").d(message)
                 }
             }
-        ).setLevel(HttpLoggingInterceptor.Level.BODY)
+        ).setLevel(HttpLoggingInterceptor.Level.BASIC)
     }
 
     factory { AuthHeaderInterceptor() }

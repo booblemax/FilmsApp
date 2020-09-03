@@ -14,4 +14,8 @@ data class FilmModel(
     val backdrops: BackdropsModel? = null,
     val video: Boolean = false,
     val hasBookmark: Boolean = false
-)
+) {
+    override fun toString(): String {
+        return this::class.java.toString()
+    }
+}

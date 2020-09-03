@@ -16,6 +16,8 @@ import com.example.domain.Resource
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseFragment
 import com.example.filmsapp.base.EventObserver
+import com.example.filmsapp.base.mvi.IState
+import com.example.filmsapp.base.mvi.Intention
 import com.example.filmsapp.common.GoogleAccountManager
 import com.example.filmsapp.common.SharedViewModel
 import com.example.filmsapp.databinding.DetailsFragmentBinding
@@ -28,12 +30,14 @@ import com.example.filmsapp.util.snack
 import com.example.filmsapp.util.visible
 import com.example.filmsapp.util.waitForTransition
 import kotlinx.android.synthetic.main.item_backdrop.view.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+@ExperimentalCoroutinesApi
 class DetailsFragment :
-    BaseFragment<DetailsViewModel, DetailsFragmentBinding>() {
+    BaseFragment<DetailsViewModel, DetailsFragmentBinding, IState, Intention>() {
 
     private val sharedViewModel: SharedViewModel by sharedViewModel()
     override val viewModel: DetailsViewModel by viewModel()
@@ -56,6 +60,10 @@ class DetailsFragment :
     }
 
     private val adapter: BackdropsViewPagerAdapter = BackdropsViewPagerAdapter(onItemClickListener)
+
+    override fun render(state: IState) {
+        TODO("Not yet implemented")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
