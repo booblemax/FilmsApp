@@ -22,8 +22,8 @@ object Versions {
     const val ktlintGradlePlugin = "9.2.1"
     const val detekt = "1.10.0"
 
-    const val gradle = "4.0.0"
-    const val kotlin = "1.3.72"
+    const val gradle = "4.0.1"
+    const val kotlin = "1.4.0"
     const val lifecycler = "2.2.0"
     const val appcompat = "1.1.0"
     const val ktx = "1.3.0"

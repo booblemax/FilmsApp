@@ -4,4 +4,9 @@ class RetrofitException(
     val code: Int,
     message: String? = null,
     val exception: Exception? = null
-) : Exception(message)
+) : Exception(message) {
+
+    override fun toString(): String {
+        return "RetrofitException(code=$code, message=$message)"
+    }
+}

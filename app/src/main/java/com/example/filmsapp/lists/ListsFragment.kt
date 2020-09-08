@@ -13,6 +13,7 @@ import com.example.filmsapp.base.BaseFragment
 import com.example.filmsapp.base.ListType
 import com.example.filmsapp.base.common.SimpleItemDecoration
 import com.example.filmsapp.base.common.WrappedLinearLayoutManager
+import com.example.filmsapp.common.FilmDetailsDto
 import com.example.filmsapp.databinding.ListsFragmentBinding
 import com.example.filmsapp.util.animateVisible
 import com.example.filmsapp.util.src
@@ -28,13 +29,9 @@ class ListsFragment :
     override val viewModel: ListsViewModel by viewModel()
     override val layoutRes: Int = R.layout.lists_fragment
 
-    private val filmItemClickListener: (FilmModel) -> Unit = { filmModel: FilmModel ->
+    private val filmItemClickListener: (FilmModel) -> Unit = { model: FilmModel ->
         viewModel.pushIntent(
-            ListsIntents.OpenFilm(
-                filmModel.id,
-                filmModel.poster,
-                filmModel.backdropPath
-            )
+            ListsIntents.OpenFilm(FilmDetailsDto(model.id, model.poster, model.backdropPath))
         )
     }
 
@@ -66,7 +63,10 @@ class ListsFragment :
             is ListsUiEvent.OpenFilm -> {
                 navigate(
                     ListsFragmentDirections.actionListsFragmentToDetailsFragment(
-                        event.id, event.posterUrl, event.backdropUrl, event.isFavorite
+                        event.filmDetailsDto.id,
+                        event.filmDetailsDto.posterUrl,
+                        event.filmDetailsDto.backdropUrl,
+                        event.filmDetailsDto.isFavorite
                     )
                 )
             }
@@ -135,7 +135,9 @@ class ListsFragment :
     private fun initClickListeners() {
         binding.listsLatestFilm.setOnClickListener {
             viewModel.state.value.latestFilm?.let {
-                    viewModel.pushIntent(ListsIntents.OpenFilm(it.id, it.poster, it.backdropPath))
+                    viewModel.pushIntent(
+                        ListsIntents.OpenFilm(FilmDetailsDto(it.id, it.poster, it.backdropPath))
+                    )
                 }
             }
 

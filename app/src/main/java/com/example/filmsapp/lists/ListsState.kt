@@ -3,6 +3,7 @@ package com.example.filmsapp.lists
 import com.example.domain.models.FilmModel
 import com.example.filmsapp.base.ListType
 import com.example.filmsapp.base.mvi.IState
+import com.example.filmsapp.common.FilmDetailsDto
 
 data class ListsState(
     val popularLoading: Boolean = false,
@@ -34,12 +35,7 @@ data class ListsState(
 sealed class ListsUiEvent {
 
     data class OpenList(val type: ListType) : ListsUiEvent()
-    data class OpenFilm(
-        val id: String,
-        val posterUrl: String?,
-        val backdropUrl: String?,
-        val isFavorite: Boolean
-    ) : ListsUiEvent()
+    data class OpenFilm(val filmDetailsDto: FilmDetailsDto) : ListsUiEvent()
 
     object OpenSettings : ListsUiEvent()
     object OpenSearch : ListsUiEvent()

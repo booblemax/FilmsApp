@@ -105,7 +105,7 @@ class SearchFragment : BaseFragment<SearchViewModel, SearchFragmentBinding, ISta
                     adapter.isLoading = false
                     viewModel.fetchedDataIsEmpty(true)
                     viewModel.decPageNumber()
-                    binding.searchList.snack(it.message?.localizedMessage ?: "")
+                    binding.searchList.snack(it.error?.localizedMessage ?: "")
                 }
                 is Resource.LOADING -> adapter.isLoading = true
             }

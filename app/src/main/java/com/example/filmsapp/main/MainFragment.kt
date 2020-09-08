@@ -3,40 +3,48 @@ package com.example.filmsapp.main
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import com.example.domain.Resource
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseFragment
 import com.example.filmsapp.base.common.EndlessRecyclerScrollListener
 import com.example.filmsapp.base.common.SimpleItemDecoration
 import com.example.filmsapp.base.common.WrappedGridLayoutManager
-import com.example.filmsapp.base.mvi.IState
-import com.example.filmsapp.base.mvi.Intention
+import com.example.filmsapp.common.FilmDetailsDto
 import com.example.filmsapp.databinding.MainFragmentBinding
 import com.example.filmsapp.util.snack
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 @ExperimentalCoroutinesApi
-class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding, IState, Intention>() {
+class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding, MainState, MainIntents>() {
 
     override val layoutRes: Int = R.layout.main_fragment
     override val viewModel: MainViewModel by viewModel()
 
     private lateinit var args: MainFragmentArgs
-
     private lateinit var adapter: MainAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         args = MainFragmentArgs.fromBundle(requireArguments())
         viewModel.listType = args.listType
-        viewModel.loadFilms(true)
     }
 
-    override fun render(state: IState) {
-        TODO("Not yet implemented")
+    override fun render(state: MainState) {
+        Timber.i(state.toString())
+        with(state) {
+            when (uiEvent) {
+                is MainUiEvent.OpenFilm -> openFilmDetails(uiEvent.filmDetailsDto)
+                is MainUiEvent.Back -> onBackPressed()
+            }
+
+            adapter.isLoading = loading && !firstLoading
+            binding.refreshLayout.isRefreshing = loading && firstLoading
+            if (!isEmptyList) adapter.submitList(films.toMutableList())
+            if (errorString != null && errorString.isNotEmpty()) view?.snack(errorString)
+            if (errorMessage != null) view?.snack(errorMessage)
+        }
     }
 
     override fun init() {
@@ -44,7 +52,7 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding, IState, In
         initAdapter()
         initRecyclerView(adapter)
         initRefreshLayout()
-        initListener(adapter)
+        viewModel.pushIntent(MainIntents.InitialEvent)
     }
 
     private fun initTitle() {
@@ -52,7 +60,7 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding, IState, In
         binding.mainToolbar.title = getString(args.listType.titleId)
         binding.mainToolbar.navigationIcon =
             ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_back, context?.theme)
-        binding.mainToolbar.setNavigationOnClickListener { onBackPressed() }
+        binding.mainToolbar.setNavigationOnClickListener { viewModel.pushIntent(MainIntents.OnBack) }
     }
 
     private fun initAdapter() {
@@ -60,23 +68,16 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding, IState, In
             (binding.rvFilms.layoutManager as WrappedGridLayoutManager).let { layoutManager ->
                 viewModel.lastKnownPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
             }
-            findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToDetailsFragment(
-                    it.id,
-                    it.poster,
-                    it.backdropPath,
-                    viewModel.isFavoriteList()
+            viewModel.pushIntent(
+                MainIntents.OpenFilm(
+                    FilmDetailsDto(it.id, it.poster, it.backdropPath)
                 )
             )
         }
     }
 
     private fun initRecyclerView(adapter: MainAdapter) {
-        val layoutManager =
-            WrappedGridLayoutManager(
-                context,
-                MIN_COLUMN_COUNT
-            )
+        val layoutManager = WrappedGridLayoutManager(context, MIN_COLUMN_COUNT)
         layoutManager.spanSizeLookup = MainSpanSizeLookup(adapter)
         binding.rvFilms.layoutManager = layoutManager
         binding.rvFilms.setHasFixedSize(true)
@@ -84,7 +85,7 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding, IState, In
         binding.rvFilms.addItemDecoration(SimpleItemDecoration(MARGIN_OFFSET))
         binding.rvFilms.addOnScrollListener(object : EndlessRecyclerScrollListener(layoutManager) {
             override fun loadMoreItems() {
-                viewModel.loadFilms()
+                viewModel.pushIntent(MainIntents.LoadNextPage)
             }
 
             override fun isLastPage(): Boolean = false
@@ -97,11 +98,7 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding, IState, In
     }
 
     private fun initRefreshLayout() {
-        binding.refreshLayout.setOnRefreshListener {
-            viewModel.resetPageNumber()
-            viewModel.loadFilms(true)
-        }
-
+        binding.refreshLayout.setOnRefreshListener { viewModel.pushIntent(MainIntents.ReloadList) }
         binding.refreshLayout.setColorSchemeColors(
             ResourcesCompat.getColor(resources, R.color.colorAccent, context?.theme),
             ResourcesCompat.getColor(resources, R.color.colorPrimary, context?.theme),
@@ -109,27 +106,15 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding, IState, In
         )
     }
 
-    private fun initListener(adapter: MainAdapter) {
-        viewModel.films.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.SUCCESS -> {
-                    adapter.isLoading = false
-                    viewModel.fetchedDataIsEmpty(it.data?.isEmpty() ?: true)
-                    adapter.submitList(it.data?.toMutableList() ?: mutableListOf())
-                }
-                is Resource.ERROR -> {
-                    viewModel.fetchedDataIsEmpty(true)
-                    viewModel.decPageNumber()
-                    binding.rvFilms.snack(it.message?.localizedMessage ?: "")
-                    adapter.isLoading = false
-                }
-                is Resource.LOADING -> {
-                    if (!viewModel.isFirstPageLoading()) {
-                        adapter.isLoading = true
-                    }
-                }
-            }
-        }
+    private fun openFilmDetails(filmDetailsDto: FilmDetailsDto) {
+        findNavController().navigate(
+            MainFragmentDirections.actionMainFragmentToDetailsFragment(
+                filmDetailsDto.id,
+                filmDetailsDto.posterUrl,
+                filmDetailsDto.backdropUrl,
+                filmDetailsDto.isFavorite
+            )
+        )
     }
 
     companion object {

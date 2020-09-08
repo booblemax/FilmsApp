@@ -2,6 +2,7 @@ package com.example.filmsapp.lists
 
 import com.example.domain.Resource
 import com.example.domain.dispatchers.DispatcherProvider
+import com.example.domain.models.FilmModel
 import com.example.domain.repos.FilmsRepository
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseViewModel
@@ -26,11 +27,9 @@ class ListsViewModel(
             is ListsIntents.InitialIntent -> loadFilms()
             is ListsIntents.OpenLists -> reduce { it.copy(uiEvent = ListsUiEvent.OpenList(intent.type)) }
             is ListsIntents.OpenFilm -> reduce {
-                val isFavourite = repository.isFilmStoredInDb(intent.id)
-                it.copy(uiEvent = ListsUiEvent.OpenFilm(
-                        intent.id, intent.posterUrl, intent.backdropUrl, isFavourite
-                    )
-                )
+                val isFavorite = repository.isFilmStoredInDb(intent.filmDetailsDto.id)
+                val corrFilmDetails = intent.filmDetailsDto.copy(isFavorite = isFavorite)
+                it.copy(uiEvent = ListsUiEvent.OpenFilm(corrFilmDetails))
             }
             is ListsIntents.OpenSearch -> reduce { it.copy(uiEvent = ListsUiEvent.OpenSearch) }
             is ListsIntents.OpenSettings -> reduce { it.copy(uiEvent = ListsUiEvent.OpenSettings) }
@@ -51,7 +50,7 @@ class ListsViewModel(
         val latestFilmResource = repository.getLatestFilm()
         reduce { oldState ->
             when (latestFilmResource) {
-                is Resource.SUCCESS -> oldState.copy(
+                is Resource.SUCCESS<FilmModel> -> oldState.copy(
                     latestFilm = latestFilmResource.data
                 )
                 is Resource.ERROR -> oldState.copy(latestFilm = null)
@@ -68,7 +67,7 @@ class ListsViewModel(
         val popularFilmResource = repository.getPopularFilms()
         reduce { oldState ->
             when (popularFilmResource) {
-                is Resource.SUCCESS -> oldState.copy(
+                is Resource.SUCCESS<List<FilmModel>> -> oldState.copy(
                     popularLoading = false,
                     popularFilms = popularFilmResource.data ?: listOf()
                 )
@@ -89,7 +88,7 @@ class ListsViewModel(
         val topratedFilmResource = repository.getTopRatedFilms()
         reduce { oldState ->
             when (topratedFilmResource) {
-                is Resource.SUCCESS -> oldState.copy(
+                is Resource.SUCCESS<List<FilmModel>> -> oldState.copy(
                     topratedLoading = false,
                     topRatedFilms = topratedFilmResource.data ?: listOf()
                 )
@@ -110,7 +109,7 @@ class ListsViewModel(
         val upcomingFilmResource = repository.getUpcomingFilms()
         reduce { oldState ->
             when (upcomingFilmResource) {
-                is Resource.SUCCESS -> oldState.copy(
+                is Resource.SUCCESS<List<FilmModel>> -> oldState.copy(
                     upcomingLoading = false,
                     upcomingFilms = upcomingFilmResource.data ?: listOf()
                 )

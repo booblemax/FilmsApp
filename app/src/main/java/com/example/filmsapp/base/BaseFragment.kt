@@ -43,6 +43,11 @@ abstract class BaseFragment<VM : BaseViewModel<S, I>, B : ViewDataBinding, S : I
     ): View? {
         init(inflater, container)
         init()
+
+        viewModel.state
+            .onEach { state -> render(state) }
+            .launchIn(lifecycleScope)
+
         return binding.root
     }
 
@@ -57,10 +62,6 @@ abstract class BaseFragment<VM : BaseViewModel<S, I>, B : ViewDataBinding, S : I
         onBackPressedCallback = dispatcher.addCallback(this) {
             onBackPressed()
         }
-
-        viewModel.state
-            .onEach { state -> render(state) }
-            .launchIn(lifecycleScope)
     }
 
     /**
