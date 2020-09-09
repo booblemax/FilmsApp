@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.decode.DataSource
 import coil.request.Request
-import com.example.filmsapp.databinding.ItemCarouselImageBinding
 import com.example.filmsapp.base.BaseViewHolder
+import com.example.filmsapp.databinding.ItemCarouselImageBinding
 
 class ImagesCarouselAdapter(
     private val onImageReadyListener: () -> Unit
@@ -30,6 +30,7 @@ class ImagesCarouselAdapter(
 
     fun submitList(images: List<String>) {
         this.images.addAll(images)
+        notifyDataSetChanged()
     }
 }
 

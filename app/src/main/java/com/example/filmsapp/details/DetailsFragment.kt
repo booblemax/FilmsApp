@@ -11,7 +11,6 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.ViewPager2
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseFragment
 import com.example.filmsapp.base.Event
@@ -133,6 +132,14 @@ class DetailsFragment :
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.detailsBackdrops.setCurrentItem(
+            sharedViewModel.backdropCarouselPosition,
+            false
+        )
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         prepareTransition()
         waitForTransition(binding.detailsBackdrops)
@@ -152,11 +159,6 @@ class DetailsFragment :
                     addTransformer(ScaleTransformer())
                 }
             )
-            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    sharedViewModel.backdropCarouselPosition = position
-                }
-            })
         }
     }
 
@@ -196,6 +198,8 @@ class DetailsFragment :
     }
 
     private fun openBackdrop(itemView: View, position: Int) {
+        sharedViewModel.backdropCarouselPosition = position
+
         val extras =
             FragmentNavigatorExtras(
                 itemView.image_backdrop to itemView.image_backdrop.transitionName

@@ -5,6 +5,7 @@
         <variable
             name="url"
             type="String" />
+
         <variable
             name="requestListener"
             type="coil.request.Request.Listener" />

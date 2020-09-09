@@ -10,26 +10,23 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseFragment
-import com.example.filmsapp.base.mvi.IState
-import com.example.filmsapp.base.mvi.Intention
 import com.example.filmsapp.common.SharedViewModel
 import com.example.filmsapp.databinding.ImageCarouselFragmentBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import kotlin.collections.set
 
 @ExperimentalCoroutinesApi
 class ImagesCarouselFragment :
-    BaseFragment<ImagesCarouselViewModel, ImageCarouselFragmentBinding, IState, Intention>() {
+    BaseFragment<ImagesCarouselViewModel, ImageCarouselFragmentBinding, ImageCarouselState, ImageCarouselIntents>() {
 
     private val sharedViewModel: SharedViewModel by sharedViewModel()
     override val viewModel: ImagesCarouselViewModel by viewModel()
     override val layoutRes: Int = R.layout.image_carousel_fragment
 
-    private val carouselAdapter = ImagesCarouselAdapter {
-        startPostponedEnterTransition()
-    }
+    private val carouselAdapter = ImagesCarouselAdapter { startPostponedEnterTransition() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +37,12 @@ class ImagesCarouselFragment :
         prepareTransition()
     }
 
-    override fun render(state: IState) {
-        TODO("Not yet implemented")
+    override fun render(state: ImageCarouselState) {
+        Timber.i(state.toString())
+        with(state) {
+            carouselAdapter.submitList(urls)
+            binding.imagesCarousel.scrollToPosition(position)
+        }
     }
 
     override fun init() {
@@ -49,12 +50,11 @@ class ImagesCarouselFragment :
             layoutManager =
                 LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
             adapter = carouselAdapter
-            postponeEnterTransition()
-            ImagesCarouselFragmentArgs.fromBundle(requireArguments()).let {
-                carouselAdapter.submitList(it.urls.asList())
-                scrollToPosition(it.position)
-            }
             PagerSnapHelper().apply { attachToRecyclerView(this@with) }
+            postponeEnterTransition()
+        }
+        ImagesCarouselFragmentArgs.fromBundle(requireArguments()).let {
+            viewModel.pushIntent(ImageCarouselIntents.Initial(it.urls.asList(), it.position))
         }
     }
 
