@@ -6,6 +6,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.fragment.findNavController
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseFragment
+import com.example.filmsapp.base.Event
 import com.example.filmsapp.base.common.EndlessRecyclerScrollListener
 import com.example.filmsapp.base.common.SimpleItemDecoration
 import com.example.filmsapp.base.common.WrappedGridLayoutManager
@@ -34,16 +35,22 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding, MainState,
     override fun render(state: MainState) {
         Timber.i(state.toString())
         with(state) {
-            when (uiEvent) {
-                is MainUiEvent.OpenFilm -> openFilmDetails(uiEvent.filmDetailsDto)
-                is MainUiEvent.Back -> onBackPressed()
-            }
+            uiEvent?.let { processUiEvent(it) }
 
             adapter.isLoading = loading && !firstLoading
             binding.refreshLayout.isRefreshing = loading && firstLoading
             if (!isEmptyList) adapter.submitList(films.toMutableList())
             if (errorString != null && errorString.isNotEmpty()) view?.snack(errorString)
             if (errorMessage != null) view?.snack(errorMessage)
+        }
+    }
+
+    private fun processUiEvent(event: Event<MainUiEvent>) {
+        event.getContentIfNotHandled()?.let { uiEvent ->
+            when (uiEvent) {
+                is MainUiEvent.OpenFilm -> openFilmDetails(uiEvent.filmDetailsDto)
+                is MainUiEvent.Back -> onBackPressed()
+            }
         }
     }
 

@@ -38,19 +38,27 @@ inline fun View.snack(
 }
 
 fun View.visible() {
-    visibility = View.VISIBLE
+    if (visibility != View.VISIBLE) {
+        visibility = View.VISIBLE
+    }
 }
 
 fun View.animateVisible() {
-    animate().alpha(1f).withEndAction { visible() }.start()
+    if (visibility != View.VISIBLE) {
+        animate().alpha(1f).withEndAction { visible() }.start()
+    }
 }
 
 fun View.invisible() {
-    visibility = View.INVISIBLE
+    if (visibility != View.INVISIBLE) {
+        visibility = View.INVISIBLE
+    }
 }
 
 fun View.gone() {
-    visibility = View.GONE
+    if (visibility != View.GONE) {
+        visibility = View.GONE
+    }
 }
 
 fun View.animateGone() {

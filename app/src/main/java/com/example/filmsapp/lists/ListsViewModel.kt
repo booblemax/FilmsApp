@@ -6,6 +6,7 @@ import com.example.domain.models.FilmModel
 import com.example.domain.repos.FilmsRepository
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseViewModel
+import com.example.filmsapp.base.Event
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -25,14 +26,14 @@ class ListsViewModel(
     override suspend fun processIntention(intent: ListsIntents) {
         when (intent) {
             is ListsIntents.InitialIntent -> loadFilms()
-            is ListsIntents.OpenLists -> reduce { it.copy(uiEvent = ListsUiEvent.OpenList(intent.type)) }
+            is ListsIntents.OpenLists -> reduce { it.copy(uiEvent = Event(ListsUiEvent.OpenList(intent.type))) }
             is ListsIntents.OpenFilm -> reduce {
                 val isFavorite = repository.isFilmStoredInDb(intent.filmDetailsDto.id)
                 val corrFilmDetails = intent.filmDetailsDto.copy(isFavorite = isFavorite)
-                it.copy(uiEvent = ListsUiEvent.OpenFilm(corrFilmDetails))
+                it.copy(uiEvent = Event(ListsUiEvent.OpenFilm(corrFilmDetails)))
             }
-            is ListsIntents.OpenSearch -> reduce { it.copy(uiEvent = ListsUiEvent.OpenSearch) }
-            is ListsIntents.OpenSettings -> reduce { it.copy(uiEvent = ListsUiEvent.OpenSettings) }
+            is ListsIntents.OpenSearch -> reduce { it.copy(uiEvent = Event(ListsUiEvent.OpenSearch)) }
+            is ListsIntents.OpenSettings -> reduce { it.copy(uiEvent = Event(ListsUiEvent.OpenSettings)) }
         }
     }
 

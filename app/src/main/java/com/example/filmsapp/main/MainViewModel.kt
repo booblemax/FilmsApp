@@ -5,6 +5,7 @@ import com.example.domain.dispatchers.DispatcherProvider
 import com.example.domain.models.FilmModel
 import com.example.domain.repos.FilmsRepository
 import com.example.filmsapp.R
+import com.example.filmsapp.base.Event
 import com.example.filmsapp.base.ListType
 import com.example.filmsapp.base.PagedViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,7 +29,7 @@ class MainViewModel(
             }
             is MainIntents.LoadNextPage -> loadFilms()
             is MainIntents.OpenFilm -> reduce {
-                it.copy(uiEvent = MainUiEvent.OpenFilm(intent.filmDetailsDto))
+                it.copy(uiEvent = Event(MainUiEvent.OpenFilm(intent.filmDetailsDto)))
             }
         }
     }

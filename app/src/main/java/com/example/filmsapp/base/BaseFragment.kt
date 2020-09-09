@@ -11,6 +11,9 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.filmsapp.BR
@@ -19,6 +22,7 @@ import com.example.filmsapp.base.mvi.Intention
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 abstract class BaseFragment<VM : BaseViewModel<S, I>, B : ViewDataBinding, S : IState, I : Intention> : Fragment() {
@@ -41,6 +45,20 @@ abstract class BaseFragment<VM : BaseViewModel<S, I>, B : ViewDataBinding, S : I
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        lifecycle.addObserver(object : LifecycleObserver {
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+            fun stop() {
+                Timber.wtf("${this::class.java.simpleName} onStop")
+            }
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+            fun destroy() {
+                Timber.wtf("${this::class.java.simpleName} onDestroy")
+            }
+
+        })
+
         init(inflater, container)
         init()
 

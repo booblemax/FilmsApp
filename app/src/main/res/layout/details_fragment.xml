@@ -37,7 +37,6 @@
                 android:layout_height="210dp"
                 android:scaleType="fitXY"
                 backdrop="@{backdropUrl}"
-                android:visibility="@{viewModel.film}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -83,9 +82,8 @@
                 android:layout_height="@dimen/film_image_height_small"
                 android:scaleType="fitCenter"
                 android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="72dp"
+                android:layout_marginTop="@dimen/size_72"
                 url="@{posterUrl}"
-                android:visibility="@{viewModel.film}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -95,10 +93,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_16"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/size_8"
                 android:layout_marginEnd="@dimen/size_12"
                 android:text="@{model.title}"
-                android:visibility="@{viewModel.film}"
                 app:layout_constraintEnd_toStartOf="@+id/details_bookmark"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -113,7 +110,6 @@
                 android:layout_marginTop="@dimen/size_8"
                 android:layout_marginStart="@dimen/size_16"
                 genres="@{model.genres}"
-                android:visibility="@{viewModel.film}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/details_title"
                 tools:text="Genres" />
@@ -124,7 +120,6 @@
                 android:layout_height="0dp"
                 android:background="@color/white"
                 android:layout_marginStart="@dimen/size_4"
-                android:visibility="@{viewModel.film}"
                 app:layout_constraintTop_toTopOf="@+id/details_genres"
                 app:layout_constraintBottom_toBottomOf="@+id/details_genres"
                 app:layout_constraintStart_toEndOf="@id/details_genres" />
@@ -136,7 +131,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_4"
                 year="@{model.releaseDate}"
-                android:visibility="@{viewModel.film}"
                 app:layout_constraintTop_toTopOf="@+id/details_genres"
                 app:layout_constraintBottom_toBottomOf="@+id/details_genres"
                 app:layout_constraintStart_toEndOf="@id/details_first_divider"
@@ -148,7 +142,6 @@
                 android:layout_height="0dp"
                 android:background="@color/white"
                 android:layout_marginStart="@dimen/size_4"
-                android:visibility="@{viewModel.film}"
                 app:layout_constraintTop_toTopOf="@+id/details_genres"
                 app:layout_constraintBottom_toBottomOf="@+id/details_genres"
                 app:layout_constraintStart_toEndOf="@id/details_year" />
@@ -160,7 +153,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_4"
                 runtime="@{model.runtime}"
-                android:visibility="@{viewModel.film}"
                 app:layout_constraintTop_toTopOf="@+id/details_genres"
                 app:layout_constraintBottom_toBottomOf="@+id/details_genres"
                 app:layout_constraintStart_toEndOf="@id/details_second_devider"
@@ -177,8 +169,7 @@
                 android:rating="@{model.voteAverage}"
                 android:layout_marginTop="@dimen/size_12"
                 android:layout_marginStart="@dimen/size_16"
-                android:visibility="@{viewModel.film}"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf=" parent"
                 app:layout_constraintTop_toBottomOf="@+id/details_genres"
                 tools:rating="6.3"/>
 
@@ -201,16 +192,15 @@
                 android:layout_marginEnd="@dimen/size_16"
                 android:layout_marginBottom="@dimen/size_8"
                 android:text="@{model.overview}"
-                android:visibility="@{viewModel.film}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/details_backdrops"
                 tools:text="asldjf;lahsdfklhjasdkljfhadkjshfkjasdhfkljahsdfkljahsdklfjhakajsdhflkjasdhfkajshdfkjahsd"/>
 
             <ProgressBar
+                android:id="@+id/details_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="@{viewModel.film}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

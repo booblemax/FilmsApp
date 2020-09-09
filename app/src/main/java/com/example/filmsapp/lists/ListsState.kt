@@ -1,6 +1,7 @@
 package com.example.filmsapp.lists
 
 import com.example.domain.models.FilmModel
+import com.example.filmsapp.base.Event
 import com.example.filmsapp.base.ListType
 import com.example.filmsapp.base.mvi.IState
 import com.example.filmsapp.common.FilmDetailsDto
@@ -15,7 +16,7 @@ data class ListsState(
     val upcomingFilms: List<FilmModel> = listOf(),
     val error: Exception? = null,
     val errorMessage: Int? = null,
-    val uiEvent: ListsUiEvent? = null
+    val uiEvent: Event<ListsUiEvent>? = null
 ) : IState {
 
     override fun toString(): String {

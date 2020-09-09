@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.models.FilmModel
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseFragment
+import com.example.filmsapp.base.Event
 import com.example.filmsapp.base.ListType
 import com.example.filmsapp.base.common.SimpleItemDecoration
 import com.example.filmsapp.base.common.WrappedLinearLayoutManager
@@ -55,25 +56,27 @@ class ListsFragment :
         }
     }
 
-    private fun processUiEvent(event: ListsUiEvent) {
-        when (event) {
-            is ListsUiEvent.OpenList -> {
-                navigate(ListsFragmentDirections.actionListsFragmentToMainFragment(event.type))
-            }
-            is ListsUiEvent.OpenFilm -> {
-                navigate(
-                    ListsFragmentDirections.actionListsFragmentToDetailsFragment(
-                        event.filmDetailsDto.id,
-                        event.filmDetailsDto.posterUrl,
-                        event.filmDetailsDto.backdropUrl,
-                        event.filmDetailsDto.isFavorite
+    private fun processUiEvent(event: Event<ListsUiEvent>) {
+        event.getContentIfNotHandled()?.let { uiEvent ->
+            when (uiEvent) {
+                is ListsUiEvent.OpenList -> {
+                    navigate(ListsFragmentDirections.actionListsFragmentToMainFragment(uiEvent.type))
+                }
+                is ListsUiEvent.OpenFilm -> {
+                    navigate(
+                        ListsFragmentDirections.actionListsFragmentToDetailsFragment(
+                            uiEvent.filmDetailsDto.id,
+                            uiEvent.filmDetailsDto.posterUrl,
+                            uiEvent.filmDetailsDto.backdropUrl,
+                            uiEvent.filmDetailsDto.isFavorite
+                        )
                     )
-                )
+                }
+                is ListsUiEvent.OpenSearch ->
+                    navigate(ListsFragmentDirections.actionListsFragmentToSearchFragment())
+                is ListsUiEvent.OpenSettings ->
+                    navigate(ListsFragmentDirections.actionListsFragmentToSettingsFragment2())
             }
-            is ListsUiEvent.OpenSearch ->
-                navigate(ListsFragmentDirections.actionListsFragmentToSearchFragment())
-            is ListsUiEvent.OpenSettings ->
-                navigate(ListsFragmentDirections.actionListsFragmentToSettingsFragment2())
         }
     }
 
