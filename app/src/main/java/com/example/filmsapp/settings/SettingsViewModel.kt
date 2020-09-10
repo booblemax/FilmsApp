@@ -2,9 +2,7 @@ package com.example.filmsapp.settings
 
 import com.example.domain.dispatchers.DispatcherProvider
 import com.example.filmsapp.base.BaseViewModel
-import com.example.filmsapp.base.mvi.EmptyState
-import com.example.filmsapp.base.mvi.IState
-import com.example.filmsapp.base.mvi.Intention
+import com.example.filmsapp.base.Event
 import com.example.filmsapp.base.prefs.SPreferences
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -12,11 +10,32 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 class SettingsViewModel(
     dispatcherProvider: DispatcherProvider,
     private val sharedPreferences: SPreferences
-) : BaseViewModel<IState, Intention>(dispatcherProvider, EmptyState()) {
+) : BaseViewModel<SettingsState, SettingsIntents>(dispatcherProvider, SettingsState()) {
 
-    fun getCurrentTheme(): Int = sharedPreferences.getCurrentTheme()
+    override suspend fun processIntention(intent: SettingsIntents) {
+        super.processIntention(intent)
+        when (intent) {
+            is SettingsIntents.Initial -> reduce {
+                it.copy(
+                    currentTheme = getCurrentTheme()
+                )
+            }
+            is SettingsIntents.SaveTheme -> reduce {
+                saveChosenTheme(intent.themeId)
+                it.copy(
+                    currentTheme = intent.themeId,
+                    uiEvent = Event(SettingsUiEvent.ChangeTheme(intent.themeId))
+                )
+            }
+            is SettingsIntents.Back -> reduce {
+                it.copy(uiEvent = Event(SettingsUiEvent.Back))
+            }
+        }
+    }
 
-    fun saveChosenTheme(themeId: Int) {
+    private fun getCurrentTheme(): Int = sharedPreferences.getCurrentTheme()
+
+    private fun saveChosenTheme(themeId: Int) {
         sharedPreferences.saveTheme(themeId)
     }
 }
