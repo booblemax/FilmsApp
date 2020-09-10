@@ -30,22 +30,18 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/search_list"
-            listVisibility="@{viewModel.emptyData}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/search_appbar" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/main_label"
+            android:id="@+id/search_label"
             style="@style/Text_24"
-            labelVisibility="@{viewModel.emptyData}"
-            emptyQuery="@{viewModel.emptyQuery}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:text="@string/label_input_film_name"
-            android:visibility="@{viewModel.films}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
