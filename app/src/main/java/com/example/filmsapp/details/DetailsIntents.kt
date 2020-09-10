@@ -8,6 +8,6 @@ sealed class DetailsIntents : BaseIntent() {
     data class Initial(val id: String, val isfavorite: Boolean) : DetailsIntents()
     object ChangeFavoriteState : DetailsIntents()
     data class OpenPlayer(val videoId: String) : DetailsIntents()
-    data class LoadTrailer(val title: String, val creds: GoogleAccountCredential): DetailsIntents()
+    data class LoadTrailer(val title: String, val creds: GoogleAccountCredential) : DetailsIntents()
     object Back : DetailsIntents()
 }

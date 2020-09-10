@@ -56,7 +56,6 @@ abstract class BaseFragment<VM : BaseViewModel<S, I>, B : ViewDataBinding, S : I
             fun destroy() {
                 Timber.wtf("${this::class.java.simpleName} onDestroy")
             }
-
         })
 
         init(inflater, container)
