@@ -2,11 +2,12 @@ package com.example.filmsapp.player
 
 import com.example.domain.dispatchers.DispatcherProvider
 import com.example.filmsapp.base.BaseViewModel
+import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
-class PlayerViewModel(dispatcherProvider: DispatcherProvider) :
-    BaseViewModel<PlayerState, PlayerIntents>(dispatcherProvider, PlayerState()) {
+class PlayerViewModel(router: Router,dispatcherProvider: DispatcherProvider) :
+    BaseViewModel<PlayerState, PlayerIntents>(router, dispatcherProvider, PlayerState()) {
 
     var lastStoppedTime: Float = 0f
 

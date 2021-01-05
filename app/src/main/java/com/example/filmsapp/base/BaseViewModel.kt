@@ -9,6 +9,7 @@ import com.example.filmsapp.R
 import com.example.filmsapp.base.mvi.BaseIntent
 import com.example.filmsapp.base.mvi.IState
 import com.example.filmsapp.base.mvi.Intention
+import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,6 +27,7 @@ import timber.log.Timber
 @Suppress("UNCHECKED_CAST")
 @ExperimentalCoroutinesApi
 abstract class BaseViewModel<S : IState, I : Intention>(
+    private val router: Router,
     protected val dispatcherProvider: DispatcherProvider,
     initialState: S
 ) : ViewModel() {
@@ -90,6 +92,10 @@ abstract class BaseViewModel<S : IState, I : Intention>(
             delay(timeDelay)
             action()
         }
+    }
+
+    fun back() {
+        router.exit()
     }
 
     companion object {

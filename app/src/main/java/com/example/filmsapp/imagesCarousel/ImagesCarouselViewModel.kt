@@ -2,11 +2,15 @@ package com.example.filmsapp.imagesCarousel
 
 import com.example.domain.dispatchers.DispatcherProvider
 import com.example.filmsapp.base.BaseViewModel
+import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
-class ImagesCarouselViewModel(dispatcherProvider: DispatcherProvider) :
-    BaseViewModel<ImageCarouselState, ImageCarouselIntents>(
+class ImagesCarouselViewModel(
+    router: Router,
+    dispatcherProvider: DispatcherProvider
+) : BaseViewModel<ImageCarouselState, ImageCarouselIntents>(
+        router,
         dispatcherProvider,
         ImageCarouselState()
     ) {

@@ -16,7 +16,7 @@ class FilmsActivity : AppCompatActivity() {
 
     private val navigatorHolder: NavigatorHolder by inject()
 
-    val navigator: Navigator by lazy { AppNavigator(this, R.id.fragment_container) }
+    private val navigator: Navigator by lazy { AppNavigator(this, R.id.fragment_container) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

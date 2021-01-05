@@ -8,14 +8,16 @@ import com.example.filmsapp.R
 import com.example.filmsapp.base.Event
 import com.example.filmsapp.base.ListType
 import com.example.filmsapp.base.PagedViewModel
+import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 class MainViewModel(
+    router: Router,
     dispatcherProvider: DispatcherProvider,
     private val repository: FilmsRepository
-) : PagedViewModel<MainState, MainIntents>(dispatcherProvider, MainState()) {
+) : PagedViewModel<MainState, MainIntents>(router, dispatcherProvider, MainState()) {
 
     lateinit var listType: ListType
     var lastKnownPosition = -1

@@ -7,16 +7,18 @@ import com.example.domain.repos.YoutubeRepository
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseViewModel
 import com.example.filmsapp.base.Event
+import com.github.terrakok.cicerone.Router
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 class DetailsViewModel(
+    router: Router,
     dispatcherProvider: DispatcherProvider,
     private val filmsRepository: FilmsRepository,
     private val youtubeRepository: YoutubeRepository
-) : BaseViewModel<DetailsState, DetailsIntents>(dispatcherProvider, DetailsState()) {
+) : BaseViewModel<DetailsState, DetailsIntents>(router, dispatcherProvider, DetailsState()) {
 
     override suspend fun processIntention(intent: DetailsIntents) {
         super.processIntention(intent)

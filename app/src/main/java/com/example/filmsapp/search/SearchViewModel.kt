@@ -6,6 +6,7 @@ import com.example.domain.repos.FilmsRepository
 import com.example.filmsapp.R
 import com.example.filmsapp.base.Event
 import com.example.filmsapp.base.PagedViewModel
+import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -19,9 +20,10 @@ import kotlinx.coroutines.launch
 @FlowPreview
 @ExperimentalCoroutinesApi
 class SearchViewModel(
+    router: Router,
     dispatcherProvider: DispatcherProvider,
     private val filmsRepository: FilmsRepository
-) : PagedViewModel<SearchState, SearchIntents>(dispatcherProvider, SearchState()) {
+) : PagedViewModel<SearchState, SearchIntents>(router, dispatcherProvider, SearchState()) {
 
     val textListener = TextListener().apply {
         channel

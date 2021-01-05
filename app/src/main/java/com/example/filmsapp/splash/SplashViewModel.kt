@@ -3,6 +3,7 @@ package com.example.filmsapp.splash
 import com.example.domain.dispatchers.DispatcherProvider
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseViewModel
+import com.github.terrakok.cicerone.Router
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -10,8 +11,9 @@ import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class SplashViewModel(
+    router: Router,
     dispatcherProvider: DispatcherProvider
-) : BaseViewModel<SplashState, SplashIntents>(dispatcherProvider, SplashState()) {
+) : BaseViewModel<SplashState, SplashIntents>(router, dispatcherProvider, SplashState()) {
 
     override suspend fun processIntention(intent: SplashIntents) {
         super.processIntention(intent)

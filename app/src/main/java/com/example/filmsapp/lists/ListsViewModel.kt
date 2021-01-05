@@ -7,6 +7,7 @@ import com.example.domain.repos.FilmsRepository
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseViewModel
 import com.example.filmsapp.base.Event
+import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -15,9 +16,10 @@ import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class ListsViewModel(
+    router: Router,
     dispatcherProvider: DispatcherProvider,
     private val repository: FilmsRepository
-) : BaseViewModel<ListsState, ListsIntents>(dispatcherProvider, ListsState()) {
+) : BaseViewModel<ListsState, ListsIntents>(router, dispatcherProvider, ListsState()) {
 
     init {
         pushIntent(ListsIntents.InitialIntent)
