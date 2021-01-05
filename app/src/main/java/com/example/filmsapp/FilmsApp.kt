@@ -6,6 +6,7 @@ import com.example.domain.di.domainModule
 import com.example.filmsapp.base.common.networkinfo.NetworkStateHolder.registerConnectivityMonitor
 import com.example.filmsapp.di.commonModule
 import com.example.filmsapp.di.vmModule
+import com.example.filmsapp.navigation.navigationModule
 import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -27,7 +28,13 @@ class FilmsApp : Application() {
         startKoin {
             androidContext(this@FilmsApp)
 
-            modules(dataModule + domainModule + vmModule + commonModule)
+            modules(
+                dataModule +
+                        domainModule +
+                        vmModule +
+                        commonModule +
+                        navigationModule
+            )
         }
     }
 }
