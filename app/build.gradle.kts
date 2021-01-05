@@ -94,6 +94,8 @@ dependencies {
 
     implementation(Libs.timber)
 
+    implementation(Libs.cicerone)
+
     // local tests
     testImplementation(TestLibs.junit)
     testImplementation(TestLibs.mockito_unit)

@@ -22,8 +22,8 @@ object Versions {
     const val ktlintGradlePlugin = "9.2.1"
     const val detekt = "1.10.0"
 
-    const val gradle = "4.0.1"
-    const val kotlin = "1.4.0"
+    const val gradle = "7.0.0-alpha03"
+    const val kotlin = "1.4.21"
     const val lifecycler = "2.2.0"
     const val appcompat = "1.1.0"
     const val ktx = "1.3.0"
@@ -47,6 +47,7 @@ object Versions {
     const val easyPermission = "3.0.0"
     const val youtubePlayer = "0.23"
     const val coroutines = "1.3.6"
+    const val cicerone = "6.6"
 
     /* test */
     const val junit = "4.13"
@@ -102,6 +103,8 @@ object Libs {
     const val easy_permission = "pub.devrel:easypermissions:${Versions.easyPermission}"
 
     const val coil = "io.coil-kt:coil:${Versions.coil}"
+
+    const val cicerone = "com.github.terrakok:cicerone:${Versions.cicerone}"
 
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
     const val logging_interceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.loggingInterceptor}"
