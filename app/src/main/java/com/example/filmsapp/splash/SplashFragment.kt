@@ -6,7 +6,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.navigation.fragment.findNavController
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseFragment
 import com.example.filmsapp.base.prefs.SPreferences
@@ -58,7 +57,7 @@ class SplashFragment :
                 errorMessage?.let { view?.snack(it) }
 
                 if (loading) getResultsFromApi()
-                else viewModel.runDelayed { navigateToLists() }
+                else viewModel.runDelayed(action = viewModel::openLists)
             } catch (exception: Exception) {
                 viewModel.pushIntent(SplashIntents.Exception(exception))
             }
@@ -157,9 +156,7 @@ class SplashFragment :
         // do nothing
     }
 
-    private fun navigateToLists() {
-        context?.let {
-            findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToListsFragment())
-        }
+    companion object {
+        const val TAG = "SplashFragment"
     }
 }

@@ -1,6 +1,5 @@
 plugins {
     id("com.android.application")
-    id("androidx.navigation.safeargs")
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
@@ -83,9 +82,6 @@ dependencies {
     implementation(Libs.koin_core)
     implementation(Libs.koin_androidx_scope)
     implementation(Libs.koin_androidx_viewmodel)
-
-    implementation(Libs.navigation_fragment_ktx)
-    implementation(Libs.navigation_ui_ktx)
 
     implementation(Libs.conscrypt)
     implementation(Libs.threetenabp)

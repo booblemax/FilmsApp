@@ -27,7 +27,7 @@ import timber.log.Timber
 @Suppress("UNCHECKED_CAST")
 @ExperimentalCoroutinesApi
 abstract class BaseViewModel<S : IState, I : Intention>(
-    private val router: Router,
+    protected val router: Router,
     protected val dispatcherProvider: DispatcherProvider,
     initialState: S
 ) : ViewModel() {

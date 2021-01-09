@@ -18,7 +18,6 @@ buildscript {
     dependencies {
         classpath(Classpath.gradle)
         classpath(Classpath.kotlinGradlePlugin)
-        classpath(Classpath.navigationSafeArgs)
         classpath(Classpath.ktlinGradlePlugin)
     }
 }

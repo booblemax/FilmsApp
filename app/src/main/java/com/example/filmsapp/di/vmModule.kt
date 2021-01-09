@@ -20,19 +20,19 @@ val vmModule = module {
 
     viewModel { SharedViewModel() }
 
-    viewModel { ListsViewModel(get(), get()) }
+    viewModel { ListsViewModel(get(), get(), get()) }
 
-    viewModel { MainViewModel(get(), get()) }
+    viewModel { MainViewModel(get(), get(), get()) }
 
-    viewModel { DetailsViewModel(get(), get(), get()) }
+    viewModel { DetailsViewModel(get(), get(), get(), get()) }
 
-    viewModel { ImagesCarouselViewModel(get()) }
+    viewModel { ImagesCarouselViewModel(get(), get()) }
 
-    viewModel { PlayerViewModel(get()) }
+    viewModel { PlayerViewModel(get(), get()) }
 
-    viewModel { SettingsViewModel(get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get()) }
 
-    viewModel { SplashViewModel(get()) }
+    viewModel { SplashViewModel(get(), get()) }
 
-    viewModel { SearchViewModel(get(), get()) }
+    viewModel { SearchViewModel(get(), get(), get()) }
 }

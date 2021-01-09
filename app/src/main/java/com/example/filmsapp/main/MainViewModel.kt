@@ -8,6 +8,7 @@ import com.example.filmsapp.R
 import com.example.filmsapp.base.Event
 import com.example.filmsapp.base.ListType
 import com.example.filmsapp.base.PagedViewModel
+import com.example.filmsapp.navigation.FilmScreen.DetailsScreen
 import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -81,4 +82,10 @@ class MainViewModel(
             ListType.UPCOMING -> repository.getUpcomingFilms(pageNumber, forceUpdate)
             ListType.FAVOURITES -> repository.getFavouritesFilms(pageNumber)
         }
+
+    fun openDetails(
+        filmId: String, posterUrl: String, backdropUrl: String, isFavorite: Boolean
+    ) {
+        router.navigateTo(DetailsScreen(filmId, posterUrl, backdropUrl, isFavorite))
+    }
 }

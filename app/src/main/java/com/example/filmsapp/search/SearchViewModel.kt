@@ -6,6 +6,7 @@ import com.example.domain.repos.FilmsRepository
 import com.example.filmsapp.R
 import com.example.filmsapp.base.Event
 import com.example.filmsapp.base.PagedViewModel
+import com.example.filmsapp.navigation.FilmScreen.DetailsScreen
 import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -17,7 +18,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-@FlowPreview
 @ExperimentalCoroutinesApi
 class SearchViewModel(
     router: Router,
@@ -25,6 +25,7 @@ class SearchViewModel(
     private val filmsRepository: FilmsRepository
 ) : PagedViewModel<SearchState, SearchIntents>(router, dispatcherProvider, SearchState()) {
 
+    @FlowPreview
     val textListener = TextListener().apply {
         channel
             .debounce(DEBOUNCE_TIME)
@@ -88,6 +89,12 @@ class SearchViewModel(
                 }
             }
         }
+    }
+
+    fun openDetailsScreen(
+        filmId: String, posterUrl: String, backdropUrl: String, isFavorite: Boolean
+    ) {
+        router.navigateTo(DetailsScreen(filmId, posterUrl, backdropUrl, isFavorite))
     }
 
     companion object {

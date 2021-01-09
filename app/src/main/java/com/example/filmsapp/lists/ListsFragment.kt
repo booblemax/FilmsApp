@@ -4,8 +4,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavDirections
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.models.FilmModel
 import com.example.filmsapp.R
@@ -59,29 +57,17 @@ class ListsFragment :
     private fun processUiEvent(event: Event<ListsUiEvent>) {
         event.getContentIfNotHandled()?.let { uiEvent ->
             when (uiEvent) {
-                is ListsUiEvent.OpenList -> {
-                    navigate(ListsFragmentDirections.actionListsFragmentToMainFragment(uiEvent.type))
-                }
-                is ListsUiEvent.OpenFilm -> {
-                    navigate(
-                        ListsFragmentDirections.actionListsFragmentToDetailsFragment(
-                            uiEvent.filmDetailsDto.id,
-                            uiEvent.filmDetailsDto.posterUrl,
-                            uiEvent.filmDetailsDto.backdropUrl,
-                            uiEvent.filmDetailsDto.isFavorite
-                        )
-                    )
-                }
-                is ListsUiEvent.OpenSearch ->
-                    navigate(ListsFragmentDirections.actionListsFragmentToSearchFragment())
-                is ListsUiEvent.OpenSettings ->
-                    navigate(ListsFragmentDirections.actionListsFragmentToSettingsFragment2())
+                is ListsUiEvent.OpenList -> viewModel.openMainScreen(uiEvent.type.ordinal)
+                is ListsUiEvent.OpenFilm -> viewModel.openDetailsScreen(
+                    uiEvent.filmDetailsDto.id,
+                    uiEvent.filmDetailsDto.posterUrl ?: "",
+                    uiEvent.filmDetailsDto.backdropUrl ?: "",
+                    uiEvent.filmDetailsDto.isFavorite
+                )
+                is ListsUiEvent.OpenSearch -> viewModel.openSearchScreen()
+                is ListsUiEvent.OpenSettings -> viewModel.openSettingsScreen()
             }
         }
-    }
-
-    private fun navigate(navigation: NavDirections) {
-        findNavController().navigate(navigation)
     }
 
     private fun initLatestFilm(model: FilmModel) {
@@ -178,6 +164,7 @@ class ListsFragment :
     }
 
     companion object {
+        const val TAG = "ListsFragment"
         const val MARGIN_OFFSET = 12
     }
 }

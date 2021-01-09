@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.filmsapp.R
 import com.example.filmsapp.base.prefs.SPreferences
+import com.example.filmsapp.navigation.FilmScreen.SplashScreen
 import com.github.terrakok.cicerone.Navigator
 import com.github.terrakok.cicerone.NavigatorHolder
+import com.github.terrakok.cicerone.Replace
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import org.koin.android.ext.android.inject
 
@@ -22,9 +24,10 @@ class FilmsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         AppCompatDelegate.setDefaultNightMode(sharedPreferences.getCurrentTheme())
+        navigator.applyCommands(arrayOf(Replace(SplashScreen())))
     }
 
-    override fun onResume() {
+    override fun onResumeFragments() {
         navigatorHolder.setNavigator(navigator)
         super.onResume()
     }

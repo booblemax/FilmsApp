@@ -3,10 +3,11 @@ package com.example.filmsapp.main
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.Fragment
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseFragment
 import com.example.filmsapp.base.Event
+import com.example.filmsapp.base.ListType
 import com.example.filmsapp.base.common.EndlessRecyclerScrollListener
 import com.example.filmsapp.base.common.SimpleItemDecoration
 import com.example.filmsapp.base.common.WrappedGridLayoutManager
@@ -23,13 +24,14 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding, MainState,
     override val layoutRes: Int = R.layout.main_fragment
     override val viewModel: MainViewModel by viewModel()
 
-    private lateinit var args: MainFragmentArgs
     private lateinit var adapter: MainAdapter
+
+    private val listType: ListType get() =
+        requireArguments().getInt(LIST_TYPE_ARG).run { ListType.values()[this] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        args = MainFragmentArgs.fromBundle(requireArguments())
-        viewModel.listType = args.listType
+        viewModel.listType = listType
     }
 
     override fun render(state: MainState) {
@@ -64,7 +66,7 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding, MainState,
 
     private fun initTitle() {
         (activity as AppCompatActivity).setSupportActionBar(binding.mainToolbar)
-        binding.mainToolbar.title = getString(args.listType.titleId)
+        binding.mainToolbar.title = getString(listType.titleId)
         binding.mainToolbar.navigationIcon =
             ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_back, context?.theme)
         binding.mainToolbar.setNavigationOnClickListener { viewModel.pushIntent(MainIntents.OnBack) }
@@ -114,18 +116,25 @@ class MainFragment : BaseFragment<MainViewModel, MainFragmentBinding, MainState,
     }
 
     private fun openFilmDetails(filmDetailsDto: FilmDetailsDto) {
-        findNavController().navigate(
-            MainFragmentDirections.actionMainFragmentToDetailsFragment(
-                filmDetailsDto.id,
-                filmDetailsDto.posterUrl,
-                filmDetailsDto.backdropUrl,
-                filmDetailsDto.isFavorite
-            )
+        viewModel.openDetails(
+            filmDetailsDto.id,
+            filmDetailsDto.posterUrl ?: "",
+            filmDetailsDto.backdropUrl ?: "",
+            filmDetailsDto.isFavorite
         )
     }
 
     companion object {
+        const val TAG = "MainFragment"
         const val MIN_COLUMN_COUNT = 2
         const val MARGIN_OFFSET = 24
+
+        private const val LIST_TYPE_ARG = "LIST_TYPE_ARG"
+
+        fun newInstance(listType: Int): Fragment = MainFragment().apply {
+            arguments = Bundle().apply {
+                putInt(LIST_TYPE_ARG, listType)
+            }
+        }
     }
 }

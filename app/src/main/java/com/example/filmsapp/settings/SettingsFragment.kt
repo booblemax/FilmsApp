@@ -62,4 +62,8 @@ class SettingsFragment :
             }
         }
     }
+
+    companion object {
+        const val TAG = "SettingsFragment"
+    }
 }

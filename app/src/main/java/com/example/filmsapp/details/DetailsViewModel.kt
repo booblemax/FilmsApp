@@ -1,5 +1,6 @@
 package com.example.filmsapp.details
 
+import android.view.View
 import com.example.domain.Resource
 import com.example.domain.dispatchers.DispatcherProvider
 import com.example.domain.repos.FilmsRepository
@@ -7,8 +8,11 @@ import com.example.domain.repos.YoutubeRepository
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseViewModel
 import com.example.filmsapp.base.Event
+import com.example.filmsapp.navigation.FilmScreen.ImagesCarouselScreen
+import com.example.filmsapp.navigation.FilmScreen.PlayerScreen
 import com.github.terrakok.cicerone.Router
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import kotlinx.android.synthetic.main.item_backdrop.view.image_backdrop
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
@@ -96,5 +100,13 @@ class DetailsViewModel(
                 filmsRepository.deleteFilm(it)
                 postMessage(R.string.film_removed)
         } ?: postMessage(R.string.error)
+    }
+
+    fun openBackdrop(urls: List<String>, position: Int) {
+        router.navigateTo(ImagesCarouselScreen(urls, position))
+    }
+
+    fun openPlayer(videoId: String) {
+        router.navigateTo(PlayerScreen(videoId))
     }
 }

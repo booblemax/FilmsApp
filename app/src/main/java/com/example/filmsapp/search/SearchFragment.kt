@@ -4,7 +4,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.widget.SearchView
-import androidx.navigation.fragment.findNavController
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseFragment
 import com.example.filmsapp.base.Event
@@ -18,11 +17,9 @@ import com.example.filmsapp.util.setupToolbar
 import com.example.filmsapp.util.snack
 import com.example.filmsapp.util.visible
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-@FlowPreview
 @ExperimentalCoroutinesApi
 class SearchFragment :
     BaseFragment<SearchViewModel, SearchFragmentBinding, SearchState, SearchIntents>() {
@@ -50,7 +47,12 @@ class SearchFragment :
     private fun processUiEvent(event: Event<SearchUiEvent>) {
         event.getContentIfNotHandled()?.let { uiEvent ->
             when (uiEvent) {
-                is SearchUiEvent.OpenFilm -> openFilmDetails(uiEvent.filmDetailsDto)
+                is SearchUiEvent.OpenFilm -> viewModel.openDetailsScreen(
+                    uiEvent.filmDetailsDto.id,
+                    uiEvent.filmDetailsDto.posterUrl ?: "",
+                    uiEvent.filmDetailsDto.backdropUrl ?: "",
+                    uiEvent.filmDetailsDto.isFavorite
+                )
                 is SearchUiEvent.Back -> onBackPressed()
             }
         }
@@ -138,18 +140,8 @@ class SearchFragment :
         }
     }
 
-    private fun openFilmDetails(filmDetailsDto: FilmDetailsDto) {
-        findNavController().navigate(
-            SearchFragmentDirections.actionSearchFragmentToDetailsFragment(
-                filmDetailsDto.id,
-                filmDetailsDto.posterUrl,
-                filmDetailsDto.posterUrl,
-                filmDetailsDto.isFavorite
-            )
-        )
-    }
-
     companion object {
+        const val TAG = "SearchFragment"
         const val MIN_COLUMN_COUNT = 2
         const val MARGIN_OFFSET = 24
     }

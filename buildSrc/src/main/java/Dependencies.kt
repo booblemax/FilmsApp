@@ -22,7 +22,7 @@ object Versions {
     const val ktlintGradlePlugin = "9.2.1"
     const val detekt = "1.10.0"
 
-    const val gradle = "7.0.0-alpha03"
+    const val gradle = "7.0.0-alpha04"
     const val kotlin = "1.4.21"
     const val lifecycler = "2.2.0"
     const val appcompat = "1.1.0"
@@ -32,7 +32,7 @@ object Versions {
     const val swipeRefreshLayout = "1.0.0"
     const val material = "1.1.0"
     const val koin = "2.0.1"
-    const val navigation = "2.2.0"
+    const val navigation = "2.3.2"
     const val retrofit = "2.8.1"
     const val coil = "0.11.0"
     const val timber = "4.7.1"
@@ -46,7 +46,7 @@ object Versions {
     const val playServices = "18.0.0"
     const val easyPermission = "3.0.0"
     const val youtubePlayer = "0.23"
-    const val coroutines = "1.3.6"
+    const val coroutines = "1.3.9"
     const val cicerone = "6.6"
 
     /* test */

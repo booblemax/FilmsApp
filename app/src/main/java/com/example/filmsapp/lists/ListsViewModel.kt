@@ -7,6 +7,10 @@ import com.example.domain.repos.FilmsRepository
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseViewModel
 import com.example.filmsapp.base.Event
+import com.example.filmsapp.navigation.FilmScreen.DetailsScreen
+import com.example.filmsapp.navigation.FilmScreen.MainScreen
+import com.example.filmsapp.navigation.FilmScreen.SearchScreen
+import com.example.filmsapp.navigation.FilmScreen.SettingsScreen
 import com.github.terrakok.cicerone.Router
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -131,5 +135,23 @@ class ListsViewModel(
     override fun handleException(exception: Throwable) {
         Timber.e(exception)
         pushIntent(ListsIntents.Exception(exception))
+    }
+
+    fun openMainScreen(listType: Int) {
+        router.navigateTo(MainScreen(listType))
+    }
+
+    fun openSearchScreen() {
+        router.navigateTo(SearchScreen())
+    }
+
+    fun openSettingsScreen() {
+        router.navigateTo(SettingsScreen())
+    }
+
+    fun openDetailsScreen(
+        filmId: String, posterUrl: String, backdropUrl: String, isFavorite: Boolean
+    ) {
+        router.navigateTo(DetailsScreen(filmId, posterUrl, backdropUrl, isFavorite))
     }
 }

@@ -3,6 +3,7 @@ package com.example.filmsapp.splash
 import com.example.domain.dispatchers.DispatcherProvider
 import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseViewModel
+import com.example.filmsapp.navigation.FilmScreen.ListsScreen
 import com.github.terrakok.cicerone.Router
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
@@ -35,5 +36,9 @@ class SplashViewModel(
                 pushIntent(SplashIntents.Exception(errorMessage = R.string.error))
             }
         }
+    }
+
+    fun openLists() {
+        router.navigateTo(ListsScreen())
     }
 }

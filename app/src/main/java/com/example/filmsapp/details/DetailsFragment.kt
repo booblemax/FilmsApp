@@ -7,8 +7,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.SharedElementCallback
 import androidx.core.view.ViewCompat
 import androidx.core.view.get
-import androidx.navigation.fragment.FragmentNavigatorExtras
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import com.example.filmsapp.R
@@ -40,17 +39,28 @@ class DetailsFragment :
     private val sharedViewModel: SharedViewModel by sharedViewModel()
     override val viewModel: DetailsViewModel by viewModel()
     override val layoutRes: Int = R.layout.details_fragment
-    private lateinit var args: DetailsFragmentArgs
+
+    private val filmId: String
+        get() =
+            requireArguments().getString(FILM_ID_ARG) ?: throw IllegalArgumentException("No such argument")
+    private val posterUrl: String
+        get() =
+            requireArguments().getString(FILM_ID_ARG) ?: throw IllegalArgumentException("No such argument")
+    private val backdropUrl: String
+        get() =
+            requireArguments().getString(FILM_ID_ARG) ?: throw IllegalArgumentException("No such argument")
+    private val isFavorite: Boolean
+        get() =
+            requireArguments().getBoolean(FILM_ID_ARG)
 
     private val googleAccountManager: GoogleAccountManager by inject()
 
-    private val adapter: BackdropsViewPagerAdapter = BackdropsViewPagerAdapter(this::openBackdrop)
+    private val adapter: BackdropsViewPagerAdapter = BackdropsViewPagerAdapter { _, position -> openBackdrop(position)}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        args = DetailsFragmentArgs.fromBundle(requireArguments()).also {
-            viewModel.pushIntent(DetailsIntents.Initial(it.filmId, it.isFavorites))
-        }
+
+        viewModel.pushIntent(DetailsIntents.Initial(filmId, isFavorite))
         requireActivity().makeStatusBarTransparent()
     }
 
@@ -95,7 +105,7 @@ class DetailsFragment :
     private fun processUiEvent(event: Event<DetailsUiEvent>) {
         event.getContentIfNotHandled()?.let { uiEvent ->
             when (uiEvent) {
-                is DetailsUiEvent.OpenPlayer -> openPlayer(uiEvent.videoId)
+                is DetailsUiEvent.OpenPlayer -> viewModel.openPlayer(uiEvent.videoId)
                 is DetailsUiEvent.Back -> onBackPressed()
             }
         }
@@ -116,13 +126,8 @@ class DetailsFragment :
     }
 
     private fun initImages() {
-        arguments?.let {
-            val args = DetailsFragmentArgs.fromBundle(it)
-            with(args) {
-                binding.posterUrl = posterUrl
-                binding.backdropUrl = backdropUrl
-            }
-        }
+        binding.posterUrl = posterUrl
+        binding.backdropUrl = backdropUrl
     }
 
     private fun registerInsetsListener() {
@@ -197,24 +202,10 @@ class DetailsFragment :
         }
     }
 
-    private fun openBackdrop(itemView: View, position: Int) {
+    private fun openBackdrop(position: Int) {
         sharedViewModel.backdropCarouselPosition = position
-
-        val extras =
-            FragmentNavigatorExtras(
-                itemView.image_backdrop to itemView.image_backdrop.transitionName
-            )
-        findNavController().navigate(
-            DetailsFragmentDirections.actionDetailsFragmentToImagesCarouselFragment(
-                adapter.currentList.map { it.filePath }.toTypedArray(), position
-            ),
-            extras
-        )
-    }
-
-    private fun openPlayer(videoId: String) {
-        findNavController().navigate(
-            DetailsFragmentDirections.actionDetailsFragmentToPlayerFragment(videoId)
+        viewModel.openBackdrop(
+            adapter.currentList.map { it.filePath }, position
         )
     }
 
@@ -225,6 +216,23 @@ class DetailsFragment :
     }
 
     companion object {
+
+        const val TAG = "DetailsFragment"
         const val VISIBLE_PAGE_LIMIT = 3
+
+        private const val FILM_ID_ARG = "FILM_ID_ARG"
+        private const val POSTER_URL_ARG = "POSTER_URL_ARG"
+        private const val BACKDROP_URL_ARG = "BACKDROP_URL_ARG"
+        private const val IS_FAVORITE_ARG = "IS_FAVORITE_ARG"
+
+        fun newInstance(filmId: String, posterUrl: String, backdropUrl: String, isFavorite: Boolean): Fragment =
+            DetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putString(FILM_ID_ARG, filmId)
+                    putString(POSTER_URL_ARG, posterUrl)
+                    putString(BACKDROP_URL_ARG, backdropUrl)
+                    putBoolean(IS_FAVORITE_ARG, isFavorite)
+                }
+            }
     }
 }

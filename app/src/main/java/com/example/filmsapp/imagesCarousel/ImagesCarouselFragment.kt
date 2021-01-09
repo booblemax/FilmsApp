@@ -5,6 +5,7 @@ import android.transition.TransitionInflater
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.app.SharedElementCallback
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -12,10 +13,12 @@ import com.example.filmsapp.R
 import com.example.filmsapp.base.BaseFragment
 import com.example.filmsapp.common.SharedViewModel
 import com.example.filmsapp.databinding.ImageCarouselFragmentBinding
+import com.example.filmsapp.util.snack
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import java.lang.IllegalArgumentException
 import kotlin.collections.set
 
 @ExperimentalCoroutinesApi
@@ -39,6 +42,7 @@ class ImagesCarouselFragment :
 
     override fun render(state: ImageCarouselState) {
         Timber.i(state.toString())
+
         with(state) {
             carouselAdapter.submitList(urls)
             binding.imagesCarousel.scrollToPosition(position)
@@ -53,9 +57,11 @@ class ImagesCarouselFragment :
             PagerSnapHelper().apply { attachToRecyclerView(this@with) }
             postponeEnterTransition()
         }
-        ImagesCarouselFragmentArgs.fromBundle(requireArguments()).let {
-            viewModel.pushIntent(ImageCarouselIntents.Initial(it.urls.asList(), it.position))
-        }
+
+        val urls: List<String> = requireArguments().getString(URLS_ARG)?.split(",") ?: listOf()
+        val position: Int = requireArguments().getInt(POSITION_ARG, 0)
+
+        viewModel.pushIntent(ImageCarouselIntents.Initial(urls, position))
     }
 
     override fun onBackPressed(popTo: Int?) {
@@ -87,5 +93,19 @@ class ImagesCarouselFragment :
                 }
             }
         })
+    }
+
+    companion object {
+        const val TAG = "ImageCarouselFragment"
+
+        private const val URLS_ARG = "URLS_ARG"
+        private const val POSITION_ARG = "POSITION_ARG"
+
+        fun newInstance(urls: List<String>, position: Int): Fragment = ImagesCarouselFragment().apply {
+            arguments = Bundle().apply {
+                putString(URLS_ARG, urls.joinToString())
+                putInt(POSITION_ARG, position)
+            }
+        }
     }
 }
